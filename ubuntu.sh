@@ -18,7 +18,6 @@ apt-get install \
     texlive \
     texlive-base \
     texlive-base-bin \
-    texlive-common \
     texlive-extra-utils \
     texlive-fonts-recommended \
     texlive-font-utils \
@@ -39,8 +38,7 @@ apt-get install \
     imagemagick \
     ps2eps \
     pdftk \
-    bibindex \
     bibutils \
-    biblatex \
+    texlive-bibtex-extra \
     gnuplot \
     octave
