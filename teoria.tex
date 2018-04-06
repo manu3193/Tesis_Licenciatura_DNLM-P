@@ -319,16 +319,44 @@
 %``indice'' y en el texto aparece lo que indique ``termino'';
 %\verb+\ot{termino}+ agrega una entrada secundaria al término.
 
-En este cap\'itulo se procede a detallar el contenido te\'orico necesario para el desarrollo de la propuesta. Como se presenta en los cap\'itulos anteriores, la propuesta consiste en la paralelizaci\'on de un filtro que combina la eliminaci\'on de ruido y la mejora de la imagen. La reducci\'on de ruido se realiza por medio del enfoque de filtrado espacial, mediante el ponderamiento de la similitud entre las regiones aleda\~nas a los pixeles de la imagen. Este enfoque presenta una gran robustez ante el ruido, pero una mayor complejidad computacional, la cual se aborda con mayor detalle en esta secci\'on. La mejora de la imagen se emplea mediante un enfoque de Unsharp Masking, permitiendo un mayor realce en bordes y contraste en regiones de la imagen. Adem\'as se presentan t\'ecnicas de paralelizaci\'on que se adec\'uan al enfoque del filtro, con el fin de reducir el tiempo de procesamiento.
+En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de la propuesta presentada en ested trabajo. La propuesta consiste en la paralelizaci\'on de un filtro que combina la eliminaci\'on de ruido y la mejora de la imagen. La reducci\'on de ruido se realiza por medio de un enfoque de filtrado espacial no local, mediante el ponderamiento de la similitud entre las regiones aleda\~nas a los pixeles de la imagen. Este enfoque presenta una gran robustez ante el ruido, pero una mayor complejidad computacional, la cual se aborda con mayor detalle en este cap\'itulo. La mejora de la imagen se realiza utilizando uno de los enfoques de Unsharp Masking, permitiendo un mayor realce en bordes y contraste en regiones de la imagen. Adem\'as se presentan t\'ecnicas de paralelizaci\'on que permitan el enfoque del desacople entre la imagen de filtrado y la utilizada para el pesado, como se propone en \cite{deceived}., con el fin de reducir el tiempo de procesamiento del algoritmo en una primera instancia y evitar los artefactos que resultan al utilizar el enfoque tradicional de filtrado en etapas sucesivas. 
 
 
 \subsection{Conceptos B\'asicos}
 
 \subsubsection{Filtrado Espacial}
 
-Los m\'etodos de filtrado discutidos en este cap\'itulo se realizan en el dominio espacial. El dominio espacial es el plano que contiene los valores de los pixeles de una imagen, representada por una matriz de pixeles. Las t\'ecnicas en el dominio espacial realizan operaciones directamente en la matriz de pixeles, a diferencia de otros m\'etodos basados en transformaciones (transformada de Fourier, Wavelets e histogramas) con el fin de realizar las operaciones en otros dominios. 
+Los m\'etodos de filtrado presentados en este cap\'itulo se enfocan en el dominio espacial. La imagen es representada como una matriz que contiene los valores de los pixeles en un plano de coordenadas (x,y). Este plano representa el dominio espacial, en el que se realizan operaciones directamente en la matriz de pixeles, a diferencia de otros m\'etodos basados en transformaciones (transformada de Fourier, Wavelets o histogramas, por dar un ejemplo).
+
+
 
 \subsubsection{Filtros lineales y filtros no lineales}
+
+
+Los filtros lineales se basan en la convoluci\'on de kernels con la se\~nal correspondiente a los pixeles en la imagen. Estos filtros comparten los principios de surpeposici\'on y homogeneidad y se emplean para efectos de suavizados o agudizamiento de la imagen. Existen distintos tipos de filtros lineales, incluyendo  Gaussianos, pasa baja y pasa alta, entre otros. 
+
+
+En una imagen los cambios de alta magnitud entre el valor de pixeles se asocian a altas frecuencias, como es el caso de ruido y bordes. Los cambios suaves corresponden a bajas frecuencias, por lo tanto los filtros pasa baja atenuan las altas frecuencias provocando una disminuci\'on entre cambios bruscos y por lo tanto eliminaci\'on de ruido, pero con el costo de afectar detalles y bordes.
+
+Otro ejemplo de filtros lineales son los Gaussianos que permiten un efecto equivalente para un pixel en todas las direcciones, dando un mejor efecto de suavizado. Tambi\'en los filtros pasa alta se utilizan para la detecci\'on de bordes y
+
+Los filtros no lineales permiten generar modificaciones m\'as complejas a la imagen y evitar algunos problemas presentes en los filtros lineales como lo son la degradaci\'on de los bordes si se habla de los filtros pasa baja, o en el caso de los filtros pasa alta, la magnificaci\'on del ruido.
+
+\begin{equation}
+\label{eq:mediana}
+\Gamma_{mediana}=\begin{array}
+\left\Vert \begin{array}{ccc}
+1 & 1 & 1\\
+1 & 1 & 1\\
+1 & 1 & 1
+\right\Vert\end{array}
+\end{array}
+\end{array}\right\Vert
+ \enspace .
+\end{equation}
+
+El filtro de mediana es un ejemplo de filtro no lineal su kernel se encuentra definido por el kernel \ref{eq:mediana}. 
+
 
 
 
@@ -336,6 +364,14 @@ Los m\'etodos de filtrado discutidos en este cap\'itulo se realizan en el domini
 
 \subsubsection{Unsharp Masking}
 
+Para el realce de los bordes y mejora de contraste se utilza uno de los m\'etodos de unsharp mask que realiza una substracci\'on de la imagen suavizada a la imagen original dando como resultado una imagen $B$ con las altas frecuencias de la imagen, es decir, los bordes y otros cambios considerables en la intensidad de los pixeles t\'ipicamente representados como detalles o ruido.
+
+\begin{equation}
+\label{eq:unsharpmask}
+G=U+\lambda\,B
+\end{equation}
+
+La imagen $G$ corresponde a la imagen mejorada resultante al proceso de Unsharp Masking, en este caso, el coeficiente $\lambda$ regula el grado de mejora. 
 
 
 \subsection{Eliminaci\'on de ruido}
@@ -344,7 +380,32 @@ Los m\'etodos de filtrado discutidos en este cap\'itulo se realizan en el domini
 
 \subsubsection{Filtro Non-Local Means}
 
+El filtro de promediado no local o Non-Local mean utiliza la distancia euclidiana para determinar la similitud entre vecindarios de dos pixeles $p_{1}=\left(x_{1},y_{1}\right)$
+y $p_{2}=\left(x_{2},yx_{2}\right)$ y as\'i determinar el pondeado en una regi\'on dada por una ventana $\omega$ para asignarle el peso correspondiente al pixel reduciendo los cambios bruscos a la vez que se conservan los bordes y detalles, tomando como punto de partida que la localidad est\'a muchas veces relacionada con la similitud de los patrones. La ecuaci\'on del filtro NLM se expresa de la siguiente manera:
+
+\begin{equation}
+\label{eq:nlmfunc}
+\[
+\psi_{\textrm{NLM}}\left[\left[u,v\right],\left[x,y\right]\right]=\exp\left(-\frac{\left\Vert \vec{\eta}\left[x,y\right]-\vec{\eta}\left[u,v\right]\right\Vert }{2\sigma_{r}^{2}}\right).
+\]
+\end{equation}
+
 \subsubsection{Filtro Deceived Non-Local Means}
+
+El filtro Deceived Non-Local Means (DNLM) presenta un enfoque novedoso el cual consiste en la combinaci\'on de un m\'etodo de Undsharp Masking (USM) con el filtro Non Local Means, con el fin de lograr una mejora en los bordes y en el contraste de la imagaen, as\'i como la eliminaci\'on de ruido aditivo gausiano  presente en la imagen. La combinaci\'on propuesta se basa en el desacople entre la imagen para el pesado (imagen original $U$) y la utilizada en el filtrado $U_{USM}$. Esto permite evitar el efecto anillo presente en las im\'agenes filtradas con el USM. La siguientes ecuaciones presentan la definici\'on del enfoque de desacoplamiento y la funci\'on de pesado del filtro DNLM respectivamente:
+
+\begin{equation}
+\ref{eq:dnlm}
+Y(p)=\left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)U_{USM}(m)\right),
+\end{equation}
+
+
+\begin{equation}
+	\psi_{\text{NLM}}(p,m) =  exp\left(-\frac{ \left\| \displaystyle\ \overrightarrow{\eta}(\omega_{a},m) - \overrightarrow{\eta}(\omega_{a},p)  \right\|^{2}}{h}\right) 
+\end{equation}
+
+
+En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = N$ y un vecindario de tama\~no $\omega_{a} \times \omega_{a} = N$ pixeles, la complejidad computacional del filtro DNLM es de $O(N^3)$, donde $N$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
 
 
 \subsection{Paralelizaci\'on}
