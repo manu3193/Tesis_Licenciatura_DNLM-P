@@ -319,7 +319,14 @@
 %``indice'' y en el texto aparece lo que indique ``termino'';
 %\verb+\ot{termino}+ agrega una entrada secundaria al término.
 
-En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de la propuesta presentada en ested trabajo. La propuesta consiste en la paralelizaci\'on de un filtro que combina la eliminaci\'on de ruido y la mejora de la imagen. La reducci\'on de ruido se realiza por medio de un enfoque de filtrado espacial no local, mediante el ponderamiento de la similitud entre las regiones aleda\~nas a los pixeles de la imagen. Este enfoque presenta una gran robustez ante el ruido, pero una mayor complejidad computacional, la cual se aborda con mayor detalle en este cap\'itulo. La mejora de la imagen se realiza utilizando uno de los enfoques de Unsharp Masking, permitiendo un mayor realce en bordes y contraste en regiones de la imagen. Adem\'as se presentan t\'ecnicas de paralelizaci\'on que permitan el enfoque del desacople entre la imagen de filtrado y la utilizada para el pesado, como se propone en \cite{deceived}., con el fin de reducir el tiempo de procesamiento del algoritmo en una primera instancia y evitar los artefactos que resultan al utilizar el enfoque tradicional de filtrado en etapas sucesivas. 
+En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de la propuesta presentada en este trabajo. La propuesta consiste en la paralelizaci\'on del filtro Deceived Non-Local Means (DNLM), presentado como parte de la familia de filtros DeWAFF en \cite{calderon2015dewaff}, para la eliminaci\'on de ruido, realce de bordes y mejora de contraste en la imagen. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales desarrolladas para este filtro y para el filtro Non-Local Means original (NLM) presentadas en \cite{CalderonRamirez2017} y \cite{Condat2010, Darbon2008}, respectivamente.
+Como lo demuestra el autor en \cite{calderon2015dewaff}, el filtro DNLM presenta los mejores resultados en comparaci\'on con el filtro bilateral y el filtro bilateral escalado (ambos parte de DeWAFF), ya que se basa en el efoque de eliminaci\'on de ruido por medio del ponderado no local presentado en \cite{buades2005non}. Sin embargo, la complejidad computacional del filtro DNLM hace que su uso sea poco pr\'actico, debido a que los investigadores frecuentemente necesitan analizar videos de actividad celular compuestos por cientos de miles de im\'agenes  \cite{Yang2006NucleiSU, cellsegmentationMarkov, Tay2010, Fils_BfilCells_2008}.
+
+
+
+
+
+de im\'agenes que combina la eliminaci\'on de ruido y la mejora de informaci\'on importante como los bordes y el contraste. La reducci\'on de ruido se realiza por medio del enfoque de filtrado espacial por ponderado no local, llamado filtro Non-Local Means. Este enfoque presenta buena robustez ante el ruido, pero una mayor complejidad computacional, la cual se aborda con mayor detalle en este cap\'itulo. La mejora en la imagen se realiza utilizando uno de los enfoques de Unsharp Masking, permitiendo un mayor realce en bordes y contraste en la imagen. Adem\'as se presenta una estrategia de paralelizaci\'on que permita el enfoque del desacople entre la imagen de filtrado y la utilizada para el pesado, necesario para la versi\'on mejorada presentada en \cite{deceived}., con el fin de reducir el tiempo de procesamiento del algoritmo en una primera instancia y evitar los artefactos que resultan al utilizar el enfoque tradicional de filtrado en etapas sucesivas. 
 
 
 \subsection{Conceptos B\'asicos}
@@ -360,7 +367,7 @@ El filtro de mediana es un ejemplo de filtro no lineal su kernel se encuentra de
 
 
 
-\subsection{Agudizamiento de detalles en imagen}\
+\subsection{Realce de detalles en imagen}\
 
 \subsubsection{Unsharp Masking}
 
@@ -407,5 +414,8 @@ Y(p)=\left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)\right)^{-1} \\ \left(\
 
 En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = N$ y un vecindario de tama\~no $\omega_{a} \times \omega_{a} = N$ pixeles, la complejidad computacional del filtro DNLM es de $O(N^3)$, donde $N$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
 
+\subsection{Optimizaciones computacionales}
 
 \subsection{Paralelizaci\'on}
+
+\subsection{Arquitectura Intel Xeon Phi Knights Landing}
