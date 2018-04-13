@@ -9,73 +9,40 @@
 \chapter{Introducción}
 \label{chp:intro}
 
-%En la \nt{introducción} deben quedar completamente claros los siguientes
-%aspectos, cuyo significado depende del tipo concreto de tesis:
-%
-%\begin{compactitem}
-%\item Contexto
-%\item Problema
-%\item Esbozo de solución
-%\item Objetivos y estructura
-%\end{compactitem}
-%
-%El contexto corresponde al entorno donde se desarrolla el proyecto de
-%tesis, que puede ser el área general de aplicación, un dominio de
-%problemas, etc. El problema concreto se sintetiza usualmente en una
-%frase o pregunta. Esta pregunta debería ser una consecuencia a la que
-%se llega después de realizar el desarrollo del contexto. Del
-%planteamiento del problema se deriva cuál es el objetivo del trabajo
-%en particular, que a su vez debe conducir al lector de forma natural
-%al esbozo de la solución del problema a tratar en la
-%tesis. Generalmente para aclarar la solución se hace uso de un
-%diagrama de bloques o diagrama de flujo general, es decir, desde un
-%nivel de abstracción alto, donde no sea necesario entrar en detalles
-%técnicos. Usualmente este diagrama y su breve explicación dictan cuál
-%debe ser la estructura del resto del tesis, que es mencionada siempre
-%al final de la introducción.
-%
-%Una buena introducción debe lograr que el lector tenga interés de leer el resto
-%del tesis.
-%
-%Es recomendable dividir la tesis en secciones, nombradas cada una de acuerdo a
-%su contenido. \textbf{Jamás} utilice los nombres de la guía como
-%``\emph{Problema existente e importancia de su solución}'', sino algo como ``La
-%deforestación en Costa Rica'' o lo que se adecúe a su problema en particular.
-%
-%Recuerde que en español solo la primera letra del título va en mayúscula
-%(exceptuando nombres propios, por supuesto).
+El mejoramiento de las im\'agenes es un proceso en el que se obtiene un realce de las caracter\'isticas o informaci\'on relevante y la atenuaci\'on de informaci\'on poco importante o no deseada en una imagen. Esto permite mejorar la efectividad de m\'etodos de segmentaci\'on, rastreo de objetos, clasificaci\'on y otras t\'ecnicas de reconocimiento de patrones y el aprendizaje autom\'atico \cite{BF2014,IMPROVESEGMENTATIONBF,CONCAPAN2016}. 
 
-El mejoramiento de las im\'agenes es un proceso en el que por medio de diferentes t\'ecnicas se obtiene un realce de las caracter\'isticas o informaci\'on relevante y la atenuaci\'on de informaci\'on poco importante o no deseada. Esto permite mejorar la efectividad de m\'etodos de segmentaci\'on, rastreo de objetos, clasificaci\'on y otras t\'ecnicas de reconocimiento de patrones y el aprendizaje autom\'atico. 
+Los filtros espaciales son utilizados para la reducci\'on del ruido en im\'agenes. Estos filtros act\'uan mediante la manipulaci\'on directa de los valores de los pixeles en el plano de la imagen, a diferencia de los filtros en frecuencia en los que se realiza una conversi\'on de dominio por medio de la Transformada de Fourier para realizar operaciones en el dominio de la frecuencia.
+
+El filtro Non-Local Means (NLM) propuesto en \cite{buades2005non} se basa en el ponderamiento de la similitud entre los vecindarios de los pixeles contenidos en una ventana de búsqueda deslizante para as\'i asignar el peso correspondiente a cada pixel. Este enfoque ha demostrado resultados destacables en t\'erminos relaci\'on se\~nal-ruido y poca degradaci\'on o p\'erdida de detalles (como por ejemplo los bordes) en comparaci\'on con otros filtros como el de mediana y el bilateral \cite{CONCAPAN2016}. 
+
+Existen mejoras desarrolladas a partir del algoritmo NLM como el propuesto en \cite{calderon2015dewaff} llamado Deceived Non-Local Means (DNLM). Presenta una combinaci\'on del m\'etodo Unsharp Masking (USM) con el filtro NLM por medio del desacoplamiento de la imagen utilizada en el pesado y la imagen usada en el filtrado. Esto permite reducir los artefactos no deseados en las im\'agenes (efecto de anillo) generados por el enfoque convencional, es decir, al aplicar primero el m\'etodo USM y posteriormente el filtro NLM \cite{calderon2015dewaff}.  
+
+Uno de los principales inconvenientes del filtro NLM es su complejidad computacional: en el peor de los casos, para una imagen de entrada de $N$ pixeles utilizando un tamaño de ventana deslizante de $A\times B = N$ y un tamaño de vecindario de $A\times B = N$, la complejidad computacional est\'a dada por $\mathcal{O}(N^{3})$, tardando hasta $32s$ en el filtrado de una imagen de 1024x1024 pixeles \cite{Zhu2016}. Esto hace que el filtro DNLM sea poco pr\'actico para los investigadores de \'areas como la microbiolog\'ia, ya que frecuentemente necesitan analizar videos de actividad celular compuestos por cientos de miles de im\'agenes, implicando m\'ultiples d\'ias de procesamiento  \cite{Yang2006NucleiSU, cellsegmentationMarkov, Tay2010, Fils_BfilCells_2008}. De ah\'i que no es suficiente implementar las optimizaciones algor\'itmicas, sino que debe acompa\~narse con una adecuada estrategia de paralelizaci\'on y vectorizaci\'on para el mayor aprovechamiento de los recursos.
+
+Una forma de reducir la complejidad computacional del filtro es mediante el uso de optimizaciones o aproximaciones del algoritmo. Este proyecto pretende continuar el trabajo realizado previamente, que consisti\'o en el desarrollo de una propuesta de optimizaci\'on para el filtro DNLM por medio del uso de Im\'agenes Integrales y la Transformada R\'apida de Fourier (DNLM-IIFFT). Esta optimizaci\'on permite reducir la complejidad del algoritmo a  $\mathcal{O}(N^{2}\log(N))$. Los resultados experimentales arrojan una aceleraci\'on de hasta 10 veces en el procesamiento de una imagen de 1280x720 pixeles. Si bien estos resultados presentan una aceleraci\'on considerable, es necesario explorar t\'ecnicas de paralelizaci\'on que permitan una mayor reducci\'on del tiempo de ejecuci\'on del algoritmo. 
+
+La estrategia de paralelizaci\'on propuesta en este trabajo se enfoca en la paralelizaci\'on del algoritmo a nivel intra-nodo, para el aprovechamiento total de los n\'ucleos de procesamiento y unidades vectoriales presentes en la arquitectura. Para lograrlo, se emplea la biblioteca Intel Integrated Primitives (Intel IPP) utilizando datos alineados en memoria para una eficiente vectorizaci\'on y el uso de OpenMP para la paralelizaci\'on a nivel de hilos en el proceso de filtrado. Este esquema de paralelizaci\'on intra-nodo se escala a m\'ultiples nodos de procesamiento como se muestra en la figura \ref{fig:diagram1}.
 
 
-Los filtros espaciales son ampliamente utilizados para la reducci\'on de los diferentes tipos de ruido encontrados en las im\'agenes. Muchas veces se emplean en combinación con t\'ecnicas como la ecualizaci\'on de histogramas, que permite obtener una mejora en el contraste; o Unsharp Masking (USM) para resaltar los bordes.
-
-Uno de los filtros con mejor resultado en la reducción de ruido es el Non-Local Means (NLM) propuesto en \textcite{1467423}, ya que se basa en la similitud entre los vecindarios de los pixeles contenidos en una ventana de búsqueda deslizante para el ponderamiento del peso asignado a cada pixel. Este enfoque ha demostrado muy buenos resultados con una menor p\'erdida de detalles (como por ejemplo los bordes) en comparaci\'on con otros filtros como el de mediana y el bilateral \cite{calderon2016first}. Es importante resaltar que este algoritmo es altamente paralelizable, debido a que no existe dependencia en el c\'alculo de los pixeles que componen la imagen. 
-
-Existen mejoras desarrolladas a partir del algoritmo NLM, un enfoque novedoso es el propuesto en \textcite{7160148} llamado Deceived Non-Local Means (DNLM). Presenta una combinaci\'on del m\'etodo Unsharp Masking (USM) con el filtro NLM por medio del desacoplamiento de la imagen utilizada en el pesado y la imagen usada en el filtrado. Esto permite reducir los artefactos no deseados en las im\'agenes (efecto de anillo) generados por el enfoque convencional, es decir, al aplicar primero el m\'etodo USM y posteriormente el filtro NLM.  
-
-Uno de los principales inconvenientes del filtro NLM es su complejidad computacional: En el peor de los casos, para una imagen de entrada de $N$ pixeles utilizando un tamaño de ventana deslizante de $A\times B = N$ y un tamaño de vecindario de $A\times B = N$, la complejidad computacional es de $\mathcal{O}(N^{3})$. 
-
-Lo anterior provoca que el tiempo de procesamiento del filtro NLM sea una limitante importante a considerar, en especial si se planea utilizar para una tarea en tiempo real o en el preprocesado de grandes vol\'umenes de im\'agenes (en el caso de sets de datos para aprendizaje autom\'atico). 
-
-Una forma de reducir la complejidad computacional del filtro es mediante el uso de optimizaciones o aproximaciones del algoritmo. Este proyecto pretende continuar el trabajo realizado previamente, que consisti\'o en el desarrollo de una propuesta de optimizaci\'on para el filtro DNLM por medio del uso de Im\'agenes Integrales y la Transformada R\'apida de Fourier (DNLM-IIFFT). Esta optimizaci\'on permite reducir la complejidad del algoritmo a  $\mathcal{O}(N^{2}\log(N))$. Los resultados experimentales arrojan una aceleraci\'on de hasta 10 veces en el procesamiento de una imagen de 720p. Si bien estos resultados presentan una aceleraci\'on importante, se deben explorar t\'ecnicas de paralelizaci\'on que permitan reducir a\'un m\'as el tiempo de ejecuci\'on del algoritmo. 
-
-\begin{figure}[htb]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{blockD}
   \caption{Diagrama de bloques de la soluci\'on}
-  \label{fig:ltxfig}
+  \label{fig:diagram1}
 \end{figure}
 
-*COMENTAR Y HACER REFERENCIA SOBRE FIGURA*
+Este trabajo forma parte del proyecto de investigaci\'on llamado "Análisis funcional genómico de células cancerosas por RNA de interferencia para la identificación de redes de regulación asociadas a proliferación y muerte en respuesta a quimioterapia genotóxica", financiado por el Fondo Especial para la Educaci\'on Superior (FEES).
+
 
 \section{Objetivos y estructura del documento}
 
 \index{objetivos}
 
-Este trabajo tiene como objetivo la paralelizaci\'on del filtro DNLM-IIFFT optimizado para la arquitectura Xeon Phi Knights Landing, que permita el procesamiento eficiente de grandes vol\'umenes de im\'agenes.
-En este trabajo se realiza una implementaci\'on paralela del filtro DNLM-IFFT (modificaci\'on del filtro NLM) en sistemas multi-nodo optimizados para la arquitectura Intel Knights Landing, con la finalidad de realizar procesamiento concurrente y de alto rendimiento de grandes conjuntos de im\'agenes. 
+Este trabajo tiene como objetivo la paralelizaci\'on del filtro DNLM-IIFFT optimizado para la arquitectura Xeon Phi Knights Landing, para el procesamiento de conjuntos de im\'agenes. La paralelizaci\'on se realiza en varios niveles: paralelismo a nivel de tareas y paralelismo a nivel del datos. El paralelismo a nivel de tareas se emplea en el procesamiento del conjunto de im\'agenes mediante la asignaci\'on del filtrado de una imagen a cada uno de los nodos del c\'uster. Bajo este mismo principio, se emplea la distribuci\'on del procesamiento de la imagen en bloques de filas para cada uno de los hilos en el nodo de computaci\'on, con el objetivo de explotar la localidad de cach\'e. El paralelismo a nivel de datos se emplea en la vectorizaci\'on de operaciones, mediante el uso de datos alineados en memoria y la biblioteca Intel IPP. Finalmente se realiza una evaluaci\'on de la soluci\'on propuesta por medio de una comparaci\'on entre las optimizaciones y la versi\'on original del filtro DNLM.
 
+
+\index{estructura}
+La presente tesis est\'a organizada de la siguiente manera: el cap\'itulo \ref{chp:intro} corresponde a la introducci\'on, el contexto en el que se desarrolla este trabajo y los objetivos. Seguidamente en el cap\'itulo 2 se detalla el marco te\'orico necesario para el desarrollo de la tesis y en el cap\'itulo 3 se presenta la soluci\'on. El cap\'itulo 4 corresponde al desarrollo del experimento y finalmente, se presentan las conclusiones y el trabajo futuro en el cap\'itulo 5. 
 
 
 %Esta plantilla LaTeX tiene como objetivo simplificar la construcción del
