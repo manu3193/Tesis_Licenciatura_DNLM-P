@@ -319,15 +319,69 @@
 %``indice'' y en el texto aparece lo que indique ``termino'';
 %\verb+\ot{termino}+ agrega una entrada secundaria al término.
 
-En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la paralelizaci\'on del filtro Deceived Non-Local Means (DNLM). Este filtro es una modificaci\'on del filtro Non-Local Means (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas para el filtro DNLM y el filtro NLM original. Existen optimizaciones computacionales del filtro NLM para reducir su tiempo de ejecuci\'on , las cuales se puede agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.  
+En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la optimizaci\'on y paralelizaci\'on del filtro Deceived Non-Local Means (DNLM). Este filtro es una modificaci\'on del filtro Non-Local Means (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas originalmente para el filtro NLM y adaptadas en este trabajo al filtro DNLM. Las optimizaciones computacionales del filtro NLM se pueden agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.  En este trabajo se limita al estudio de optimizaciones exactas al filtro NLM debido a la necesidad de obtener la mejor calidad del filtro. Existen mejoras en el rendimiento del filtro NLM en t\'erminos del ruido eliminado, sin embargo se emplean t\'ecnicas de cl\'ustering y diccionarios para preclasificar parches similares en la imagen, incurriendo en una mayor complejidad computacional del filtro [FALTAN CITAS]. 
 
 
 
-\subsection{Realce de detalles en imagen}
+\section{Eliminaci\'on de ruido}
+
+\subsection{Ruido Blanco Aditivo de distribuci\'on Gaussiana}
+\label{ch:marco_agwn}
+
+El ruido presente en im\'agenes se debe a fen\'omenos naturales en el proceso de captura, transmisi\'on y almacenamiento de las im\'agenes. 	Una forma de modelar este ruido es mediante el ruido blanco aditivo de distribuci\'on gaussiana. Este ruido es llamado gaussiano porque se manifiesta en funci\'on de una distribuci\'on de probabilidad gaussiana. Se dice que es blanco porque el espectro de intensidad es plano. Se le llama aditivo porque se encuentra acumulado los pixeles de la imagen. El modelo Gaussiano se considera como el m\'as adecuado para la representaci\'on de ruido en im\'agenes y est\'a dado por la ecuaci\'on \ref{eq:modelruido}.
+
+\begin{equation}
+\label{eq:modelruido}
+U = X + V
+\end{equation}
+
+ donde $X$ corresponde a la imagen sin ruido y el t\'ermino $V$ corresponde a la Funci\'on de Densidad de Probabilidad Gaussiana dada por la ecuaci\'on \ref{eq:probfuncgauus}.
+
+\begin{equation}
+\label{eq:probfuncgauus}
+P(V(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {V(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
+\end{equation}
+
+El par\'ametro $\sigma$ es la desviaci\'on est\'andar  y $\mu$ el valor medio de la distribuci\'on de probabilidad.
+
+
+\subsection{Filtro Non-Local Means}
+\label{ch:marco_nlm}
+
+El filtro NLM forma parte de los filtros espaciales de promedio ponderado que pueden definirse de manera general como se detalla en la ecuaci\'on \ref{eq:weighted}.
+
+\begin{equation}
+\label{eq:weighted}
+Y(U,p,m)=\left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)U(m)\right),
+\end{equation}
+
+Donde $p$ y $m$ son pixeles contenidos en una ventana deslizante $\Omega$ de la imagen de entrada $U$ \cite{calderon2015dewaff}.
+
+El filtro NLM se define mediante la funci\'on de pesado $\psi$ utilizando la distancia Euclidiana para determinar la similitud entre vecindarios de dos pixeles $p$ y $m$. De esta manera se determina el peso en la contribuci\'on para el ponderamiento de los pixeles en una regi\'on dada por una ventana $\Omega$. 
+
+Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades como otros filtros. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos comparando los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen\cite{calderon2015dewaff}. La ecuaci\'on \ref{eq:nlmfunc} muestra la funci\'on de pesado del filtro NLM.
+
+\begin{equation}
+\label{eq:nlmfunc}
+\[
+\psi_{\textrm{NLM}}\left(p,m\right)=\exp\left(-\frac{\left\Vert \vec{\eta}\left(\omega,m\right)-\vec{\eta}\left(\omega,p\right)\right\Vert }{\sigma^{2}}\right).
+\]
+\end{equation}
+
+Donde $\sigma$ es el par\'ametro que controla el grado de suavizado del filtro y $\vec{\eta}$ el vector que contiene todos los pixeles del vecindario $\omega$.
+
+En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = N$ y un vecindario de tama\~no $\omega_{a} \times \omega_{a} = N$ pixeles, la complejidad computacional del filtro DNLM es de $O(N^3)$, donde $N$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
+
+
+
+\subsection{Mejora de bordes y contraste}
 
 \subsubsection{Unsharp Masking}
+\label{ch:marco_usm}
 
-Para el realce de los bordes y mejora de contraste se utilza un m\'etodo de unsharp mask que realiza una substracci\'on de la imagen suavizada a la imagen original dando como resultado una imagen $B$ con las altas frecuencias de la imagen, es decir, los bordes y otros cambios considerables en la intensidad de los pixeles t\'ipicamente representados como detalles y ruido. Adicionalmente, se puede emplear un enfoque inverso que consiste en a\~nadir la imagen $B$ con la informaci\'on de bordes y detalles a la imagen original en una proporci\'on dada por el coeficiente $\lambda$, como se observa en la ecuaci\'on \ref{eq:unsharpmask}. La imagen $B$ es el producto de la convoluci\'on entre la imagen original y un kernel que aproxime la segunda derivada, como el kernel Laplaciano o Laplaciano de Gaussiano.
+Los m\'etodos de Unsharp Masking se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracci\'on de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles t\'ipicamente representados como detalles y ruido. 
+
+Adicionalmente, se puede emplear un enfoque inverso que consiste en sumar la imagen $B$ con la informaci\'on de bordes y detalles en alta frecuencia a la imagen original. La adici\'on se controla en una proporci\'on dada por el coeficiente $\lambda$, como se observa en la ecuaci\'on \ref{eq:unsharpmask}. La imagen $B$ se obtiene por medio de la convoluci\'on entre la imagen original y un kernel de aproximaci\'on a la segunda derivada, como el kernel Laplaciano, Laplaciano de Gaussiano o de diferencia Gaussiana.
 
 \begin{equation}
 \label{eq:unsharpmask}
@@ -351,6 +405,8 @@ y $l$ puede estar dado por:
 \end{array}\right]
 \end{equation}
 
+para el caso de la aproximaci\'on b\'asica a la segunda derivada.
+
 En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por medio del Laplaciano del Gaussiano \cite{sotak1989laplacian}, dado por la siguiente ecuaci\'on:
 
 \begin{equation}
@@ -358,88 +414,64 @@ En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por
 \end{equation}
 
 
-\subsection{Eliminaci\'on de ruido}
 
-\subsubsection{Ruido Gaussiano Aditivo}
-
-El ruido Gaussiano recibe este nombre debido a que est\'a modelado por la funci\'on de densidad de probabilidad Gaussiana correspondiente a la se\~nal de entrada. El modelo Gaussiano se considera como el m\'as adecuado para la representaci\'on de ruido en im\'agenes y est\'a dado por la ecuaci\'on \ref{eq:modelruido}
-
-\begin{equation}
-\label{eq:modelruido}
-U = X + V
-\end{equation}
-
- donde $X$ corresponde a la imagen sin ruido y el t\'ermino $V$ corresponde a la funci\'on de densidad de probabilidad dada por la ecuaci\'on \ref{eq:probfuncgauus}.
-
-\begin{equation}
-\label{eq:probfuncgauus}
-P(V(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {V(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
-\end{equation}
+\subsection{Filtro Deceived Non-Local Means}
+\label{ch:marco_dnlm}
 
 
-\subsubsection{Filtro Non-Local Means}
+El enfoque del filtro Deceived Non-Local Means (DNLM) consiste en la combinaci\'on de un m\'etodo de Undsharp Masking (USM) con el filtro NLM, con el prop\'osito de lograr por un lado una mejora en los bordes y en el contraste de la imagen, y por otro lado la eliminaci\'on del ruido Gausiano  presente en la imagen. La combinaci\'on propuesta se basa en el desacople entre la imagen usada en el pesado (imagen original $U$) y la utilizada en el filtrado $U_{USM}$. Esto permite evitar el efecto anillo presente en las im\'agenes filtradas con el USM \cite{calderon2015dewaff}.
 
-El filtro NLM forma parte de los filtros de promedio ponderado que pueden definirse de manera general por la siguiente ecuaci\'on:
-
-\begin{equation}
-\label{eq:weighted}
-Y(U,p,m)=\left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)U(m)\right),
-\end{equation}
-
-Donde $p$ y $m$ son pixeles contenidos en una ventana deslizante $\Omega$ de la imagen de entrada $U$ \cite{calderon2015dewaff}.
-El filtro NLM define la funci\'on de pesado $\psi$ mediante la distancia Euclidiana para determinar la similitud entre vecindarios de dos pixeles $p_{1}=\left(x_{1},y_{1}\right)$
-y $p_{2}=\left(x_{2},y_{2}\right)$ , de esta manera se determina el pondeado en una regi\'on dada por una ventana $\omega$ para asignarle el peso correspondiente al pixel reduciendo los cambios bruscos a la vez que se conservan los bordes y detalles, tomando como punto de partida que la localidad est\'a relacionada con la similitud de los patrones. La funci\'on de pesado del filtro NLM se expresa de la siguiente manera:
-
-\begin{equation}
-\label{eq:nlmfunc}
-\[
-\psi_{\textrm{NLM}}\left[\left[u,v\right],\left[x,y\right]\right]=\exp\left(-\frac{\left\Vert \vec{\eta}\left[x,y\right]-\vec{\eta}\left[u,v\right]\right\Vert }{2\sigma_{r}^{2}}\right).
-\]
-\end{equation}
-
-\subsubsection{Filtro Deceived Non-Local Means}
-
-El filtro Deceived Non-Local Means (DNLM) presenta un enfoque el cual consiste en la combinaci\'on de un m\'etodo de Undsharp Masking (USM) con el filtro Non Local Means, con el fin de lograr una mejora en los bordes y en el contraste de la imagaen, as\'i como la eliminaci\'on del Gausiano  presente en la imagen. La combinaci\'on propuesta se basa en el desacople entre la imagen para el pesado (imagen original $U$) y la utilizada en el filtrado $U_{USM}$. Esto permite evitar el efecto anillo presente en las im\'agenes filtradas con el USM \cite{calderon2015dewaff}. La siguientes ecuaciones presentan la definici\'on del enfoque de desacoplamiento y la funci\'on de pesado del filtro DNLM respectivamente:
+ La ecuaci\'on \ref{eq:dnlm} presenta la definici\'on del enfoque de desacoplamiento del filtro.
 
 \begin{equation}
 \label{eq:dnlm}
-Y(p)=\left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{i}\left(U, p, m\right)U_{USM}(m)\right),
+Y(p)=\left(\sum_{m\in \Omega}\psi_{NLM}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{NLM}\left(U, p, m\right)U_{USM}(m)\right),
 \end{equation}
 
 
-\begin{equation}
-	\psi_{\text{NLM}}(p,m) =  exp\left(-\frac{ \left\| \displaystyle\ \overrightarrow{\eta}(\omega_{a},m) - \overrightarrow{\eta}(\omega_{a},p)  \right\|^{2}}{h}\right) 
-\end{equation}
 
-
-En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = N$ y un vecindario de tama\~no $\omega_{a} \times \omega_{a} = N$ pixeles, la complejidad computacional del filtro DNLM es de $O(N^3)$, donde $N$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
 
 \subsection{Optimizaciones computacionales}
-
+\label{ch:marco_opt}
 
 \subsubsection{DNLM-IIFFT}
+\label{ch:marco_dnlmifft}
 
-Al analizar la distancia Euclidiana entre los vecindarios se tiene:
+Esta optimizaci\'on computacional utiliza im\'agenes integrales y la transformada r\'apida de fourier para disminuir la complejidad computacional del algoritmo. 
+
+
+
+Al analizar la distancia Euclidiana entre los vecindarios $D$,
 
 \begin{equation}
-D\left(i,j\right)=\sum_{u}\left(\varPhi_{i}\left(u\right)-\varPhi_{j}\left(u\right)\right)^{2} \enspace ,
+D\left(p,m\right)=\left\Vert \vec{\eta}\left(\omega,m\right)-\vec{\eta}\left(\omega,p\right)\right\Vert
 \end{equation}
- donde $\sum_{u}$ denota la sumatoria de los valores dados por la diferencia entre los vecindarios $\varPhi_i$ and $\varPhi_j$.
 
-Al desarrollar la diferencia cuadrada y al reescribir los t\'erminos cuadr\'aticos como $\varPhi_{i}^{2}=\sum_{u}\varPhi_{i}\left(u\right)^{2} \enspace$,  se obtiene: 
 \begin{equation}
- D\left(i,j\right)=\varPhi_{i}^{2}-2\sum_{u}\varPhi_{j}\left(u\right)\varPhi_{i}\left(u\right)+\varPhi_{j}^{2}  \enspace ,
+D\left(p,m\right)=\sum_{u}\left(\varPhi_{m}\left(u\right)-\varPhi_{p}\left(u\right)\right)^{2} \enspace ,
+\end{equation}
+ donde $\sum_{u}$ denota la sumatoria de los valores dados por la diferencia entre los vecindarios $\varPhi_m$ and $\varPhi_p$.
+
+Al desarrollar la diferencia cuadrada y al reescribir los t\'erminos cuadr\'aticos como $\varPhi_{m}^{2}=\sum_{u}\varPhi_{m}\left(u\right)^{2} \enspace$,  se obtiene: 
+\begin{equation}
+ D\left(m,p\right)=\varPhi_{m}^{2}-2\sum_{u}\varPhi_{p}\left(u\right)\varPhi_{m}\left(u\right)+\varPhi_{p}^{2}  \enspace ,
  \label{eq_cuadratica}
 \end{equation}
 
 
 \begin{equation}
-D\left(i,j\right)=\varPhi_{i}^{2}-2\varPhi_{j}\cdot\varPhi_{i}+\varPhi_{j}^{2} \enspace ,
+D\left(m,p\right)=\varPhi_{m}^{2}-2\varPhi_{p}\cdot\varPhi_{m}+\varPhi_{p}^{2} \enspace ,
 \end{equation}
-donde $\varPhi_{j}\cdot\varPhi_{i}$ corresponde al producto punto entre matrices. El siguiente ejemplo ilustra el c\'alculo de la distancia Euclideana entre los vecindarios de pixeles contenidos en la imagen $U\in\mathbb{R}^{5\times5}$ definida en la Tabla \ref{tab_ImageExample}.
+donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices. El siguiente ejemplo ilustra el c\'alculo de la distancia Euclideana entre los vecindarios de pixeles contenidos en la imagen $U\in\mathbb{R}^{5\times5}$ definida en la Tabla \ref{tab_ImageExample}.
 
 
-\begin{table}
+
+
+
+
+
+
+\begin{table}{H}
 \begin{center}
 \caption{Ejemplo de imagen $U$.}
 
@@ -460,6 +492,10 @@ donde $\varPhi_{j}\cdot\varPhi_{i}$ corresponde al producto punto entre matrices
 }
 \par\end{center} \label{tab_ImageExample}
 \end{table}
+
+
+
+
 Para efectos de la ilustraci\'on, se toma una ventana $\Omega_{\left(3,3\right)}\in\mathbb{R}^{3\times3}$  y se realiza  el c\'alculo de la distancia Euclidiana entre los vecindarios $\varPhi_{\left(3,3\right)}$ y $\varPhi_{\left(2,2\right)}$:
 
 \begin{equation}
@@ -599,8 +635,10 @@ correspondiente al producto punto de las matrices $-2N_{j}\cdot N_{i}$,  puede s
 
 
 \subsubsection{Optimizaci\'on de Gossens}
-
+\label{ch:marco_gossens}
 
 \subsection{Paralelizaci\'on}
+\label{ch:marco_parallel}
 
 \subsection{Arquitectura Intel Xeon Phi Knights Landing}
+\label{ch:marco_xeonphi}
