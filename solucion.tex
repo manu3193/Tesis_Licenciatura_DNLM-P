@@ -1,4 +1,4 @@
-\chapter{Solución propuesta}
+\chapter{Optimizaci\'on y paralelizaci\'on del filtro DNLM}
 \label{ch:solucion}
 
 Primero que todo, jamás utilice el título indicado arriba, sino algo
@@ -12,3 +12,7 @@ propuesto. Sin embargo, el enfoque no debe nunca concentrarse en los detalles
 de la implementación particular realizada, sino del diseño conceptual como tal.
 
 Recuerdese que toda figura y tabla deben estar referenciadas en el texto.
+
+En este cap\'itulo se presenta la paralelizaci\'on del filtro DNLM, con una comparaci\'on entre dos optimizaciones algor\'itmicas presentes en la literatura y sus respectivas versiones paralelas. La primera es una optimizaci\'on propuesta para el filtro DNLM, llamada DNLM-IIFFT. Se enfoca en disminuir la funci\'on de costo computacional mediante el uso de im\'agenes integrales y la transformada r\'apida de Fourier \cite{CalderonRamirez2017}. La segunda optimizaci\'on elegida es adaptada en este trabajo al filtro DNLM, debido a que fue presentada originalmente para el filtro NLM. Esta optimizaci\'on, en adelante DNLM-MOAS, acelera el c\'alculo de la funci\'on de pesado del filtro gracias al uso de un filtro de media m\'ovil, en adici\'on con el cambio n los ciclos de iteraci\'on y el aprovechamiento de la simetr\'ia de la funci\'on de pesado del filtro NLM \cite{Goossens2008}. Ambas optimizaciones se detallan en la secci\'on \ref{ch:marco_opt}.
+
+El paralelismo se emplea en dos formas: a nivel de tareas y a nivel de datos. En el caso del paralelismo a nivel de datos, este trabajo se enfoca en la vectorizaci\'on de la mayor cantidad de operaciones vectorizables presentes el algoritmo. Para esto se propone el uso de las primitivas de Intel para procesamiento de se\~nales e im\'agenes, llamadas \textit{Integrated Performance Primitives} (IPP). Muchas de estas rutinas est\'an optimizadas para utilizar datos alineados en memoria y generar instrucciones SIMD vectorizadas. Estas instrucciones vectorizadas son aprovechadas por las unidades vectoriales presentes en la arquitectura Xeon Phi Knights Landing, la cual se profundiza en la secci\'on \ref{marco_xeonphi}.  
