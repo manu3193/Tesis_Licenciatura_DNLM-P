@@ -24,45 +24,25 @@ El filtro NLM propuesto en \cite{buades2005non} ha demostrado resultados destaca
 
 Uno de los principales inconvenientes del filtro NLM es su complejidad computacional: en el peor de los casos, para una imagen de entrada de $N$ pixeles utilizando un tamaño de ventana deslizante de $A\times B = N$ y un tamaño de vecindario de $A\times B = N$, la complejidad computacional est\'a dada por $\mathcal{O}(N^{3})$, tardando hasta $32s$ en el filtrado de una imagen de 1024x1024 pixeles \cite{Zhu2016}. Esto hace que el filtro DNLM sin optimizar sea poco pr\'actico para los investigadores de \'areas como la microbiolog\'ia, ya que frecuentemente necesitan analizar videos de actividad celular compuestos por cientos de miles de im\'agenes, implicando m\'ultiples d\'ias de procesamiento. 
 
-Existen mejoras desarrolladas a partir del algoritmo NLM como la propuesta en \cite{calderon2015dewaff} llamada Deceived Non-Local Means (DNLM). Presenta una combinaci\'on del m\'etodo Unsharp Masking (USM) con el filtro NLM por medio del desacoplamiento de la imagen utilizada en el pesado y la imagen usada en el filtrado. Esto permite reducir los artefactos no deseados en las im\'agenes (efecto de anillo) generados por el enfoque convencional, es decir, al aplicar en una primera etapa el m\'etodo USM y posteriormente el filtro NLM \cite{calderon2015dewaff}.  
+Existen mejoras desarrolladas a partir del algoritmo NLM como la propuesta en \cite{calderon2015dewaff} llamada Deceived Non-Local Means (DNLM). Presenta una combinaci\'on del m\'etodo \textit{Unsharp Mask} (USM) con el filtro NLM por medio del desacoplamiento de la imagen utilizada en el pesado y la imagen usada en el filtrado. Esto permite reducir los artefactos no deseados en las im\'agenes (efecto de anillo) generados por el enfoque convencional, es decir, al aplicar en una primera etapa el m\'etodo USM y posteriormente el filtro NLM \cite{calderon2015dewaff}.  
 
 
-Una forma de reducir la complejidad computacional del filtro es mediante el uso de optimizaciones o aproximaciones del algoritmo. En este trabajo se incluye el estudio de optimizaciones computacionales exactas del algoritmo y no aproximaciones. Esto es debido a que algunas optimizaciones logran reducir en efecto la complejidad computacional del algoritmo, sin embargo producen una disminuci\'on del rendimiento del algoritmo de filtrado \cite{Orchard2008,Tasdizen2009}. REVISAR CITAS
+Una forma de reducir la complejidad computacional del filtro es mediante el uso de optimizaciones o aproximaciones del algoritmo. En este trabajo se incluye el estudio de optimizaciones computacionales exactas del algoritmo y no aproximaciones. Esto es debido a que algunas optimizaciones logran reducir en efecto la complejidad computacional del algoritmo, sin embargo en este trabajo nos interesan las optimizaciones con la misma respuesta que la implementaci\'on original del filtro. 
 
 Sumado al an\'alisis de las optimizaciones algor\'itmicas del filtro DNLM para disminuir su costo computacional, se busca alcanzar el mayor aprovechamiento del \textit{hardware} por medio de la vectorizaci\'on y paralelizaci\'on del algoritmo. Para esto se propone una estrategia de paralelizaci\'on para computaci\'on de alto rendimiento enfocada en la arquitectura Xeon Phi Knigths Landing disponible en las instalaciones del Centro Nacional de Alta Tecnolog\'ia, como parte del cl\'uster de alto rendimiento "Kabr\'e" del Colaboratorio Nacional de Computaci\'on Avanzada (CNCA).
 
-La estrategia de paralelizaci\'on propuesta en este trabajo se enfoca en la paralelizaci\'on del algoritmo a nivel intra-nodo, para el aprovechamiento total de los n\'ucleos de procesamiento y unidades vectoriales disponibles en la arquitectura, la cual se abarca con mayor detalle en la Secci\'on \ref{ch:marco_xeonphi}. Para lograr una mayor optimizaci\'on del algoritmo, se emplean las primitivas de procesamiento de im\'agenes y se\~nales \textit{Integrated Performance Primitives} (IPP) utilizando alineamiento de datos en memoria para una eficiente vectorizaci\'on y el uso de OpenMP para paralelizaci\'on a nivel de tareas en el algoritmo de filtrado. 
+La estrategia de paralelizaci\'on propuesta en este trabajo se enfoca en la paralelizaci\'on del algoritmo a nivel intra-nodo, para el aprovechamiento total de los n\'ucleos de procesamiento y unidades vectoriales disponibles en la arquitectura, la cual se abarca con mayor detalle en la Secci\'on \ref{ch:marco_xeonphi}. 
+Para lograr una mayor optimizaci\'on del algoritmo, se se utilizan datos alineados en memoria gracias a las primitivas de procesamiento de im\'agenes y se\~nales \textit{Integrated Performance Primitives} (IPP), especialmente dise\~nada para permitir la vectorizaci\'on de sus rutinas de procesamiento de im\'agenes \cite{IntelCorporation2017}.       Sumado a lo anterior, se utiliza OpenMP para la paralelizaci\'on a nivel de tareas de los algoritmos de filtrado. 
 
-
-[INLUIR DIAGRAMA DE LA SOLUCION]
-
-Este trabajo forma parte del proyecto de investigaci\'on llamado "Análisis funcional genómico de células cancerosas por RNA de interferencia para la identificación de redes de regulación asociadas a proliferación y muerte en respuesta a quimioterapia genotóxica", financiado por el Fondo Especial para la Educaci\'on Superior (FEES) del Consejo Nacional de Rectores (CONARE) y con participaci\'on de investigadores del TEC, UCR y CNCA. 
+Este trabajo forma parte del proyecto de investigaci\'on llamado ``Análisis funcional genómico de células cancerosas por RNA de interferencia para la identificación de redes de regulación asociadas a proliferación y muerte en respuesta a quimioterapia genotóxica'', financiado por el Fondo Especial para la Educaci\'on Superior (FEES) del Consejo Nacional de Rectores (CONARE) y con participaci\'on de investigadores del TEC, UCR y CNCA. 
 
 
 \section{Objetivos y estructura del documento}
 
 \index{objetivos}
 
-Este trabajo tiene como objetivo la implementaci\'on de una optimizaci\'on computacional del filtro DNLM especializada para la arquitectura Xeon Phi Knights Landing, con el objetivo de acelerar el tiempo de procesamiento de las im\'agenes. La paralelizaci\'on se realiza en dos niveles: paralelismo a nivel de tareas y paralelismo a nivel del datos. El paralelismo a nivel de tareas se utiliza en la descomposici\'on del procesamiento de la imagen en subtareas independientes para secciones de la imagen, con cierto grado de granularidad. Esto tiene como objetivo explotar caracter\'isticas propias de la arquitectura como la gran cantidad de hilos de procesamiento, la localidad de cach\'e y el uso de memoria de alto ancho de banda. El paralelismo a nivel de datos se realiza mediante la vectorizaci\'on de operaciones. Para esto se utilizan datos alineados en memoria y la biblioteca IPP, especialmente dise\~nada para permitir la vectorizaci\'on de sus rutinas de procesamiento de im\'agenes. Finalmente se pretende evaluar la soluci\'on propuesta por medio de una comparaci\'on entre dos optimizaciones y la versi\'on original del filtro DNLM.
+Este trabajo tiene como objetivo la implementaci\'on de una optimizaci\'on computacional del filtro DNLM especializada para la arquitectura Xeon Phi Knights Landing, con el objetivo de acelerar el tiempo de procesamiento de las im\'agenes. La paralelizaci\'on se realiza en dos niveles: paralelismo a nivel de tareas y paralelismo a nivel del datos. El paralelismo a nivel de tareas se utiliza en la descomposici\'on del procesamiento de la imagen en subtareas independientes para secciones de la imagen, con cierto grado de granularidad. Esto tiene como objetivo explotar caracter\'isticas propias de la arquitectura como la gran cantidad de hilos de procesamiento, la localidad de cach\'e y el uso de memoria de alto ancho de banda. El paralelismo a nivel de datos se realiza mediante la vectorizaci\'on de operaciones. Finalmente se pretende evaluar la soluci\'on propuesta por medio de una comparaci\'on entre dos optimizaciones y la versi\'on original del filtro DNLM.
 
 
 \index{estructura}
-La presente tesis est\'a organizada de la siguiente manera: el cap\'itulo \ref{chp:intro} corresponde a la introducci\'on, el contexto en el que se desarrolla este trabajo y los objetivos. Seguidamente en el cap\'itulo 2 se detalla el marco te\'orico necesario para el desarrollo de la tesis y en el cap\'itulo 3 se presenta la soluci\'on. El cap\'itulo 4 corresponde al desarrollo del experimento y finalmente, se presentan las conclusiones y el trabajo futuro en el cap\'itulo 5. 
-
-
-%Esta plantilla LaTeX tiene como objetivo simplificar la construcción del
-%documento de tesis, presentando ejemplo de figuras y tablas, así como otorgar
-%una plataforma de compilación en GNU/Linux que simplifique la administración de
-%todo el documento.
-%
-%La última sección de la introducción usualmente sí tiene un título estandar que
-%es ``Objetivos y estructura del documento'', donde se presentan \emph{en prosa}
-%los objetivos general y específicos que ha tenido el proyecto de tesis,
-%así como la estructura de la tesis (por ejemplo, ``en el siguiente capítulo se
-%esbozan los fundamentos teóricos necesarios para explicar en el
-%capítulo~\ref{ch:solucion} la propuesta realizada$\ldots$''
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End: 
+La presente tesis est\'a organizada de la siguiente manera: el Cap\'itulo \ref{chp:intro} corresponde a la introducci\'on, el contexto en el que se desarrolla este trabajo y los objetivos. Seguidamente en el Cap\'itulo \ref{ch:marco} se detalla el marco te\'orico necesario para el desarrollo de la tesis y en el Cap\'itulo \ref{ch:solucion} se presenta la soluci\'on. El Cap\'itulo \ref{ch:res} corresponde al desarrollo del experimento y finalmente, se presentan las conclusiones y el trabajo futuro en el Cap\'itulo \ref{ch:concl}. 

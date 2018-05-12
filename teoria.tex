@@ -1,325 +1,8 @@
 \chapter{Marco teórico}
 \label{ch:marco}
 
-%\section{Descripción}
-%
-%Toda tesis hace referencia a trabajos previos en el área y trabajos afines que
-%están directamente relacionados con lo planteado en el tesis.
-%
-%Además, en el marco teórico debe aparecer la información absolutamente
-%necesaria para comprender la solución, y por eso es recomendable escribir
-%primero la solución (el siguiente capítulo), para ir anotando qué debe ser
-%explicado en el marco teórico.
-%
-%\section{Generalidades}
-%
-%Se recomienda revisar las guías de publicación de la \nt{IEEE} en
-%\url{http://www.ieee.org/publications_standards/publications/authors/authors_journals.html},
-%donde puede encontrar cómo hacer referencias bibliográficas correctamente, cómo
-%citar ecuaciones, tablas y figuras, etc.  
-%
-%\subsection{Redacción}
-%
-%La \nt{redacción} en todo el documento debe seguir un estilo científico
-%objetivo. Esto implica que se redacta de modo impersonal, sin utilizar primeras
-%personas del singular o del plural, y se evita el uso de cualquier tipo de
-%calificativo, sustituyéndolos siempre por datos concretos, vinculados a
-%referencias bibliográficas o datos experimentales. Los comparativos también
-%deben concretarse a hechos y datos, y nunca dejarse ``en el aire''. Por la
-%naturaleza de la tesis, el tiempo verbal es usualmente presente, no perdiendo
-%nunca de vista que se está explicando ``cómo hacer algo'', en vez de ``qué se
-%hizo''.
-%
-%Las \nt{frases} deben ser cortas, y debe evitarse que el lector tenga que saltar
-%constantemente entre partes de la tesis, lo que implica una exposición lineal
-%clara, donde lo que se necesita ya ha sido explicado antes. Deben evitarse
-%redundancias y por tanto cada concepto se exponen en un único lugar.
-%
-%Todo aspecto circunstancial es irrelevante para la tesis, es decir, si se ha
-%desarrollado en el laboratorio $X$, o en el curso $Y$, con el profesor $Z$, o
-%en la empresa $W$, el nombre de funciones o clases en su código, etc., es
-%información irrelevante para reproducir el experimento, y por lo tanto sobra.
-%
-%\subsubsection{Numeración del documento}
-%
-%La primera página de la tesis es la correspondiente a la introducción,
-%así que ésta debe ser la página 1. Desde la introducción, hasta antes
-%de la bibliografía, las unidades son ``Capítulos''. La bibliografía y
-%anexos no se consideran capítulos, así que ya no continúan con la
-%misma numeración de los capítulos (la paginación sí continua). Los
-%índices, notación, glosario, etc.\ se numeran con números romanos en
-%versalitas ({\textsc{I}, \textsc{II}, \textsc{III}, \textsc{IV},
-%  \textsc{V}, \textsc{VI}}$\ldots$) y antes del índice (portada,
-%resúmenes, agradecimientos, hoja de evaluadores, etc.) las páginas no
-%llevan numeración.
-%
-%Esta plantilla LaTeX ya se ocupa de todo lo anterior.
-%
-%\subsection{Ecuaciones}
-%
-%Para citar \nt{ecuaciones} se utilizan paréntesis redondos, y no es
-%necesario emplear explícitamente la palabra ``ecuación''. Por ejemplo
-%``Introduciendo en (4.2) los resultados de (3.3) y (3.7) se obtiene
-%...''. La ecuación es parte del flujo de texto y no un objeto
-%flotante, así que no pueden emplearse como figuras. Cuando se requiere
-%la ecuación, allí se inserta.
-%
-%Es incorrecto redactar de la siguiente forma: \explain{MAL}
-%
-%\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-%  dada por (\ref{eq:ej1}), donde el parámetro $\kappa$ está dado por
-%  (\ref{eq:ej2}).}
-%
-%\begin{equation} \label{eq:ej1}
-%  I_{DS}
-%  =
-%  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-%  \left[
-%    e^{-\frac{V_{SB}}{v_t}}
-%    -
-%    e^{-\frac{V_{DB}}{v_t}}
-%  \right]
-%\end{equation}
-%
-%\begin{equation} \label{eq:ej2}
-%  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-%\end{equation}
-%
-%Lo anterior es incorrecto porque obliga al lector a estar buscando ecuaciones,
-%que pueden mostrarse directamente.  La única referenciación permitida es hacia
-%atrás.
-%
-%La forma correcta de redactar lo anterior es: \chk{BIEN}
-%
-%\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-%  dada por}
-%\begin{equation} \label{eq:ej3}
-%  I_{DS}
-%  =
-%  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-%  \left[
-%    e^{-\frac{V_{SB}}{v_t}}
-%    -
-%    e^{-\frac{V_{DB}}{v_t}}
-%  \right]
-%\end{equation}
-%\textsl{donde el parámetro $\kappa$ es}
-%\begin{equation} \label{eq:ej4}
-%  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-%\end{equation}
-%
-%Así el flujo del texto guía al lector por las ecuaciones sin mayor esfuerzo.
-%
-%Es recomendable numerar \emph{todas} las ecuaciones, de modo que en la revisión
-%del documento, o en futuras referencias a su documento de tesis todas las
-%ecuaciones puedan ser citadas sin requerir describir textualmente a cuál
-%ecuación se está haciendo referencia.
-%
-%\subsection{Figuras}
-%
-%Para el almacenamiento de imágenes existen dos tipos de formato: las imágenes
-%raster y las imágenes vectoriales.\index{imagen!raster}
-%
-%\subsubsection{Imágenes raster}
-%
-%Las imágenes raster son representadas por una rejilla de píxeles, en donde cada
-%píxel tiene un valor que representa al nivel de gris o el color. La
-%discretización espacial es ineludible, y la única forma de obtener buena
-%calidad es empleando tamaños grandes de la imagen que conduzcan a resoluciones
-%de al menos 300 puntos por pulgada en la impresión, lo que conlleva a archivos
-%de documentos de varios megabytes. Dentro de los formatos para almacenar
-%imágenes raster existen algunos con pérdida (como el JPEG) que producen en
-%imágenes sintéticas, como diagramas, estructuras ruidosas que dan una
-%apariencia de baja calidad a las figuras. Otros formatos (como PNG, BMP, TIFF o
-%GIF) no tiene pérdidas de información, pero los algoritmos de compresión no
-%pueden reducir el tamaño de las imágenes con los mismos factores de reducción
-%que los formatos con pérdidas. Este tipo de formatos debe utilizarse únicamente
-%para fotografías o capturas de escenas reales con cámaras digitales.
-%
-%\subsubsection{Imágenes vectoriales}
-%
-%\index{imagen!vectorial}
-%Las imágenes vectoriales \textbf{deben} ser empleadas en todo tipo de
-%diagrama. En ellas no se almacenan píxeles, sino las estructuras geométricas
-%que componen la figura como círculos (representado por posicion de su centro y
-%su radio), rectángulos (representados por sus esquinas), líneas, texto, etc. La
-%mayoría de programas para elaborar este tipo de diagramas, como Inkscape, XFig,
-%OpenOffice.org Draw, MS Visio, Adobe Illustrator, etc. proveen varios formatos
-%vectoriales que pueden ser insertados tanto en LaTeX como en OpenOffice.org
-%Writer (o MS Word). Los formatos más empleados son los llamados metafiles, que
-%incluyen al WMF, EMF. En LaTeX se utiliza por lo general EPS. Recientemente se
-%ha incrementado el soporte al formato SVG.
-%
-%No debe cometerse el error de generar una imagen vectorial a partir de una
-%imagen raster, pues una vez realizada la discretización espacial no es posible
-%reconstruir los elementos geométricos que componen la imagen. Por ello, no
-%tiene ningún sentido generar un archivo EPS o WMF a partir de una imagen ya
-%almacenada en BMP, JPG, o PNG, pues lo único que ocurrirá es que se inserta la
-%figura raster tal cual en la imagen vectorial, sin implicar ninguna ganancia en
-%la calidad.
-%
-%Esta plantilla de LaTeX administra la generación de ciertas figuras por usted.
-%Puede colocar en el directorio \texttt{fig/} archivos EPS, JPG, PNG o GP (de
-%GNUPlot) y el Makefile se encarga de hacer todas las conversiones necesarias.
-%En las siguientes subsecciones se describen dos casos adicionales que resultan
-%útiles para realizar figuras más complejas.
-%
-%\subsubsection{Figuras ltxfig/psfrag}
-%
-%\index{psfrag}\index{ltxfig}
-%Cuando en el subdirectorio \texttt{fig/} se encuentran dos archivos con el
-%mismo nombre pero extensiones \texttt{ltxfig} y \texttt{psfrag}, por ejemplo
-%\texttt{prueba.ltxfig} y \texttt{prueba.psfrag}, entonces el Makefile asume que
-%usted desea crear una figura a partir del archivo \texttt{prueba.ltxfig},
-%creado con el programa \texttt{XFig}, sustituyendo los textos ahí presentes con
-%texto formateado con LaTeX.
-%
-%La figura~\ref{fig:ltxfig} ha sido creada con este esquema.  Revise los
-%archivos correspondientes en el directorio de figuras
-%\texttt{fig/ltxfig\_prototipo.*} para más detalles sobre su uso.
-%
-%\begin{figure}[htb]
-%  \centering
-%  \includegraphics[width=0.9\textwidth]{ltxfig_prototipo}
-%  \caption{Ejemplo de imagen ltxfig/psfrag}
-%  \label{fig:ltxfig}
-%\end{figure}
-%
-%\subsubsection{Figuras pstricks}  
-%
-%\index{pstricks}
-%Los archivos con extensión \texttt{.pstricks} en el directorio \texttt{fig} se
-%utilizan para generar cualquier tipo de imágenes según el código que se
-%contenga.  Es un concepto más general que el anterior.  La
-%figura~\ref{fig:pstricks} ha sido creada con este esquema.  Puede revisar los
-%archivos \texttt{prototipo\_gnuplot*} como un ejemplo de su uso, en donde de un
-%archivo gnuplot (\texttt{\_.gp}) se genera un archivo \texttt{\_.eps}, el cual
-%es incluido en el archivo \texttt{.pstricks} sustituyendo cadenas de texto por
-%código LaTeX.
-%
-%\begin{figure}[htb]
-%  \centering
-%  \includegraphics{prototipo_gnuplot}
-%  \caption{Ejemplo de imagen gnuplot/pstricks}
-%  \label{fig:pstricks}
-%\end{figure}
-%
-%\subsubsection{Entradas en el índice de figuras}
-%
-%El índice de figuras debe servir para encontrar rápidamente dónde se
-%encuentra cierta figura.  El pie de la figura, indicado en \LaTeX con
-%\texttt{caption} puede ser extenso, en especial para indicar detalles
-%de las figura, y es la entrada por defecto que aparecerá en el índice
-%de figuras, la cual no debe superar la extensión de una línea y debe
-%únicamente dar la idea del contenido de la figura para poder ser
-%encontrada.  Para lograr esto en \LaTeX{} se agrega un parámetro
-%opcional con el texto del índice de la siguiente forma:
-%\begin{verbatim}
-%  \caption[Texto en el índice]{Texto al pie de la figura}
-%\end{verbatim}
-%
-%\subsection{Referencias bibliográficas}
-%
-%\index{referencias}\index{BibTeX}
-%Todo concepto o idea tomado de otros autores contar con la respectiva
-%referencia. En redacción técnica de ingeniería rara vez se utiliza la cita
-%textual, así que es necesario reformular las ideas y conceptos con palabras
-%propias. En ingeniería electrónica se utilizan los formatos de referencia de la
-%IEEE o la ACM, que son numéricos, encerrados entre paréntesis cuadrados (por
-%ejemplo, ``En \cite{Davis1963} se propuso un nuevo algoritmo'', o ``En
-%\cite{ProakisManolakis1998} los autores proponen tomar las ventajas de los
-%algorimos presentados en \cite{Oppenheim1998,Roberts2005,Haykin2001} por medio
-%del método de Newton \cite{Burrus1998} conocido en el área de optimización
-%lineal.''). La referencia es parte de las frases, así que si la frase termina
-%con la referencia para indicar la idea, ésta debe estar antes del punto final o
-%demás signos de puntuación: ``La capacidad de memoria también sigue una Ley
-%similar a la de Moore \cite{Octave}. Los siguientes son los aspectos a tomar en
-%cuenta en el diseño del sistema \cite{Lindner2002}:''
-%
-%Se recomienda utilizar BibTeX para indicar las referencias
-%bibliográficas.  Actualmente herramientas como Mendeley, Zotero u
-%otras similares simplifican la administración de las referencias y
-%pueden exportar al formato BibTeX.
-%
-%\subsection{Extensión}
-%
-%\index{extensión}
-%Una tesis de licenciatura no debe sobrepasar las 120 páginas incluyendo
-%apéndices y los formalismos desde portada hasta índices.
-%
-%El cuerpo de la tesis (desde introducción hasta conclusiones) usualmente se
-%extiende desde 45 páginas hasta no más de 80, dependiendo de la problemática
-%tratada.
-%
-%No es necesario reproducir contenidos de otras fuentes: agregue las referencias
-%a dichas fuentes, y limítese a enunciar lo estrictamente necesario para
-%comprender sus propuestas de solución.
-%
-%\section{Sobre esta plantilla \LaTeX}
-%
-%Esta plantilla \LaTeX pretende simplificar varios pasos en la creación del
-%documento de tesis.
-%
-%\subsection{Marcar asuntos pendientes}
-%
-%La plantilla tiene dos ``\emph{modos}'' de operación: normal y borrador
-%(\emph{draft}).  En el archivo \texttt{main.tex} a partir de la línea 41 usted
-%encuentra el código
-%
-%\begin{verbatim}
-%%
-%% DRAFT MODE
-%%
-%\newboolean{draftmode}                  % boolean used to control draft-mode
-%% Ensure that only one of the next two lines is active:
-%\setboolean{draftmode}{true}            % turn draft mode on
-%%\setboolean{draftmode}{false}           % turn draft mode off
-%\end{verbatim}
-%
-%Con el modo borrador, se activan ciertos comandos y funcionalidades útiles en
-%el proceso de elaboración de la tesis, pero que deben ser desactivados al
-%final, antes de entregar la tesis.  Por ejemplo, se activa el pie de página que
-%dice ``\emph{Borrador: fecha}'', y se activa el índice titulado ``Revisar''.  En dicho índice aparecen las páginas en donde se hayan utilizado alguno de los siguientes comandos:
-%\begin{compactitem}
-%\item \verb+\boxcomment{comentario}+ Crea una caja en el margen de página con
-%  el comentario indicado.
-%\item \verb+\explain{comentario}+ Crea una caja en el margen de página con
-%  el comentario indicado, con una flecha hacia la derecha para indicar qué en
-%  concreto debe ser revisado.
-%\item \verb+\chk{comentario}+ Crea una caja en el margen con símbolo de
-%  ``chequeado'' y el comentario indicado.
-%\item \verb+\TODO{comentario}+ Crea una caja grande de fondo sombreado con el
-%  comentario indicado.
-%\end{compactitem}
-%
-%En este párrafo se\chk{resultado de chk} utilizan algunos de estos comandos
-%para ilustrar su efecto.  El \verb+\chk+ como puede observar tiene sentido
-%usarlo para marcar que algo está casi listo.  Por otro lado \explain{explain}
-%el comando \verb+\explain+ permite marcar algo que requiere ser revisado en
-%redacción, valores, etc.  El \verb+\boxcomment+\boxcomment{La caja simple}
-%solo pone una marca al margen.
-%
-%\TODO{Finalmente el comando \texttt{TODO} coloca esta caja gris.}
-%
-%Si usted desativa el modo draft, desaparecen todas las marcas
-%anteriores, y desaparece el índice ``Revisar''.  En éste índice
-%aparecen todas las páginas en donde se utilizaron estos comandos con
-%los respectivos comentarios, lo que permite encontrar rápidamente
-%detalles que usted indicó que debe revisar.
-%
-%\subsection{Índices}
-%
-%Como índice se conoce la lista de términos claves con su respectiva
-%página.  Usualmente aparece al final del documento.  La plantilla
-%ofrece varios comandos para simplificar el uso estandar del comando de
-%\LaTeX\ \verb+\index{termino}+ que coloca al término indicado en el
-%índice.  Con \verb+\nt[indice]{termino}+ (\emph{new term}) usted
-%indica la entrada principal del término, que aparece en el texto en el
-%índice, es decir, en el índice aparece lo que indique en vez de
-%``indice'' y en el texto aparece lo que indique ``termino'';
-%\verb+\ot{termino}+ agrega una entrada secundaria al término.
 
-En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la optimizaci\'on y paralelizaci\'on del filtro Deceived Non-Local Means (DNLM). Este filtro es una modificaci\'on del filtro Non-Local Means (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas originalmente para el filtro NLM y adaptadas en este trabajo al filtro DNLM. Las optimizaciones computacionales del filtro NLM se pueden agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.  En este trabajo se limita al estudio de optimizaciones exactas al filtro NLM debido a la necesidad de obtener la mejor calidad del filtro. Existen mejoras en el rendimiento del filtro NLM en t\'erminos del ruido eliminado, sin embargo se emplean t\'ecnicas de cl\'ustering y diccionarios para preclasificar parches similares en la imagen, incurriendo en una mayor complejidad computacional del filtro [FALTAN CITAS]. 
+En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la optimizaci\'on y paralelizaci\'on del filtro Deceived Non-Local Means (DNLM). Este filtro es una modificaci\'on del filtro Non-Local Means (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas originalmente para el filtro NLM y adaptadas en este trabajo al filtro DNLM. Las optimizaciones computacionales del filtro NLM se pueden agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.  En este trabajo se limita al estudio de optimizaciones exactas al filtro NLM debido a la necesidad de obtener la mejor calidad del filtro. Existen mejoras en el rendimiento del filtro NLM en t\'erminos del ruido eliminado, sin embargo se emplean t\'ecnicas de cl\'ustering, diccionarios y otros m\'etodos para preclasificar parches similares en la imagen, a\~nadiendo complejidad computacional al filtro \cite{pardoNLM:2018,Chan2013,Tasdizen2009,Chatterjee2008,JI20091238,Karam2018}. 
 
 
 
@@ -335,7 +18,7 @@ El ruido presente en im\'agenes se debe a fen\'omenos naturales en el proceso de
 U = X + V
 \end{equation}
 
- donde $X$ corresponde a la imagen sin ruido y el t\'ermino $V$ corresponde a la Funci\'on de Densidad de Probabilidad Gaussiana dada por la ecuaci\'on \ref{eq:probfuncgauus}.
+ donde $X$ corresponde a la imagen sin ruido y el t\'ermino $V$ corresponde a la Funci\'on de Densidad de Probabilidad Gaussiana dada en (\ref{eq:probfuncgauus}).
 
 \begin{equation}
 \label{eq:probfuncgauus}
@@ -348,7 +31,7 @@ El par\'ametro $\sigma$ es la desviaci\'on est\'andar  y $\mu$ el valor medio de
 \subsection{Filtro Non-Local Means}
 \label{ch:marco_nlm}
 
-El filtro NLM forma parte de los filtros espaciales de promedio ponderado que pueden definirse de manera general como se detalla en la ecuaci\'on \ref{eq:weighted}.
+El filtro NLM forma parte de los filtros espaciales de promedio ponderado que pueden definirse de manera general como se detalla en (\ref{eq:weighted}).
 
 \begin{equation}
 \label{eq:weighted}
@@ -359,7 +42,7 @@ Donde $p$ y $m$ son pixeles contenidos en una ventana deslizante $\Omega$ de la 
 
 El filtro NLM se define mediante la funci\'on de pesado $\psi$ utilizando la distancia Euclidiana para determinar la similitud entre vecindarios de dos pixeles $p$ y $m$. De esta manera se determina el peso en la contribuci\'on para el ponderamiento de los pixeles en una regi\'on dada por una ventana $\Omega$. 
 
-Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades como otros filtros. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos comparando los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen\cite{calderon2015dewaff}. La ecuaci\'on \ref{eq:nlmfunc} muestra la funci\'on de pesado del filtro NLM.
+Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades como otros filtros. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos comparando los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen\cite{calderon2015dewaff}. La ecuaci\'on (\ref{eq:nlmfunc}) muestra la funci\'on de pesado del filtro NLM.
 
 \begin{equation}
 \label{eq:nlmfunc}
@@ -370,7 +53,7 @@ Este filtro introduce el concepto de similitud entre vencindarios de pixeles y n
 
 Donde $\sigma$ es el par\'ametro que controla el grado de suavizado del filtro y $\vec{\eta}$ el vector que contiene todos los pixeles del vecindario $\omega$.
 
-En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = N$ y un vecindario de tama\~no $\omega_{a} \times \omega_{a} = N$ pixeles, la complejidad computacional del filtro DNLM es de $O(N^3)$, donde $N$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
+En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = S\timesS$ y un vecindario de $|\omega| = P\timesP$ pixeles, la complejidad computacional del filtro DNLM es de $O(S^2 \cdot P^2 \cdot N \cdot M)$, donde $N\timesM$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
 
 
 
@@ -381,7 +64,7 @@ En cuanto a la complejidad computacional del filtro, para el peor escenario de u
 
 Los m\'etodos de Unsharp Masking se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracci\'on de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles t\'ipicamente representados como detalles y ruido. 
 
-Adicionalmente, se puede emplear un enfoque inverso que consiste en sumar la imagen $B$ con la informaci\'on de bordes y detalles en alta frecuencia a la imagen original. La adici\'on se controla en una proporci\'on dada por el coeficiente $\lambda$, como se observa en la ecuaci\'on \ref{eq:unsharpmask}. La imagen $B$ se obtiene por medio de la convoluci\'on entre la imagen original y un kernel de aproximaci\'on a la segunda derivada, como el kernel Laplaciano, Laplaciano de Gaussiano o de diferencia Gaussiana.
+Adicionalmente, se puede emplear un enfoque inverso que consiste en sumar la imagen $B$ con la informaci\'on de bordes y detalles en alta frecuencia a la imagen original. La adici\'on se controla en una proporci\'on dada por el coeficiente $\lambda$, como se observa en (\ref{eq:unsharpmask}). La imagen $B$ se obtiene por medio de la convoluci\'on entre la imagen original y un kernel de aproximaci\'on a la segunda derivada, como el kernel Laplaciano, Laplaciano de Gaussiano o de diferencia Gaussiana.
 
 \begin{equation}
 \label{eq:unsharpmask}
@@ -407,9 +90,10 @@ y $l$ puede estar dado por:
 
 para el caso de la aproximaci\'on b\'asica a la segunda derivada.
 
-En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por medio del Laplaciano del Gaussiano \cite{sotak1989laplacian}, dado por la siguiente ecuaci\'on:
+En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por medio del Laplaciano del Gaussiano \cite{sotak1989laplacian}, como se define en (\ref{eq:log}):
 
 \begin{equation}
+\label{eq:log}
 \operatorname{LoG}(x,y) = \frac{1}{\pi\sigma^4}\left(\frac{x^2+y^2}{2\sigma^2} - 1\right)e^{-\frac{x^2+y^2}{2\sigma^2}},
 \end{equation}
 
@@ -421,7 +105,7 @@ En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por
 
 El enfoque del filtro Deceived Non-Local Means (DNLM) consiste en la combinaci\'on de un m\'etodo de Undsharp Masking (USM) con el filtro NLM, con el prop\'osito de lograr por un lado una mejora en los bordes y en el contraste de la imagen, y por otro lado la eliminaci\'on del ruido Gausiano  presente en la imagen. La combinaci\'on propuesta se basa en el desacople entre la imagen usada en el pesado (imagen original $U$) y la utilizada en el filtrado $U_{USM}$. Esto permite evitar el efecto anillo presente en las im\'agenes filtradas con el USM \cite{calderon2015dewaff}.
 
- La ecuaci\'on \ref{eq:dnlm} presenta la definici\'on del enfoque de desacoplamiento del filtro.
+ La ecuaci\'on (\ref{eq:dnlm}) presenta la definici\'on del enfoque de desacoplamiento del filtro.
 
 \begin{equation}
 \label{eq:dnlm}
@@ -471,7 +155,7 @@ donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices
 
 
 
-\begin{table}{H}
+\begin{table}
 \begin{center}
 \caption{Ejemplo de imagen $U$.}
 
@@ -547,12 +231,12 @@ Para efectos de la ilustraci\'on, se toma una ventana $\Omega_{\left(3,3\right)}
 \begin{equation}
 =42+-2\cdot78+222=42-156+222=108\label{eq:cuadrados-1} \enspace ,
 \end{equation}
-consistente con los resultados obtenidos en la ecuaci\'on \ref{eq:resultado1}.
+consistente con los resultados obtenidos en (\ref{eq:resultado1}).
 
 
 
 
-La optimizaci\'on de este algoritmo se centra en el c\'alculo de la distancia Euclidiana definida en la Ecuaci\'on \ref{eq_cuadratica} de la siguiente manera:
+La optimizaci\'on de este algoritmo se centra en el c\'alculo de la distancia Euclidiana definida en  (\ref{eq_cuadratica}) de la siguiente manera:
 \begin{itemize}
 \item El uso de la imagen integral cuadrada para calcular los t\'erminos $\varPhi_{i}^{2}$
 y $\varPhi_{j}^{2}$.
@@ -616,9 +300,9 @@ $C=\left(1,4\right)$ y $D=\left(4,4\right)$, como se especifica en la Tabla \ref
 \sum_{x_{0}<x\leq x_{1},y_{0}<y\leq y_{1}}I\left(3,3\right)=271+25-179-75=42 \enspace ,
 \end{equation}
 
-con lo cual, es consistente con el primer t\'ermino de la Ecuaci\'on \ref{eq:cuadrados-1}. 
+con lo cual, es consistente con el primer t\'ermino en (\ref{eq:cuadrados-1}). 
 
-La incorporaci\'on de la imagen integral para la sumatoria del \'area de una ventana para una imagen de entrada con $c$ pixeles, presenta una complejidad computacional de $O(c)$, y s\'olamente debe ser calculada una vez en el filtro DNLM.
+La incorporaci\'on de la imagen integral para la sumatoria del \'area de una ventana para una imagen de entrada con $N\timesM$ pixeles, presenta una complejidad computacional de $O(c)$, y s\'olamente debe ser calculada una vez en el filtro DNLM.
 
 
 \paragraph{Transformada R\'apida de Fourier}
@@ -629,19 +313,67 @@ S\left(i,j\right)=N_{i}^{2}-2\sum_{a=0}^{m-1}\sum_{b=0}^{m-1}N_{j}\left(a,b\righ
 \end{equation}
 
 
-
-correspondiente al producto punto de las matrices $-2N_{j}\cdot N_{i}$,  puede ser calculado utilizando la FFT con una complejidad computacional logar\'itmica, reduciendo la funci\'on de costo del filtro DNLM. 
-
+Los pesos son calculados
 
 
-\subsubsection{Optimizaci\'on de Gossens}
-\label{ch:marco_gossens}
+
+correspondiente al producto punto de las matrices $-2N_{j}\cdot N_{i}$,  puede ser calculado utilizando la FFT con una complejidad computacional logar\'itmica, reduciendo la funci\'on de costo del filtro DNLM a $O(S^2 \cdot log(P) \cdot N \cdot M)$
 
 
-Esta optimizaci\'on plantea en primer lugar el aprovechamiento de la simetr\'ia presente en el c\'alculo de los pesos de los pixeles. 
+
+\subsubsection{Optimizaci\'on de Condat}
+\label{ch:marco_condat}
+
+Esta propuesta de optimizaci\'on al algoritmo NLM se caracteriza por su simpleza, al proponer un intercambio entre los loops de interaci\'on del algoritmo \cite{Condat2010}. La aceleraci\'on se consigue al incorporar convoluciones para realizar el ponderamiento de la ventana de b\'usqueda, operando sobre los valores producto de la diferencia cuadrada de los pixeles (\ref{eq:diffquad}) iterando las distancias entre los pixeles contenidos en la ventana de b\'usqueda \Omega \cite{Condat2010}. 
+
+\begin{equation}
+D\left(k\right) = \left(U\left(k + n\right) - U\left( k \right)\right)^2 ,
+\label{eq:diffquad}
+\end{equation}
+
+y 
+
+\begin{equation}
+\label{eq:convmoas}
+SSD = D * h ,
+\end{equation}
+
+donde se define la convoluci\on con un kernel $h$ (\ref{eq:convmoas}) que corresponde a un kernel de promediado.
+
+
+La funci\'on de pesado resultante se muestra en la Ecuaci\'on (\ref{wmoas}). 
+
+\begin{equation}
+\[
+\psi_{\textrm{DNLM-MOAS}}\left(k\right)=\exp\left(-\frac{ SSD\left(k\right) }{\sigma^{2}}\right).
+\]
+\label{eq:wmoas}
+\end{equation}
+
+
+Adem\'as plantea el aprovechamiento de la simetr\'ia presente en el c\'alculo de los pesos de los pixeles, consiguiendo una funci\'on de costo computacional de $O((2P + 2) \cdot (2S + 1)^2 \cdot N \cdot M)$.  
+
+
+
+
 
 \subsection{Paralelizaci\'on}
 \label{ch:marco_parallel}
 
+Marco Teorico sobre paralelizacion.
+
 \subsection{Arquitectura Intel Xeon Phi Knights Landing}
 \label{ch:marco_xeonphi}
+
+La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \textit{many-core} est\'a dise\~nada para aplicaciones de computaci\'on de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para prop\'osito general. A diferencia de la versi\'on anterior, esta nueva iteraci\'on con nombre clave Knights Landig permite el arranque de un sistema operativo por s\'i misma \cite{XeonPhiWhitePaper}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicaci\'on en 2D, cada una de ellas conformada por 2 CPUs y 1MB de Cach\'e L2 \cite{XeonPhiWhitePaper}. Cada uno de los CPUs incorpora 2 Unidades de Procesamiento Vectorial (VPU) con registros de hasta 512 bytes de largo \ref{XeonPhiWhitePaper}. 
+Entre las caracter\'isticas que destacan del CPU es su modo de ejecuci\'on fuera de orden y el multihilo simult\'aneo de 4 hilos \cite{XeonPhiWhitePaper}. Una de sus particularidades es la incorporaci\'on de 16GB de Memoria de Alto Ancho de Banda (HBM) de hasta $450 Gbyte/s$ en el mismo chip como lo muestra la Figura \ref{fig:cpu_phi}, permitiendo tiempos de latencia cortos en comparaci\'on con los obtenidos con tecnolog\'ias DDR4 \cite{XeonPhiWhitePaper}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{fig/cpu}
+\caption{Diagrama de alto nivel del procesador Xeon Phi KNL.}
+\label{fig:cpu_phi}
+\end{figure}
+
+
+La memoria Cach\'e L2 es unificada de 1Mb compartida para los dos n\'ucleos que conforman cada celda \cite{XeonPhiWhitePaper}.

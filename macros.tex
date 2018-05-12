@@ -40,8 +40,8 @@
   \languageshorthands{spanish}%         % command we turn it around.
   \captionsspanish                      % The reason: hyperref has some
   \datespanish                          % problems with the spanish babel,
-}                                       % so we use some trick here so that it
-%\AtBeginDocument{\SelectSpanish}        % thinks it is english.
+}                                       % so we use some trick here so that 
+%\AtBeginDocument{\SelectSpanish}       % it thinks it is english.
 
 \usepackage{makeidx}                    % to create index file
 
@@ -128,10 +128,6 @@
 \ifdraft{%
 
 \usepackage[pdftex,%
-            pdftitle={\pdfTitle},%
-            pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de Clase},%
-            pdfkeywords={\pdfKeywords},%
             naturalnames=true,
             linktocpage,
             hyperindex,
@@ -153,10 +149,6 @@
             ]{hyperref}
 }{%
 \usepackage[pdftex,%
-            pdftitle={\pdfTitle},%
-            pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
-            pdfkeywords={\pdfKeywords},%
             naturalnames=true,
             linktocpage,hyperindex,
             colorlinks,
@@ -177,6 +169,7 @@
             ]{hyperref}
 }
 
+
 %
 % Ensure that the links of the images point to the top of the images and not
 % to the caption
@@ -196,10 +189,6 @@
                                         % into the sources directly.
 \ifdraft{%
 \usepackage[ps2pdf,%
-            pdftitle={\pdfTitle}%
-            pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
-            pdfkeywords={\pdfKeywords},%
             % plainpages=false,
             linktocpage,
             hyperindex,
@@ -209,10 +198,6 @@
             pdfstartview=FitH]{hyperref}
 }{%
 \usepackage[ps2pdf,%
-            pdftitle={\pdfTitle}%
-            pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
-            pdfkeywords={\pdfKeywords},%
             % plainpages=false,
             linktocpage,
             hyperindex,
@@ -225,6 +210,19 @@
 %\usepackage[ps2pdf]{hyperref}
 
 \fi  % end of if pdf or not
+
+% --------------------------------------------------------------------------
+
+% Allow the use of international characters
+\AtBeginDocument{%
+  \hypersetup{%
+             pdftitle={\pdfTitle},%
+             pdfsubject={Tesis de Licenciatura},%
+             pdfauthor={\pdfAuthor},%
+             pdfkeywords={\pdfKeywords}
+            }%
+}
+
 
 \usepackage{sty/algorithmic}            % algorithmic environment
 

@@ -130,6 +130,100 @@ title = {{AN IMPROVED NON-LOCAL DENOISING ALGORITHM}},
 year = {2008}
 }
 
+@article{mingliang2016medical,
+abstract = {The generation process of medical image will inevitably introduce certain noises. These noises will degrade the image quality and affect the final clinical diagnosis. Therefore, denoising plays an important role in the pre-processing of medical image before the formal diagnosis and treatment. In this paper, the classical NLM algorithm is improved to denoise medical images by involving a novel noise weighting function and parallelizing. In our experiment, plenty of medical images have been tested and experiment results show that our algorithm can achieve better results and higher efficiency compared with the original NLM method.},
+author = {Mingliang, Xu and Pei, Lv and Mingyuan, Li and Hao, Fang and Hongling, Zhao and Bing, Zhou and Yusong, Lin and Liwei, Zhou},
+doi = {10.1016/j.neucom.2015.08.117},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Mingliang et al. - 2016 - Medical image denoising by parallel non-local means.pdf:pdf},
+journal = {Neurocomputing},
+keywords = {Denoising,GPU,Medical image,Non-local means,Parallel algorithm,modification},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {GPU,modification},
+title = {{Medical image denoising by parallel non-local means}},
+year = {2016}
+}
+
+@inproceedings{goossens2010gpu,
+author = {Goossens, Bart and Luong, Hi{\^{e}}p and Aelterman, Jan and Pi{\v{z}}urica, Aleksandra and Philips, Wilfried},
+booktitle = {Lecture Notes in Computer Science},
+doi = {10.1007/978-3-642-17691-3_5},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Goossens et al. - 2010 - A GPU-accelerated real-time NLMeans algorithm for denoising color video sequences.pdf:pdf},
+isbn = {3642176909},
+keywords = {DirectX,GPU,GossensOptimization},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {DirectX,GPU,GossensOptimization},
+title = {{A GPU-accelerated real-time NLMeans algorithm for denoising color video sequences}},
+year = {2010}
+}
+@inproceedings{marques2013implementation,
+annote = {Resumen: Implementa el algoritmo NLM usando la optmizaci{\'{o}}n de Condat en GPUs. Presenta 2 referencias importantes e optimizaciones al filtro: la del trabajo de Condat y Darbon.},
+author = {M{\'{a}}rques, Adri{\'{a}}n and Pardo, Alvaro},
+booktitle = {Lecture Notes in Computer Science},
+doi = {10.1007/978-3-642-41822-8_51},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/M{\'{a}}rques, Pardo - 2013 - Implementation of non local means filter in GPUs(2).pdf:pdf},
+isbn = {9783642418211},
+keywords = {CUDA,GPU,Image denoising,Non-local means,Optimizacion,Paralelizacion,VIP},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {GPU,Optimizacion,Paralelizacion,VIP},
+title = {{Implementation of non local means filter in GPUs}},
+year = {2013}
+}
+
+
+@inproceedings{shi2015optimized,
+abstract = {{\textcopyright} 2015 IEEE. Non-local means filter is widely used for image noise reduction. Although the sequential implementation for this algorithm has been successfully applied to large scale InSAR problems, few parallel versions of the non-local InSAR filters have addressed well algorithm characteristics such as an unpredictable workload balance, a strong data dependency. These challenges engender many interesting design issues including domain decomposition, data access, management and workload balancing. This paper presents a sophisticated and improved parallel scheme for the iterative non-local Interferometric Synthetic Aperture Radar (InSAR) filters. The proposed algorithm gives a better speedup and high efficiency. Results for numerical simulations and performance measurements were obtained on SuperMUC.},
+annote = {Resumen: propone una paralelizacion del filtro NLM usando MPI y aprovechandose de la localidad de los datos.},
+author = {Shi, Yilei and Zhu, Xiaoxiang and Bamler, Richard},
+booktitle = {2015 IEEE International Conference on Information and Automation, ICIA 2015 - In conjunction with 2015 IEEE International Conference on Automation and Logistics},
+doi = {10.1109/ICInfA.2015.7279525},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Shi, Zhu, Bamler - 2015 - Optimized parallelization of non-local means filter for image noise reduction of InSAR image.pdf:pdf},
+isbn = {9781467391047},
+keywords = {Algorithm design and analysis,Coherence,Filtering algorithms,Noise measurement,Optical filters,Parallel algorithms,Standards,mpi,parallelization},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {mpi,parallelization},
+pages = {1515--1518},
+title = {{Optimized parallelization of non-local means filter for image noise reduction of InSAR image}},
+year = {2015}
+}
+@article{nguyen2016medical,
+abstract = {The Non-local means denoising filter has been established as gold standard for image denoising problem in general and particularly in medical imaging due to its efficiency. However, its computation time limited its applications in real world application, especially in medical imaging. In this paper, a distributed version on parallel hybrid architecture is proposed to solve the computation time problem and a new method to compute the filters' coefficients is also proposed, where we focused on the implementation and the enhancement of filters' parameters via taking the neighborhood of the current voxel more accurately into account. In terms of implementation, our key contribution consists in reducing the number of shared memory accesses. The different tests of the proposed method were performed on the brain-web database for different levels of noise. Performances and the sensitivity were quantified in terms of speedup, peak signal to noise ratio, execution time, the number of floating point operations. The obtained results demonstrate the efficiency of the proposed method. Moreover, the implementation is compared to that of other techniques, recently published in the literature.},
+author = {Nguyen, Tuan Anh and Nakib, Amir and Nguyen, Huy Nam},
+doi = {10.1016/j.cmpb.2016.02.002},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Nguyen, Nakib, Nguyen - 2016 - Medical image denoising via optimal implementation of non-local means on hybrid parallel architecture.pdf:pdf},
+journal = {Computer Methods and Programs in Biomedicine},
+keywords = {High performance computing,Image denoising,Image enhancement,Parallel computing,gpu,modification,mpi,multicore,parallelization},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {gpu,modification,mpi,multicore,parallelization},
+title = {{Medical image denoising via optimal implementation of non-local means on hybrid parallel architecture}},
+year = {2016}
+}
+@article{zhu2016parallel,
+abstract = {The Non-Local means (NLM) denoising algorithm calculates similarity weight between denoising pixels and searching area pixels by establishing similar functions. In texture denoising and edge region denoising domain, the Non-Local Means denoising algorithm performs better than many other existing denoising algorithms because it uses the redundant information of images. However, NLM algorithm has defect in speed for the huge computational amount. Recently, Intel Xeon Phi Coprocessor (based on Intel Many Integrated Core architecture, MIC) exhibits huge superiority in speedup computation. Therefore we design parallel algorithm strategies of OpenMP and OpenCL based on the serial NLM algorithm for MIC architecture, and conduct the experiment on CPU, GPU, and MIC with images of different sizes. The experiment suggests that the OpenMP-based NLM algorithm has better performance on Xeon Phi 7120 than on Xeon E5 2692 when the image size is greater than or equal to 1024*1024, the OpenCL-based NLM algorithm has better performance on Xeon Phi 7120 than on NVIDIA Kepler K20M GPU, and OpenCL-based NLM algorithm performs a little better than OpenMP-based NLM algorithm when they both implemented on Intel Xeon Phi 7120.},
+annote = {Prioridad: ALTA},
+author = {Zhu, Huming and Wu, Yanfei and Li, Pei and Wang, Duo and Shi, Wei and Zhang, Peng and Jiao, Licheng},
+doi = {10.1016/j.jocs.2016.07.001},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Zhu et al. - 2016 - A parallel Non-Local means denoising algorithm implementation with OpenMP and OpenCL on Intel Xeon Phi Coprocesso(2).pdf:pdf},
+journal = {Journal of Computational Science},
+keywords = {GPU,MIC,Multicore,Non-Local means denoising,OpenCL,OpenMP,Parallel algorithm,Parallelization,VIP,XeonPhi},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {GPU,Multicore,OpenCL,OpenMP,Parallelization,VIP,XeonPhi},
+title = {{A parallel Non-Local means denoising algorithm implementation with OpenMP and OpenCL on Intel Xeon Phi Coprocessor}},
+year = {2016}
+}
+@article{huang2017parallel,
+annote = {Prioridad: ALTA},
+author = {Huang, Fang and Lan, Bo and Tao, Jian and Chen, Yinjie and Tan, Xicheng and Feng, Jie and Ma, Yan},
+doi = {10.1109/ACCESS.2017.2696362},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Huang et al. - 2017 - A Parallel Nonlocal Means Algorithm for Remote Sensing Image Denoising on an Intel Xeon Phi Platform.pdf:pdf},
+journal = {IEEE Access},
+keywords = {MIC,OpenMP,Parallel computing,VIP,Xeon{\_}phi,image processing,remote sensing},
+mendeley-groups = {NLM Parallelizations},
+mendeley-tags = {OpenMP,VIP,Xeon{\_}phi},
+title = {{A Parallel Nonlocal Means Algorithm for Remote Sensing Image Denoising on an Intel Xeon Phi Platform}},
+year = {2017}
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%555
 
 @article{Zhu2016,
@@ -239,6 +333,64 @@ pages = {1603--1607},
 title = {{Fast non-local filtering by random sampling: It works, especially for large images}},
 year = {2013}
 }
+
+@article{Chatterjee2008,
+abstract = {The Non-Local Means (NLM) method of denoising has received considerable attention in the image processing community due to its performance, despite its simplicity. In this paper, we show that NLM is a zero-th order kernel regression method, with a very specific choice of kernel. As such, it can be generalized. The original method of NLM, we show, implicitly assumes local constancy of the underlying image data. Once put in the context of kernel regression, we extend the existing Non-Local Means algorithm to higher orders of regression which allows us to approximate the image data locally by a polynomial or other localized basis of a given order. These extra degrees of freedom allow us to perform better denoising in texture regions. Overall the higher order method displays consistently better denoising capabilities compared to the zero-th order method. The power of the higher order method is amply illustrated with the help of various denoising experiments.},
+author = {Chatterjee, Priyam and Milanfar, Peyman},
+doi = {10.1117/12.778615},
+file = {:home/manzumbado/Desktop/spie08paper.pdf:pdf},
+isbn = {9780819469861},
+issn = {0277786X},
+mendeley-groups = {NLM Optimizations},
+pages = {68140P--68140P--9},
+title = {{A Generalization of Non-Local Means via Kernel Regression}},
+url = {http://proceedings.spiedigitallibrary.org/proceeding.aspx?doi=10.1117/12.778615},
+year = {2008}
+}
+@article{JI20091238,
+author = {Ji, Zexuan and Chen, Qiang and Sun, Quan-Sen and Xia, De-Shen},
+doi = {https://doi.org/10.1016/j.ipl.2009.09.007},
+issn = {0020-0190},
+journal = {Information Processing Letters},
+keywords = { Image denoising, Nonlocal means filter, Rotation-invariant, Zernike moments,Information retrieval},
+mendeley-groups = {NLM Optimizations},
+number = {23},
+pages = {1238--1244},
+title = {{A moment-based nonlocal-means algorithm for image denoising}},
+url = {http://www.sciencedirect.com/science/article/pii/S0020019009002750},
+volume = {109},
+year = {2009}
+}
+@article{Karam2018,
+abstract = {— We propose stochastic bilateral filter (SBF) and sto-chastic non-local means (SNLM), efficient randomized processes that agree with conventional bilateral filter (BF) and non-local means (NLM) on average, respectively. By Monte-Carlo, we repeat this process a few times with different random instantia-tions so that they can be averaged to attain the correct BF/NLM output. The computational bottleneck of the SBF and SNLM are constant with respect to the window size and the color dimension of the edge image, meaning the execution times for color and hyperspectral images are nearly the same as for the grayscale images. In addition, for SNLM, the complexity is constant with respect to the block size. The proposed stochastic filter implementations are considerably faster than the conventional and existing " fast " implementations for high dimensional image data.},
+author = {Karam, Christina and Hirakawa, Keigo},
+doi = {10.1109/TIP.2017.2777182},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Karam, Hirakawa - 2018 - Monte-Carlo Acceleration of Bilateral Filter and Non-Local Means.pdf:pdf},
+journal = {IEEE TRANSACTIONS ON IMAGE PROCESSING},
+keywords = {Index Terms— Bilateral filter,Optimization,VIP,approximation,modification,monte-carlo,non-local means},
+mendeley-groups = {NLM Optimizations},
+mendeley-tags = {Optimization,VIP,approximation,modification},
+number = {3},
+title = {{Monte-Carlo Acceleration of Bilateral Filter and Non-Local Means}},
+volume = {27},
+year = {2018}
+}
+
+@inproceedings{pardoNLM:2018,
+abstract = {In this work we study improvements for the Non Local Means image filter using clustering in the space of patches. Patch clustering it is proposed to guide the selection of the best patches to be used to filter each pixel. Besides clustering, we incorporate spatial coherence keeping some local patches extracted from a local search window around each pixel. Therefore, for each pixel we use local patches and non local ones extracted from the corresponding cluster. The proposed method outperforms classical Non Local Means filter and also, when compared with other methods from the literature based on random sampling, our results confirm the benefits of sampling inside clusters combined with local information.},
+address = {Cham},
+author = {Pardo, Alvaro},
+booktitle = {Progress in Pattern Recognition, Image Analysis, Computer Vision, and Applications},
+editor = {Mendoza, Marcelo and Velast{\'{i}}n, Sergio},
+isbn = {978-3-319-75193-1},
+mendeley-groups = {NLM Optimizations},
+pages = {483--490},
+publisher = {Springer International Publishing},
+title = {{Non Local Means Image Filtering Using Clustering}},
+year = {2018}
+}
+
+
 @inproceedings{coupe2006fast,
   title={Fast non local means denoising for 3D MR images},
   author={Coup{\'e}, Pierrick and Yger, Pierre and Barillot, Christian},
@@ -308,12 +460,35 @@ year = {2013}
 
 @INPROCEEDINGS{CNN_DNLM, 
 author={S.~Calderón, F. Fallas, M. Zumbado, P. Tyrrell, H. Stark, Z. Emersic, B. Meden}, 
-booktitle={2018 IEEE International Conference on Image Processing (ICIP)}, 
+booktitle={2018 IEEE International Conference on Image Processing (ICIP 2018), in press}, 
 title={Assessing the impact of image preprocessing using the Deceived Non Local Means Filter in a Convolutional Neural Net based approach for age estimation using digital  X-ray images from hand bones}, 
-year={In Press}, 
+year={}, 
 volume={}, 
 number={}, 
-pages={1-5}, 
+pages={}, 
 ISSN={}, 
 month={},}
 
+@misc{IntelCorporation2017,
+author = {{Intel Corporation}},
+file = {:home/manzumbado/Desktop/ippi{\_}0.pdf:pdf},
+isbn = {0971786135},
+keywords = {Intel IPP,linking,user's guide},
+mendeley-groups = {tesis},
+title = {{Intel Integrated Performance Primitives Developer Reference}},
+year = {2017}
+}
+
+@article{XeonPhiWhitePaper,
+abstract = {This article describes the architecture of Knights Landing, the second-generation Intel Xeon Phi product family, which targets high-performance computing and other highly parallel workloads. It provides a significant increase in scalar and vector performance and a big boost in memory bandwidth compared to the prior generation, called Knights Corner. Knights Landing is a self-booting, standard CPU that is completely binary compatible with prior Intel Xeon processors and is capable of running all legacy workloads unmodified. Its innovations include a core optimized for power efficiency, a 512-bit vector instruction set, a memory architecture comprising two types of memory for high bandwidth and large capacity, a high-bandwidth on-die interconnect, and an integrated on-package network fabric. These features enable the Knights Landing processor to provide significant performance improvement for computationally intensive and bandwidth-bound workloads while still providing good performance on unoptimized legacy workloads, without requiring any special way of programming other than the standard CPU programming model.},
+author = {Gramunt, Roger and Kim, Ho-seop and Hutsell, Steven},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Gramunt, Kim, Hutsell - 2016 - Knights LandingSecond-Generation Intel Xeon Phi Product.pdf:pdf},
+journal = {IEEE Micro},
+mendeley-groups = {tesis},
+number = {2},
+pages = {34--46},
+title = {{Knights Landing:Second-Generation Intel Xeon Phi Product}},
+url = {http://ieeexplore.ieee.org/document/7453080/},
+volume = {36},
+year = {2016}
+}

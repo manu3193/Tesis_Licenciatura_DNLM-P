@@ -19,7 +19,12 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{ifthen}                     % provide if-then-else operators
-
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{plotmarks}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{algpseudocode}
+\usepackage{tabularx}
 % --------------------------------------------------------------------------
 % Global variables required in document formatting
 % --------------------------------------------------------------------------
@@ -46,10 +51,10 @@
 \newcommand{\scriptAuthor}{Manuel Zumbado Corrales}
 
 % Título de la tesis
-\newcommand{\scriptTitle}{Implementación paralela del filtro DNLM-IIFFT en sistemas multi-nodo optimizado para la arquitectura Intel Xeon Phi Knights Landing} 
+\newcommand{\scriptTitle}{Implementaci\'on paralela de optimizaciones del filtro Deceived Non-Local Means para la plataforma Xeon Phi} 
 
 % Keywords
-\newcommand{\scriptKeywords}{palabras, clave, ...}
+\newcommand{\scriptKeywords}{Non Local Means, Procesamiento de im\'agenes, Paralelizaci\'on, Costo Computacional, Optimizaci\'on, Xeon Phi Knights Landing}
 
 % Descripción de la editorial
 \newcommand{\boxeditorial}{%
@@ -80,8 +85,13 @@
   \renewcommand{\examplesolution}{Solución}
   \pagestyle{empty}
 
-  \include{titlepage} % Titlepage in Spanish
-  %\include{titlepage_en} % Titlepage in English (only if whole thesis in En)
+  % select one of the following titlepages
+  \include{titlepage_licce_es}  % Titlepage in Spanish
+  %\include{titlepage_licel_es} % Titlepage in Spanish
+  %\include{titlepage_licce_en} % Titlepage in English (only if thesis is in En)
+  %\include{titlepage_msc_es}   % Titlepage in Spanish
+  %\include{titlepage_msc_en}   % Titlepage in English (only if thesis is in En)
+
   \include{disclaimer}
   \include{tribunal}  % Remover en versión final
   \include{acta}      % Remover en versión final
