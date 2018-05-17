@@ -2,7 +2,9 @@
 \label{ch:marco}
 
 
-En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la optimizaci\'on y paralelizaci\'on del filtro Deceived Non-Local Means (DNLM). Este filtro es una modificaci\'on del filtro Non-Local Means (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas originalmente para el filtro NLM y adaptadas en este trabajo al filtro DNLM. Las optimizaciones computacionales del filtro NLM se pueden agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.  En este trabajo se limita al estudio de optimizaciones exactas al filtro NLM debido a la necesidad de obtener la mejor calidad del filtro. Existen mejoras en el rendimiento del filtro NLM en t\'erminos del ruido eliminado, sin embargo se emplean t\'ecnicas de cl\'ustering, diccionarios y otros m\'etodos para preclasificar parches similares en la imagen, a\~nadiendo complejidad computacional al filtro \cite{pardoNLM:2018,Chan2013,Tasdizen2009,Chatterjee2008,JI20091238,Karam2018}. 
+En este cap\'itulo se detalla el contenido te\'orico necesario para el desarrollo de este trabajo. La propuesta consiste en la optimizaci\'on y paralelizaci\'on del filtro \engl{Deceived Non-Local Means} (DNLM). Este filtro es una modificaci\'on del filtro \engl{Non-Local Means} (NLM) que adiciona la mejora de bordes y contraste, conservando la buena respuesta del filtro NLM en cuanto a preservaci\'on de bordes y robustez ante el ruido \cite{calderon2015dewaff}. 
+Existen mejoras en el rendimiento del filtro NLM en t\'erminos del ruido eliminado, sin embargo se emplean t\'ecnicas de cl\'ustering, diccionarios y otros m\'etodos para preclasificar parches similares en la imagen, a\~nadiendo complejidad computacional al filtro \cite{pardoNLM:2018,Chan2013,Tasdizen2009,Chatterjee2008,JI20091238,Karam2018}. 
+La propuesta de paralelizaci\'on incluye la evaluaci\'on de optimizaciones computacionales exactas desarrolladas originalmente para el filtro NLM y adaptadas en este trabajo al filtro DNLM. Las optimizaciones computacionales del filtro NLM se pueden agrupar en dos enfoques: Optimizaciones exactas y aproximaciones del algoritmo.
 
 
 
@@ -22,13 +24,13 @@ U = X + V
 
 \begin{equation}
 \label{eq:probfuncgauus}
-P(V(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {V(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
+P(v(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {V(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
 \end{equation}
 
 El par\'ametro $\sigma$ es la desviaci\'on est\'andar  y $\mu$ el valor medio de la distribuci\'on de probabilidad.
 
 
-\subsection{Filtro Non-Local Means}
+\section{Filtro Non-Local Means}
 \label{ch:marco_nlm}
 
 El filtro NLM forma parte de los filtros espaciales de promedio ponderado que pueden definirse de manera general como se detalla en (\ref{eq:weighted}).
@@ -46,20 +48,20 @@ Este filtro introduce el concepto de similitud entre vencindarios de pixeles y n
 
 \begin{equation}
 \label{eq:nlmfunc}
-\[
+
 \psi_{\textrm{NLM}}\left(p,m\right)=\exp\left(-\frac{\left\Vert \vec{\eta}\left(\omega,m\right)-\vec{\eta}\left(\omega,p\right)\right\Vert }{\sigma^{2}}\right).
-\]
+
 \end{equation}
 
 Donde $\sigma$ es el par\'ametro que controla el grado de suavizado del filtro y $\vec{\eta}$ el vector que contiene todos los pixeles del vecindario $\omega$.
 
-En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = S\timesS$ y un vecindario de $|\omega| = P\timesP$ pixeles, la complejidad computacional del filtro DNLM es de $O(S^2 \cdot P^2 \cdot N \cdot M)$, donde $N\timesM$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
+En cuanto a la complejidad computacional del filtro, para el peor escenario de usar una ventana $|\Omega| = S \times S$ y un vecindario de $|\omega| = P \times P$ pixeles, la complejidad computacional del filtro DNLM es de $O(S^2 \cdot P^2 \cdot N \cdot M)$, donde $N \times M$ corresponde a el n\'umero total de pixeles de la imagen de entrada $U$. 
 
 
 
-\subsection{Mejora de bordes y contraste}
+\section{Mejora de bordes y contraste}
 
-\subsubsection{Unsharp Masking}
+\subsection{Unsharp Masking}
 \label{ch:marco_usm}
 
 Los m\'etodos de Unsharp Masking se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracci\'on de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles t\'ipicamente representados como detalles y ruido. 
@@ -99,7 +101,7 @@ En este trabajo se utiliza un kernel de aproximaci\'on a la segunda derivada por
 
 
 
-\subsection{Filtro Deceived Non-Local Means}
+\section{Filtro Deceived Non-Local Means}
 \label{ch:marco_dnlm}
 
 
@@ -115,10 +117,10 @@ Y(p)=\left(\sum_{m\in \Omega}\psi_{NLM}\left(U, p, m\right)\right)^{-1} \\ \left
 
 
 
-\subsection{Optimizaciones computacionales}
+\section{Optimizaciones computacionales}
 \label{ch:marco_opt}
 
-\subsubsection{DNLM-IIFFT}
+\subsection{DNLM-IIFFT}
 \label{ch:marco_dnlmifft}
 
 Esta optimizaci\'on computacional utiliza im\'agenes integrales y la transformada r\'apida de fourier para disminuir la complejidad computacional del algoritmo. 
@@ -146,7 +148,7 @@ Al desarrollar la diferencia cuadrada y al reescribir los t\'erminos cuadr\'atic
 \begin{equation}
 D\left(m,p\right)=\varPhi_{m}^{2}-2\varPhi_{p}\cdot\varPhi_{m}+\varPhi_{p}^{2} \enspace ,
 \end{equation}
-donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices. El siguiente ejemplo ilustra el c\'alculo de la distancia Euclideana entre los vecindarios de pixeles contenidos en la imagen $U\in\mathbb{R}^{5\times5}$ definida en la Tabla \ref{tab_ImageExample}.
+donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices. El siguiente ejemplo ilustra el c\'alculo de la distancia Euclideana entre los vecindarios de pixeles contenidos en la imagen $U\in\mathbb{R}^{5 \times 5}$ definida en la Tabla \ref{table:imageExample}.
 
 
 
@@ -157,7 +159,7 @@ donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices
 
 \begin{table}
 \begin{center}
-\caption{Ejemplo de imagen $U$.}
+\caption{Ejemplo de imagen de entrada $U$.\label{table:imageExample}}
 
 \renewcommand{\arraystretch}{1.4}
 \setlength\tabcolsep{3pt}
@@ -174,7 +176,7 @@ donde $\varPhi_{p}\cdot\varPhi_{m}$ corresponde al producto punto entre matrices
 \textbf{5} & \multicolumn{1}{c}{1} & 5 & 6 & \multicolumn{1}{c}{5} & 3\tabularnewline
 \end{tabular}
 }
-\par\end{center} \label{tab_ImageExample}
+\par\end{center} 
 \end{table}
 
 
@@ -321,10 +323,10 @@ correspondiente al producto punto de las matrices $-2N_{j}\cdot N_{i}$,  puede s
 
 
 
-\subsubsection{Optimizaci\'on de Condat}
+\subsection{Optimizaci\'on de Condat}
 \label{ch:marco_condat}
 
-Esta propuesta de optimizaci\'on al algoritmo NLM se caracteriza por su simpleza, al proponer un intercambio entre los loops de interaci\'on del algoritmo \cite{Condat2010}. La aceleraci\'on se consigue al incorporar convoluciones para realizar el ponderamiento de la ventana de b\'usqueda, operando sobre los valores producto de la diferencia cuadrada de los pixeles (\ref{eq:diffquad}) iterando las distancias entre los pixeles contenidos en la ventana de b\'usqueda \Omega \cite{Condat2010}. 
+Esta propuesta de optimizaci\'on al algoritmo NLM se caracteriza por su simpleza, al proponer un intercambio entre los loops de interaci\'on del algoritmo \cite{Condat2010}. La aceleraci\'on se consigue al incorporar convoluciones para realizar el ponderamiento de la ventana de b\'usqueda, operando sobre los valores producto de la diferencia cuadrada de los pixeles (\ref{eq:diffquad}) iterando las distancias entre los pixeles contenidos en la ventana de b\'usqueda $\Omega$ \cite{Condat2010}. 
 
 \begin{equation}
 D\left(k\right) = \left(U\left(k + n\right) - U\left( k \right)\right)^2 ,
@@ -338,15 +340,14 @@ y
 SSD = D * h ,
 \end{equation}
 
-donde se define la convoluci\on con un kernel $h$ (\ref{eq:convmoas}) que corresponde a un kernel de promediado.
+donde se define la convoluci\'on con un kernel $h$ (\ref{eq:convmoas}) que corresponde a un kernel de promediado.
 
 
 La funci\'on de pesado resultante se muestra en la Ecuaci\'on (\ref{wmoas}). 
 
 \begin{equation}
-\[
+
 \psi_{\textrm{DNLM-MOAS}}\left(k\right)=\exp\left(-\frac{ SSD\left(k\right) }{\sigma^{2}}\right).
-\]
 \label{eq:wmoas}
 \end{equation}
 
@@ -357,12 +358,38 @@ Adem\'as plantea el aprovechamiento de la simetr\'ia presente en el c\'alculo de
 
 
 
-\subsection{Paralelizaci\'on}
+\section{Paralelizaci\'on}
 \label{ch:marco_parallel}
 
-Marco Teorico sobre paralelizacion.
+Existen m\'ultiples enfoques de paralelizaci\'on propuestos en la literatura que han demostrado una alta aceleraci\'on del algoritmo de filtrado, como lo muestra la Tabla \ref{method_table}. 
 
-\subsection{Arquitectura Intel Xeon Phi Knights Landing}
+
+\begin{table}
+\caption[Estado del arte en paralelizaciones del filtro NLM]{M\'etodos previos de implementaciones paralelas para el filtro NLM. Se muestra \'unicamente la aceleraci\'on m\'axima respecto a la versi\'on secuencial no optimizada del filtro.}
+\begin{tabularx}{1\linewidth}{X X X X} 
+\hline
+Implementaci\'on & Arquitectura & M\'etodo & Aceleraci\'on \\ [0.5ex]
+ \hline\hline
+ Coupe et al. \cite{coupe2006fast} &  8 Intel Xeon CPU & Biblioteca de Hilos & $50$x\\
+ Darbon et al. \cite{Darbon2008} &  8 Dual-Core AMD Opteron CPU & Instrucciones Vectorizadas & $110$Wx\\
+ Mingliang et al. \cite{mingliang2016medical} &  NVIDIA Quadro FX 480 & CUDA & $40$x\\
+Gossens et al. \cite{goossens2010gpu} &  NVIDIA GeForce 9600 GT & DirectX & $402$x\\
+Marques and Pardo. \cite{marques2013implementation} &  NVIDIA GeForce GTX 680 & CUDA & $718$x\\ 
+Shi et al. \cite{shi2015optimized} &   1024 n\'ucleos SuperMUC & MPI & $740$x\\
+Nguyen et al. \cite{nguyen2016medical} &   8 Intel Xeon CPU & MPI y PThreads & $148$x\\
+Nguyen et al. \cite{nguyen2016medical} &   8 NVIDIA Tesla C2050 & MPI y CUDA & $510$x\\
+Zhu et al. \cite{zhu2016parallel} &  Intel Xeon Phi 7110P & OpenMP & $87$x\\
+Zhu et al. \cite{zhu2016parallel} &  Intel Xeon Phi 7110P & OpenCL & $108$x\\
+Huang et al. \cite{huang2017parallel} &  Intel Xeon Phi & OpenMP & $32$x\\
+\end{tabularx}
+\label{method_table}
+\end{table}
+
+La primera implementaci\'on paralela encontrada en la literatura se realiz\' mediante m\'ultiplles hilos de ejecuci\'on para procesar im\'agenes m\'edicas en 3D, con la ayuda de un servidor y 8 procesadores Xeon \ \cite{coupe2006fast}. Seguidamente, se utiliza una arquitectura SIMD para paralelizar el filtro en un servidor con 8 procesadores AMD Opteron de doble n\'ucleo \cite{Darbon2008}. Adem\'as, implementaciones en GPU han empleado la optimizaci\'on propuesta por Gossens en DirectX \cite{marques2013implementation} y la optimizaci\'on propuesta por Condat en CUDA \cite{mingliang2016medical,goossens2010gpu}, las cuales muestran mayores aceleraciones que las implementaciones en CPU. Otra implementaci\'on con una aceleraci\'on ligeramente mayor a la obtenida por Marques y Pardo \cite{marques2013implementation} es conseguida en un sistema distribuido con 1024 n\'ucleos de procesamiento \cite{shi2015optimized}. Una implementaci\'on m\'as compleja combina MPI con P-Threads y MPI con CUDA para alcanzar una aceleraci\'on a\'un mayor \cite{nguyen2016medical}. Finalmente, dos implementaciones del filtro para plataformas Xeon Phi \cite{zhu2016parallel,huang2017parallel} y OpenCL \cite{zhu2016parallel}.
+
+Si bien la aceleraci\'on obtenida con GPU es usualmente mayor a las reportadas con la plataforma Xeon Phi, \'esta \'ultima tiene la ventaja de proveer un estilo de programaci\'on sencillo y flexible, ya que utiliza el set de instrucciones X86 \cite{huang2017parallel}. 
+
+\section{Arquitectura Intel Xeon Phi Knights Landing}
 \label{ch:marco_xeonphi}
 
 La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \textit{many-core} est\'a dise\~nada para aplicaciones de computaci\'on de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para prop\'osito general. A diferencia de la versi\'on anterior, esta nueva iteraci\'on con nombre clave Knights Landig permite el arranque de un sistema operativo por s\'i misma \cite{XeonPhiWhitePaper}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicaci\'on en 2D, cada una de ellas conformada por 2 CPUs y 1MB de Cach\'e L2 \cite{XeonPhiWhitePaper}. Cada uno de los CPUs incorpora 2 Unidades de Procesamiento Vectorial (VPU) con registros de hasta 512 bytes de largo \ref{XeonPhiWhitePaper}. 
