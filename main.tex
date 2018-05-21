@@ -16,15 +16,21 @@
 
 % \documentclass is book
 \documentclass[12pt,twoside,letterpaper]{book}
-
 \usepackage[utf8]{inputenc}
 \usepackage{ifthen}                     % provide if-then-else operators
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 \usepackage{pgfplots}
 \usetikzlibrary{plotmarks}
-\usepackage[dvipsnames]{xcolor}
 \usepackage{algpseudocode}
 \usepackage{tabularx}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 % --------------------------------------------------------------------------
 % Global variables required in document formatting
 % --------------------------------------------------------------------------
@@ -41,7 +47,7 @@
 %
 \newboolean{draftmode}                  % boolean used to control draft-mode
 % Ensure that only one of the next two lines is active:
-\setboolean{draftmode}{true}            % turn draft mode on
+\setboolean{draftmode}{false}            % turn draft mode on
 %\setboolean{draftmode}{false}           % turn draft mode off
 % --------------------------------------------------------------------------
 %
@@ -51,7 +57,7 @@
 \newcommand{\scriptAuthor}{Manuel Zumbado Corrales}
 
 % Título de la tesis
-\newcommand{\scriptTitle}{Implementaci\'on paralela de optimizaciones del filtro Deceived Non-Local Means para la plataforma Xeon Phi} 
+\newcommand{\scriptTitle}{Implementaci\'on paralela de optimizaciones computacionales del filtro DNLM para la plataforma Xeon Phi} 
 
 % Keywords
 \newcommand{\scriptKeywords}{Non Local Means, Procesamiento de im\'agenes, Paralelizaci\'on, Costo Computacional, Optimizaci\'on, Xeon Phi Knights Landing}

@@ -1,7 +1,7 @@
 \chapter*{Resumen}
 \thispagestyle{empty}
 
-En este trabajo se presenta una optimizaci\'on computacional novedosa del filtro deceived non local means usando media m\'ovil y simetr\'ia en el pesado. Se realiza la evaluaci\'on de la optimizaci\'on propuesta con distintos enfoques para disminuir el costo computacional del filtro deceived non local means. Adem\'as, tambi\'en se comprueba el impacto de paralelizar los enfoques de optimizaci\'on, evaluando el tiempo de ejecuci\'on y la escalabilidad en una arquitectura many-core. El enfoque propuesto para la implementaci\'on secuencial alcanza una aceleraci\'on de $90$, mientras que su contraparte paralela alcanza un speedup de $665$ en una imagen de entrada de $1024\times1024$.
+En este trabajo se presenta una optimizaci\'on computacional novedosa del filtro \textit{deceived non local means} usando media m\'ovil y simetr\'ia en el pesado. Se eval\'uan dos propuestas de optimizaci\'on para disminuir el costo computacional del filtro y se comprueba su escalabilidad a nivel de hilos en una plataforma  Xeon Phi \textit{Knights Landing}. El enfoque presentado para la optimizaci\'on secuencial alcanza una aceleraci\'on de $90\times$ comparado al filtro original, mientras que su contraparte paralela alcanza una aceleraci\'on de $665\times$ para una imagen de entrada de $1024\times1024$ pixeles.
 
 \bigskip
 
@@ -11,7 +11,7 @@ En este trabajo se presenta una optimizaci\'on computacional novedosa del filtro
 \chapter*{Abstract}
 \thispagestyle{empty}
 
-This work presents a novel computational optimization of the deceived non local means filter using moving average and symmetric weighting. Comprise an evaluation of the proposed optimization with different approaches to lower the computational cost of the deceived non local means filter. Furthermore, also assess the impact of parallelizing the different optimization approaches, evaluating the execution time and scalability in a many-core architecture. The proposed approach for the non-parallel implementation achieved a $90$ speedup, while its parallelized counterpart yielded a $665$ speedup with a $1024\times1024$ input image. 
+This work presents a novel computational optimization of the deceived non local means filter using moving average and symmetric weighting. Two different computational optimization of the deceived non local means filter are evaluated in order to compare the scaling of each approach for the Xeon Phi Knights Landing platform. The proposed approach for the non-parallel optimization achieved a $90\times$ speedup, while its parallelized counterpart yielded a $665\times$ speedup with a $1024\times1024$ input image. 
 
 \bigskip
 

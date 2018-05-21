@@ -70,10 +70,11 @@
 % Other packages
 
 \RequirePackage{ifthen}
-\RequirePackage{color}
+
+\RequirePackage[usenames,dvipsnames]{xcolor}
 \RequirePackage{theorem}    % for theorems, definitions and so on
 % different languages
-\RequirePackage[english,spanish]{babel}
+%\RequirePackage[spanish]{babel}
 
 \message{2009/02/15 tecStyle}
 
@@ -98,8 +99,8 @@
 \iflanguage{spanish}{
 % algunas abreviaciones
 \newcommand{\examplename}{Ejemplo}
-\newcommand{\examplelistname}{Õndice de ejemplos}
-\newcommand{\examplesolution}{SoluciÛn}
+\newcommand{\examplelistname}{√çndice de ejemplos}
+\newcommand{\examplesolution}{Soluci√≥n}
 \newcommand{\etal}{et al.\ }
 \newcommand{\etc}{etc.\ }
 \newcommand{\quot}[1]{``#1''}             % normal quotation
@@ -170,7 +171,7 @@
 % Environment for Definitions
 \newcounter{Def}
 \theoremstyle{plain}
-\newtheorem{definition}[Def]{DefiniciÛn}
+\newtheorem{definition}[Def]{Definici√≥n}
 
 
 % Indexing support
@@ -198,7 +199,21 @@
 \newcommand{\chk}[1]{}
 \newcommand{\todohdr}{Por hacer:}
 \newcommand{\TODO}[2][\todohdr]{}
+
 \definecolor{todocolor}{gray}{0.6}
+\definecolor{dkred}{rgb}{0.5,0,0}       %   dark red
+\definecolor{dkgreen}{rgb}{0,0.3,0}     %   dark green
+\definecolor{dkblue}{rgb}{0,0.0,0.5}    %   dark blue
+\definecolor{dkgray}{gray}{0.4}         %   dark gray
+\definecolor{dkmagenta}{rgb}{0.3,0.0,0.3} % dark magenta
+\definecolor{ltyellow}{rgb}{1.0,1.0,0.7}  % light yellow
+
+\newcommand{\bG}[1]{\textcolor{dkgreen}{\textbf{#1}}}
+\newcommand{\bR}[1]{\textcolor{dkred}{\textbf{#1}}}
+\newcommand{\bB}[1]{\textcolor{dkblue}{\textbf{#1}}}
+\newcommand{\bM}[1]{\textcolor{dkmagenta}{\textbf{#1}}}
+\newcommand{\bY}[1]{\textcolor{dkyellow}{\textbf{#1}}}
+\newcommand{\bC}[1]{\textcolor{dkcyan}{\textbf{#1}}}
 
 \setlength{\marginparsep}{5pt}
 \setlength{\marginparwidth}{63pt}

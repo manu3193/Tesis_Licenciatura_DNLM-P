@@ -35,13 +35,13 @@
 % include all required packages here
 \usepackage[spanish]{babel}     % supports english, but default is 
                                         % spanish...
-\newcommand*{\SelectSpanish}{%          % well, the last line indeed selects
-  \hyphenrules{spanish}%                % english over spanish, but with this
-  \languageshorthands{spanish}%         % command we turn it around.
-  \captionsspanish                      % The reason: hyperref has some
-  \datespanish                          % problems with the spanish babel,
-}                                       % so we use some trick here so that 
-%\AtBeginDocument{\SelectSpanish}       % it thinks it is english.
+% \newcommand*{\SelectSpanish}{%          % well, the last line indeed selects
+%   \hyphenrules{spanish}%                % english over spanish, but with this
+%   \languageshorthands{spanish}%         % command we turn it around.
+%   \captionsspanish                      % The reason: hyperref has some
+%   \datespanish                          % problems with the spanish babel,
+% }                                       % so we use some trick here so that it
+% \AtBeginDocument{\SelectSpanish}        % thinks it is english.
 
 \usepackage{makeidx}                    % to create index file
 
@@ -65,6 +65,8 @@
                                         % tables
 \usepackage{multicol}                   % multiple columns environments
 \usepackage{paralist}                   % a few enumeration settings
+
+\usepackage{bold-extra}
 
 \usepackage[hang,%
             small,%
@@ -99,21 +101,6 @@
                                         % and ensure that they appear all in 
                                         % the Table of Contents
 
-\usepackage{color}                      % Support for colors
-\definecolor{dkred}{rgb}{0.5,0,0}       %   dark red
-\definecolor{dkgreen}{rgb}{0,0.3,0}     %   dark green
-\definecolor{dkblue}{rgb}{0,0.0,0.5}    %   dark blue
-\definecolor{dkgray}{gray}{0.4}         %   dark gray
-\definecolor{dkmagenta}{rgb}{0.3,0.0,0.3} % dark magenta
-\definecolor{ltyellow}{rgb}{1.0,1.0,0.7}  % light yellow
-
-\newcommand{\bG}[1]{\textcolor{dkgreen}{\textbf{#1}}}
-\newcommand{\bR}[1]{\textcolor{dkred}{\textbf{#1}}}
-\newcommand{\bB}[1]{\textcolor{dkblue}{\textbf{#1}}}
-\newcommand{\bM}[1]{\textcolor{dkmagenta}{\textbf{#1}}}
-\newcommand{\bY}[1]{\textcolor{dkyellow}{\textbf{#1}}}
-\newcommand{\bC}[1]{\textcolor{dkcyan}{\textbf{#1}}}
-
 % For pdflatex
 % - The hyperref package should always be loaded last, since it has to
 %   overwrite some of the commands.
@@ -123,11 +110,11 @@
 \ifpdf
 %
 % final / draft document options
-\usepackage[pdftex,final]{graphicx}     % for inserting pdf-graphics.
+\usepackage{graphicx}                   % for inserting pdf-graphics.
                                         % options final / draft
 \ifdraft{%
 
-\usepackage[pdftex,%
+\usepackage[%pdftex,%
             naturalnames=true,
             linktocpage,
             hyperindex,
@@ -136,7 +123,6 @@
             filecolor=dkmagenta,     %\href to local file
             linkcolor=dkred,         %\ref and \pageref
             citecolor=dkgreen,       %\cite
-            pagecolor=dkred,
             pagebackref,
             plainpages=false,
             pdfpagelabels,
@@ -148,7 +134,7 @@
             pdfstartview=FitH, % FitB,FitBH,FitBV,Fit,FitH,FitV
             ]{hyperref}
 }{%
-\usepackage[pdftex,%
+\usepackage[%pdftex,%
             naturalnames=true,
             linktocpage,hyperindex,
             colorlinks,
@@ -156,7 +142,6 @@
             filecolor=dkmagenta,     %\href to local file
             linkcolor=dkred,         %\ref and \pageref
             citecolor=dkgreen,       %\cite
-            pagecolor=dkred,
             % pagebackref,           % only in draft modus should this be on.
             plainpages=false,
             pdfpagelabels,
@@ -184,7 +169,7 @@
 \else   % i.e. if not pdf
 
 \usepackage[active]{srcltx}             % insert links into the dvi to jump
-\usepackage[dvips,final]{graphicx}      % for inserting eps-graphics.
+\usepackage{graphicx}                   % for inserting eps-graphics.
                                         % options final / draft
                                         % into the sources directly.
 \ifdraft{%
@@ -224,7 +209,7 @@
 }
 
 
-\usepackage{sty/algorithmic}            % algorithmic environment
+%\usepackage{sty/algorithmic}            % algorithmic environment
 
 
 \usepackage{rotating}                   % allow block rotation
@@ -268,7 +253,7 @@
 %
 % header and footer layout (needs package fancyhdr)
 %
-\newcommand{\copyrightfooter}{\tiny{\copyright 2005-2010 --- P.~Alvarado %
+\newcommand{\copyrightfooter}{\tiny{\copyright 2005-2018 --- P.~Alvarado %
     \qquad Uso exclusivo ITCR}}
 %
 \newcommand{\draftfoot}%
@@ -281,11 +266,13 @@
     \thechapter\hspace*{1mm}#1}}{}}
 \renewcommand{\sectionmark}[1]{\markright{{\small
     \thesection\hspace*{1mm}#1}}{}}
-\lhead[{\small\textsc\Roman{\thepage}}]{\fancyplain{}%
+%\lhead[{\small\textsc\Roman{\thepage}}]{\fancyplain{}%
+\lhead[{\small\thepage}]{\fancyplain{}%
         {{\slshape \small\nouppercase{\leftmark}}}}
 \chead[]{}
 \rhead[\fancyplain{}%
-        {{\slshape \small\nouppercase{\rightmark}}}]{{\small\textsc\Roman{\thepage}}}
+%        {{\slshape \small\nouppercase{\rightmark}}}]{{\small\textsc\Roman{\thepage}}}
+        {{\slshape \small\nouppercase{\rightmark}}}]{{\small\thepage}}
 \lfoot[]{\draftfoot}
 \ifbook{%
   \cfoot[]{}

@@ -2,6 +2,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %INICIO
 
+@article{viola2001robust,
+  title={Robust real-time object detection},
+  author={Viola, Paul and Jones, Michael},
+  journal={International Journal of Computer Vision},
+  volume={4},
+  number={34--47},
+  year={2001}
+}
 
 %%PREPROCESSING AND IMAGE ENHANCEMENT FOR PATTERN RECOGNITION TASKS
 @INPROCEEDINGS{BF2014, 
@@ -376,6 +384,26 @@ volume = {27},
 year = {2018}
 }
 
+@article{wang2006fast,
+abstract = {For the non-local denoising approach presented by Buades et al., remarkable denoising results are obtained at high expense of computational cost. In this paper, a new algorithm that re-duces the computational cost for calculating the similarity of neighborhood windows is proposed. We first introduce an ap-proximate measure about the similarity of neighborhood win-dows, then we use an efficient Summed Square Image (SSI) scheme and Fast Fourier Transform (FFT) to accelerate the calculation of this measure. Our algorithm is about fifty times faster than the original non-local algorithm both theoretically and experimentally, yet produces comparable results in terms of mean-squared error (MSE) and perceptual image quality.},
+annote = {Resumen: propone el uso de la transformada de Fourier e imagenes integrales para acelerar el filtro NLM. Ambas tecnicas usadas en el paper de Osvaldo y Manuel.
+
+Basado en la optimizacion de Wang-2006.
+
+Reduce la complejiad temporal a O(N*S), donde:
+
+N: cantidad de pixeles de la imagen
+S: cantidad de pixeles de la ventana de busqueda},
+author = {Wang, Jin and Guo, Yanwen and Ying, Yiting and Liu, Yanli and Peng, Qunsheng},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang et al. - 2006 - FAST NON-LOCAL ALGORITHM FOR IMAGE DENOISING.pdf:pdf},
+keywords = {Dis-crete Fourier transforms,Image enhancement,Index Terms,VIP,Wavelet transforms,YA,optimizacion},
+mendeley-groups = {NLM Optimizations},
+mendeley-tags = {VIP,YA,optimizacion},
+title = {{FAST NON-LOCAL ALGORITHM FOR IMAGE DENOISING}},
+year = {2006}
+}
+
+
 @inproceedings{pardoNLM:2018,
 abstract = {In this work we study improvements for the Non Local Means image filter using clustering in the space of patches. Patch clustering it is proposed to guide the selection of the best patches to be used to filter each pixel. Besides clustering, we incorporate spatial coherence keeping some local patches extracted from a local search window around each pixel. Therefore, for each pixel we use local patches and non local ones extracted from the corresponding cluster. The proposed method outperforms classical Non Local Means filter and also, when compared with other methods from the literature based on random sampling, our results confirm the benefits of sampling inside clusters combined with local information.},
 address = {Cham},
@@ -459,7 +487,7 @@ year = {2018}
 
 
 @INPROCEEDINGS{CNN_DNLM, 
-author={S.~Calderón, F. Fallas, M. Zumbado, P. Tyrrell, H. Stark, Z. Emersic, B. Meden}, 
+author={S.~Calderón and F. Fallas and M. Zumbado and P. Tyrrell and H. Stark and Z. Emersic and B. Meden}, 
 booktitle={2018 IEEE International Conference on Image Processing (ICIP 2018), in press}, 
 title={Assessing the impact of image preprocessing using the Deceived Non Local Means Filter in a Convolutional Neural Net based approach for age estimation using digital  X-ray images from hand bones}, 
 year={}, 
@@ -492,3 +520,82 @@ url = {http://ieeexplore.ieee.org/document/7453080/},
 volume = {36},
 year = {2016}
 }
+
+@incollection{Jeffers201617:vect,
+address = {Boston},
+author = {Jeffers, Jim and Reinders, James and Sodani, Avinash},
+booktitle = {Intel Xeon Phi Processor High Performance Programming (Second Edition)},
+doi = {https://doi.org/10.1016/B978-0-12-809194-4.00009-0},
+edition = {Second Edition},
+editor = {Jeffers, Jim and  and Reinders, James and  and Sodani, Avinash},
+isbn = {978-0-12-809194-4},
+keywords = {AVX-512,FLOPs,Gather,Inlining,Intrinsics,MKL,Memory access pattern,Memory footprint,OpenMP,Optimization report,Random number (vectorization of),Reciprocal,SIMD,SIMD mask,Scatter,VTune,Vectorization,Vectorization Advisor,Vectors,Xeon Phi,{\{}MIC{\}} architecture},
+pages = {173--212},
+publisher = {Morgan Kaufmann},
+title = {{Chapter 9 - Vectorization}},
+url = {https://www.sciencedirect.com/science/article/pii/B9780128091944000090},
+year = {2016}
+}
+
+@incollection{Jeffers2016107,
+address = {Boston},
+author = {Jeffers, Jim and Reinders, James and Sodani, Avinash},
+booktitle = {Intel Xeon Phi Processor High Performance Programming (Second Edition)},
+doi = {https://doi.org/10.1016/B978-0-12-809194-4.00006-5},
+edition = {Second Edition},
+editor = {Jeffers, Jim and  and Reinders, James and  and Sodani, Avinash},
+isbn = {978-0-12-809194-4},
+keywords = {AVX-512,AVX2,Cache modes,Gather,High bandwidth memory,MCDRAM. {\{}IMCI{\}},Scatter,Threads per core},
+pages = {107--145},
+publisher = {Morgan Kaufmann},
+title = {{Chapter 6 - $\mu$arch optimization advice}},
+url = {https://www.sciencedirect.com/science/article/pii/B9780128091944000065},
+year = {2016}
+}
+@incollection{Jeffers201663,
+address = {Boston},
+author = {Jeffers, Jim and Reinders, James and Sodani, Avinash},
+booktitle = {Intel Xeon Phi Processor High Performance Programming (Second Edition)},
+doi = {https://doi.org/10.1016/B978-0-12-809194-4.00004-1},
+edition = {Second Edition},
+editor = {Jeffers, Jim and  and Reinders, James and  and Sodani, Avinash},
+isbn = {978-0-12-809194-4},
+keywords = {AVX-512,Advanced vector extensions,All-to-all cluster mode,BIOS,BIU,CHA,Cluster mode,Cluster modes,DDR,DDR4,DIMM,FEU,High-bandwidth memory,ITLB,Icache,Knights Corner,Knights Landing,MCDRAM,MESIF,MEU,Memory interleaving,Mesh,NUMA,PCIe,Quadrant cluster mode,Second generation Intel{\textregistered} Xeon Phi™,TLB,Tile,VPU,gskew,$\mu$op},
+pages = {63--84},
+publisher = {Morgan Kaufmann},
+title = {{Chapter 4 - Knights Landing architecture}},
+url = {https://www.sciencedirect.com/science/article/pii/B9780128091944000041},
+year = {2016}
+}
+@incollection{Jeffers201615,
+address = {Boston},
+author = {Jeffers, Jim and Reinders, James and Sodani, Avinash},
+booktitle = {Intel Xeon Phi Processor High Performance Programming (Second Edition)},
+doi = {https://doi.org/10.1016/B978-0-12-809194-4.00002-8},
+edition = {Second Edition},
+editor = {Jeffers, Jim and  and Reinders, James and  and Sodani, Avinash},
+isbn = {978-0-12-809194-4},
+keywords = {AVX-512,Advanced Vector Extensions,BIU,CHA,Cluster mode,DDR,FEU,High-bandwidth memory,ITLB,Icache,Knights Corner,Knights Landing,MCDRAM,MESIF,MEU,Mesh,PCIe,Second-Generation Intel{\textregistered} Xeon Phi™,TLB,Tile,gskew},
+pages = {15--24},
+publisher = {Morgan Kaufmann},
+title = {{Chapter 2 - Knights Landing overview}},
+url = {https://www.sciencedirect.com/science/article/pii/B9780128091944000028},
+year = {2016}
+}
+
+@incollection{Jeffers2016315,
+address = {Boston},
+author = {Jeffers, Jim and Reinders, James and Sodani, Avinash},
+booktitle = {Intel Xeon Phi Processor High Performance Programming (Second Edition)},
+doi = {https://doi.org/10.1016/B978-0-12-809194-4.00014-4},
+edition = {Second Edition},
+editor = {Jeffers, Jim and  and Reinders, James and  and Sodani, Avinash},
+isbn = {978-0-12-809194-4},
+keywords = {Bandwidth,CPI,Cache misses,Event monitoring,MPI,MPI Performance Snapshot (MPS),Memory bandwidth,Microcode,Performance Application Programming Interface (PAPI),TLB,Time stamp counter (TSC),Timers,Trace Analyzer and Collector (ITAC),VPU,VTune,VTune Amplifier,VTune Amplifier {\{}XE{\}} product,Vectorization intensity,Xeon Phi,clock{\_}gettime,gettimeofday,{\{}MIC{\}} architecture},
+pages = {315--337},
+publisher = {Morgan Kaufmann},
+title = {{Chapter 14 - Profiling and timing}},
+url = {https://www.sciencedirect.com/science/article/pii/B9780128091944000144},
+year = {2016}
+}
+
