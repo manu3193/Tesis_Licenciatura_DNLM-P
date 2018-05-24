@@ -277,7 +277,7 @@ Al desarrollar (\ref{eq:resultado1}) como se muestra en (\ref{eq:frobProd}), se 
 \begin{equation}\label{eq:matFrodProd}
 \resizebox{.9 \textwidth}{!} 
 {
-\begin{split}
+$\begin{split}
 \lVert \mat{P}_{\left(3,3\right)}-\mat{P}_{\left(2,2\right)}\rVert_{F} ^{2} & =\lVert \mat{P}_{\left(3,3\right)}\rVert_{F}^2 -2\langle\mat{P}_{\left(3,3\right)},\mat{P}_{\left(2,2\right)}\rangle_{F} + \lVert \mat{P}_{\left(2,2\right)}\rVert_{F}^2  \\
 & = \left\Vert\left[\begin{array}{ccc}
 2 & 3 & 1\\
@@ -300,7 +300,7 @@ Al desarrollar (\ref{eq:resultado1}) como se muestra en (\ref{eq:frobProd}), se 
 & =42+-2\cdot78+222\\
 & =42-156+222\\
 & =108 \enspace ,
-\end{split}
+\end{split}$
 }
 \end{equation}
 
@@ -577,5 +577,5 @@ El valor de $\text{CPI}_{\text{CPU}} $ se reduce al aumentar la cantidad de hilo
 Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de opraciones en punto flotante por segundo\cite{Jeffers2016315}. Esá definida como:
 
 \begin{equation}
-\textrm{VPUi}= \frac{\textrm{\# SIMD empaquetadas}}_{\textrm{\# SIMD empaquetadas}+\textrm{\# SIMD escalares}}
+\text{VPUi}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}
 \end{equation}

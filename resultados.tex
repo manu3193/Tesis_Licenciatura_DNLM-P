@@ -1,7 +1,7 @@
 \chapter{Resultados y análisis}
 \label{ch:res}
 
-Los experimentos realizados utilizan un tama\~no por defecto de la imagen de entrada ($1024 \times 1024$), ventana de búsqueda \Omega  ($21 \times 21$) y vecindario \omega ($7 \times 7$), excepto donde se indica lo contrario. Adem\'as, todos los resultados reportados corresponden al promedio de 10 ejecuciones para cada programa evaluado.  Para evaluar las implementaciones paralelas se utiliza la cantidad de hilos que mejor resultado muestra. Esto es, 256 hilos para el filtro DNLM-P, 128 hilos para el filtro DNLM-IFFTT-P y 32 hilos para el filtro DNLM-MA-P, según se observa en la Figura \ref{fig:scalability}. Las implementaciones secuenciales del filtro DNLM utilizan primitivas que vectorizan automáticamente las operaciones para el conjunto de instrucciones SIMD soportado por los procesadores Xeon Phi KNL.
+Los experimentos realizados utilizan un tama\~no por defecto de la imagen de entrada ($1024 \times 1024$), ventana de búsqueda $\Omega$  ($21 \times 21$) y vecindario $\omega$ ($7 \times 7$), excepto donde se indica lo contrario. Adem\'as, todos los resultados reportados corresponden al promedio de 10 ejecuciones para cada programa evaluado.  Para evaluar las implementaciones paralelas se utiliza la cantidad de hilos que mejor resultado muestra. Esto es, 256 hilos para el filtro DNLM-P, 128 hilos para el filtro DNLM-IFFTT-P y 32 hilos para el filtro DNLM-MA-P, según se observa en la Figura \ref{fig:scalability}. Las implementaciones secuenciales del filtro DNLM utilizan primitivas que vectorizan automáticamente las operaciones para el conjunto de instrucciones SIMD soportado por los procesadores Xeon Phi KNL.
 
 Las tablas \ref{tabla:vec_dnlm}, \ref{tabla:vec_dnlm_iifft} y \ref{tabla:vec_dnlm_MA} muestran la comparación en la aceleración obtenida al utilizar conjuntos de instrucciones SIMD (AVX, AVX2 y AVX512) con diferente tama\~no de registro (128, 256 y 512 bytes respectivamente) para cada una de las versiones secuenciales del filtro DNLM evaluadas. 
 
@@ -11,7 +11,7 @@ Las tablas \ref{tabla:vec_dnlm}, \ref{tabla:vec_dnlm_iifft} y \ref{tabla:vec_dnl
 \protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm}}
 \centering
 \begin{tabular}{lrrr}
-SIMD ISA & Duración \left[s\right]& Coef. de var. & Aceleración \left[x\right] \tabularnewline
+SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
 \hline
 AVX & $288.85\pm0.33$ & $0.0$ & $1$\tabularnewline
 AVX2 & $146.31\pm0.03$ & $0.00$ & $1.97$\tabularnewline
@@ -28,7 +28,7 @@ El filtro DNLM presenta una aceleración proporcional a la diferencia en el tama
 \protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM-IIFFT]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM-IIFFT usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm_iifft}}
 \centering
 \begin{tabular}{lrrr}
-SIMD ISA & Duración \left[s\right]& Coef. de var. & Aceleración \left[x\right] \tabularnewline
+SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
 \hline
 AVX & $62.79\pm0.03$ & $0.0$ & $1.00$\tabularnewline
 AVX2 & $62.30\pm0.31$ & $0.01$ & $1.09$\tabularnewline
@@ -44,7 +44,7 @@ En el caso de la optimización DNLM-IIFFT, el comportamiento mostrado en la Tabl
 \protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM-MA]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM-MA usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm_MA}}
 \centering
 \begin{tabular}{lrrr}
-SIMD ISA & Duración \left[s\right]& Coef. de var. & Aceleración \left[x\right] \tabularnewline
+SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
 \hline
 AVX & $2.82\pm0.03$ & $0.0$ & $1$\tabularnewline
 AVX2 & $2.13\pm0.03$ & $0.00$ & $1.32$\tabularnewline
@@ -70,7 +70,7 @@ Los resultados mostrados en la Tabla \ref{tabla:vec_dnlm_MA} comparten un compor
 
 
 
-Una comparación del tiempo de ejecución de las implementaciones del filtro DNLM se muestra en la Tabla \ref{tabla:speedup}, la cual revela que la aceleración del filtro DNLM-MA basado en el enfoque de media movil de Condat \cite{Condat2010} sobrepasa por un gran margen ($88.30X$) la implementación DNLM-IIFFT \cite{CalderonRamirez2017} basada en la optimización de Wang para el filtro NLM \cite{wang2006fast} que emplea la FFT e imágenes integrales. El coeficiente de variación de todas las implementaciones es igual o menor que $0.06$. 
+Una comparación del tiempo de ejecución de las implementaciones del filtro DNLM se muestra en la Tabla \ref{tabla:speedup}, la cual revela que la aceleración del filtro DNLM-MA basado en el enfoque de media movil de Condat \cite{Condat2010} sobrepasa por un gran margen ($88.30\times$) la implementación DNLM-IIFFT \cite{CalderonRamirez2017} basada en la optimización de Wang para el filtro NLM \cite{wang2006fast} que emplea la FFT e imágenes integrales. El coeficiente de variación de todas las implementaciones es igual o menor que $0.06$. 
 De la misma manera, la implementación paralela DNLM-MA-P es la más rápida, logrando alcanzar una aceleración de $665.63\times$ aobre la implementación secuencial original DNLM. Sin embargo, las implementaciones paralelas DNLM-IIFFT-P y DNLM-P muestran aceleraciones mayores a $100\times$ en comparación a la versión secuencial original DNLM.
 La tabla \ref{tabla:speedup} también muestra que el filtro DNLM-MA-P obtiene una aceleración menor ($7.24\times$) en comparación con el DNLM-IIFFT-P ($76.68\times$) y el DNLM-P ($109.14\times$) respecto a sus versiones con un sólo hilo de ejecución.
 
@@ -81,7 +81,7 @@ La tabla \ref{tabla:speedup} también muestra que el filtro DNLM-MA-P obtiene un
 \protect\caption[Aceleración promedio de optimizaciones del filtro DNLM]{Aceleración promedio para las optimizaciones del filtro DNLM usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:speedup}}
 \centering
 \begin{tabular}{lrrr}
-Filtro & Duración \left[s\right]& Coef. de var. & Aceleración \left[x\right]\tabularnewline
+Filtro & Duración [s]& Coef. de var. & Aceleración [$\times$]\tabularnewline
 \hline
 DNLM & $163.71\pm1.32$ & $0.01$ & $1$\tabularnewline
 DNLM-IIFFT & $76.68\pm0.06$ & $0.00$ & $2.14$\tabularnewline
@@ -93,8 +93,8 @@ DNLM-MA-P & $\boldsymbol{0.25\pm0.00}$ & $\boldsymbol{0.01}$ &  $\boldsymbol{665
 \end{table}
 
 
-El efecto en el cambio del tama\~no de imagen en la aceleración total de la implementación DNLM-MA-P se muestra en la Tabla \ref{tabla:scala1}. Se aprecia cómo la aceleración de la implementación DNLM-MA-P incrementa significativamente cuando el tama\~no de la imagen aumenta, con aceleraciones desde $206.95X$ a $728.66$ para tama\~nos de imagen desde $256 \times 256$ a $2048 \times 2048$ pixeles. La máxima aceleración converge tal y como lo demuestra el tiempo de filtrado de la muestra de $4096\times 4096$ pixeles.  
-De la misma manera, se observa una tendencia similar al aumentar el tama\~no de ventana y vecindario, como se muestra en la tabla \ref{tabla:scala2}. En este caso, se consigue una aceleración desde $222.43X$ al utilizar un tama\~no de ventana de búsqueda de $11 \times 11$ y de vecindario de $11 \times 11$, hasta llegar a una aceleración de $1662.90X$ al utilizar una ventana de búsqueda de $41 \times 41$ pixeles y vecindario de $11 \times 11$ pixeles. Esto es en parte debido a la diferencia entre las funciones de costo de las implementaciones DNLM y DNLM-MA detalladas en la Sección \ref{ch:marco_opt} y al alto grado de paralelismo de la plataforma Xeon Phi KNL.
+El efecto en el cambio del tama\~no de imagen en la aceleración total de la implementación DNLM-MA-P se muestra en la Tabla \ref{tabla:scala1}. Se aprecia cómo la aceleración de la implementación DNLM-MA-P incrementa significativamente cuando el tama\~no de la imagen aumenta, con aceleraciones desde $206.95\times$ a $728.66$ para tama\~nos de imagen desde $256 \times 256$ a $2048 \times 2048$ pixeles. La máxima aceleración converge tal y como lo demuestra el tiempo de filtrado de la muestra de $4096\times 4096$ pixeles.  
+De la misma manera, se observa una tendencia similar al aumentar el tama\~no de ventana y vecindario, como se muestra en la tabla \ref{tabla:scala2}. En este caso, se consigue una aceleración desde $222.43\times$ al utilizar un tama\~no de ventana de búsqueda de $11 \times 11$ y de vecindario de $11 \times 11$, hasta llegar a una aceleración de $1662.90\times$ al utilizar una ventana de búsqueda de $41 \times 41$ pixeles y vecindario de $11 \times 11$ pixeles. Esto es en parte debido a la diferencia entre las funciones de costo de las implementaciones DNLM y DNLM-MA detalladas en la Sección \ref{ch:marco_opt} y al alto grado de paralelismo de la plataforma Xeon Phi KNL.
 
 
 %Scalability table #1--------------------------------
@@ -102,7 +102,7 @@ De la misma manera, se observa una tendencia similar al aumentar el tama\~no de 
 \protect\caption[Efecto al cambiar tama\~no de imagen de entrada]{Effecto al cambiar el tama\~no de la imagen de entrada para el filtro DNLM y DNLM-MA-P usando una imagen de entrada de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:scala1}}
 \centering
 \begin{tabular}{lrrr}
-Tama\~no de imagen & DNLM \left[s\right]& DNLM-MA-P\left[s\right]& Aceleración \left[x\right] \tabularnewline
+Tama\~no de imagen & DNLM [s]& DNLM-MA-P [s]& Aceleración [$\times$] \tabularnewline
 \hline
 $256 \times 256$ & $10.26\pm0.02$ & $0.05\pm0.00$ & $206.95$ \tabularnewline
 $512 \times 512$ & $40.95\pm0.35$ & $0.11\pm0.00$ & $377.70$ \tabularnewline
@@ -118,7 +118,7 @@ $4096 \times 4096$ & $2629.59\pm31.26$ & $3.45\pm0.01$ & $761.63$ \tabularnewlin
 \protect\caption[Efecto al cambiar parámetros $\Omega$ y $\Phi$]{Effecto al cambiar el tama\~no de ventana de búsqueda ($\Omega$) y vecindario ($\Phi$) para el filtro DNLM y DNLM-MA-P usando una imagen de entrada de  $1024 \times 1024$ pixeles. \label{tabla:scala2}}
 \centering
 \begin{tabular}{lrrrr}
-$\Omega$  & $\omega$ & DNLM \left[s\right]& DNLM-MA-P \left[s\right]& Aceleración \left[x\right]\tabularnewline
+$\Omega$  & $\omega$ & DNLM [s]& DNLM-MA-P [s]& Aceleración [$\times$]\tabularnewline
 \hline
 $11 \times 11$ & $5 \times 5$ & $42.46\pm0.46$ & $0.19\pm0.00$ & $222.43$ \tabularnewline
  & $7 \times 7$ & $46.73\pm0.41$ & $0.20\pm0.00$ & $238.11$ \tabularnewline
