@@ -127,7 +127,7 @@ La figura \ref{fig:exampleUSM} muestra el resultado de aproximar al laplaciano d
   \centerline{(c) Imagen de salida $U_{\textrm{USM}}$.}\medskip
 \end{minipage}
 %
-\caption[Ejemplo de mejora en imagen con \engl{Unsharp Mask}]{Salida del filtro USM con $\lambda = 5$ y $\sigma = 0.01$. \label{fig:exampleUSM}}
+\caption[Ejemplo de mejora en imagen con \engl{Unsharp Mask}]{Salida del filtro USM con $\lambda = 0.9$ y $\sigma = 0.3$. \label{fig:exampleUSM}}
 %
 \end{figure}
 
@@ -356,7 +356,7 @@ Continuando con el ejemplo previamente mostrado, la imagen de entrada \mat{U} co
 
 
 \begin{table}
-\caption{Imagen integral para $U^{\odot2}$.\label{table:integralcuad}}
+\caption{Imagen integral para $\mat{U}^{\odot2}$.\label{table:integralcuad}}
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
 \setlength\tabcolsep{3pt}
@@ -650,25 +650,25 @@ Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocur
 \end{equation}
 
 
-\paragraph*{Costo de aciertos de lectura en cach\'e L2 ($\text{L2p}_{\text{Hit}}$):}
-
-Esta m\'etrica estima el costo de los fallos en cach\'e nivel L1 que aciertan en cach\'e nivel L2. Representa el costo de la falla de lectura a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
-
-\begin{equation}
-\text{L2p}_{\text{Hit}} = 17 *\frac{\text{\# aciertos de lectura en L2}}{\text{CPI}} \enspace .
-\end{equation}
-
-Este valor debe mantenerse por debajo del 15\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
-
-
-\paragraph*{Costo de fallos de lectura en cach\'e L2 ($\text{L2p}_{\text{Miss}}$):}
-
-Esta m\'etrica determina el costo de los fallos en cach\'e nivel L2. Representa el costo de lectura a memorias externas ya sea MCDRAM o DRAM a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
-
-\begin{equation}
-\text{L2p}_\text{Miss} = 230 *\frac{\text{\# fallos de lectura en L2}}{\text{CPI}} \enspace .
-\end{equation}
-
-La espectativa es mantener este valos por debajo del 5\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
+%\paragraph*{Costo de aciertos de lectura en cach\'e L2 ($\text{L2p}_{\text{Hit}}$):}
+%
+%Esta m\'etrica estima el costo de los fallos en cach\'e nivel L1 que aciertan en cach\'e nivel L2. Representa el costo de la falla de lectura a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
+%
+%\begin{equation}
+%\text{L2p}_{\text{Hit}} = 17 *\frac{\text{\# aciertos de lectura en L2}}{\text{CPI}} \enspace .
+%\end{equation}
+%
+%Este valor debe mantenerse por debajo del 15\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
+%
+%
+%\paragraph*{Costo de fallos de lectura en cach\'e L2 ($\text{L2p}_{\text{Miss}}$):}
+%
+%Esta m\'etrica determina el costo de los fallos en cach\'e nivel L2. Representa el costo de lectura a memorias externas ya sea MCDRAM o DRAM a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
+%
+%\begin{equation}
+%\text{L2p}_\text{Miss} = 230 *\frac{\text{\# fallos de lectura en L2}}{\text{CPI}} \enspace .
+%\end{equation}
+%
+%La espectativa es mantener este valos por debajo del 5\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
 
 
