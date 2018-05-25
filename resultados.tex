@@ -1,72 +1,107 @@
 \chapter{Resultados y análisis}
 \label{ch:res}
 
-Los experimentos realizados utilizan un tama\~no por defecto de la imagen de entrada ($1024 \times 1024$), ventana de búsqueda $\Omega$  ($21 \times 21$) y vecindario $\omega$ ($7 \times 7$), excepto donde se indica lo contrario. Adem\'as, todos los resultados reportados corresponden al promedio de 10 ejecuciones para cada programa evaluado.  Para evaluar las implementaciones paralelas se utiliza la cantidad de hilos que mejor resultado muestra. Esto es, 256 hilos para el filtro DNLM-P, 128 hilos para el filtro DNLM-IFFTT-P y 32 hilos para el filtro DNLM-MA-P, según se observa en la Figura \ref{fig:scalability}. Las implementaciones secuenciales del filtro DNLM utilizan primitivas que vectorizan automáticamente las operaciones para el conjunto de instrucciones SIMD soportado por los procesadores Xeon Phi KNL.
-
-Las tablas \ref{tabla:vec_dnlm}, \ref{tabla:vec_dnlm_iifft} y \ref{tabla:vec_dnlm_MA} muestran la comparación en la aceleración obtenida al utilizar conjuntos de instrucciones SIMD (AVX, AVX2 y AVX512) con diferente tama\~no de registro (128, 256 y 512 bytes respectivamente) para cada una de las versiones secuenciales del filtro DNLM evaluadas. 
+Los experimentos realizados utilizan un tama\~no por defecto de la imagen de entrada con $N = 1024 \times 1024$, ventana de búsqueda con $S = 21 \times 21$ y vecindario con $W = 7 \times 7$, excepto donde se indica lo contrario. Adem\'as, todos los resultados reportados corresponden al promedio de 10 ejecuciones para cada programa evaluado.  
 
 
-%Vectorization table for DNLM-------------------------------
 \begin{table}
-\protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm}}
 \centering
-\begin{tabular}{lrrr}
-SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
+\caption[Valores de CPI de los filtros al escalar el n\'umero de hilos]{Valores de CPI por hilo para versiones del filtro DNLM al escalar el n\'umero de hilos, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:cpi}}
+\begin{tabular}{lrrrrrrrrr}
+& \multicolumn{9}{c}{CPI} \tabularnewline
 \hline
-AVX & $288.85\pm0.33$ & $0.0$ & $1$\tabularnewline
-AVX2 & $146.31\pm0.03$ & $0.00$ & $1.97$\tabularnewline
-AVX512 & $146.51\pm 1.30$ & $0.01$ & $1.97$ \tabularnewline
+ Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+\hline
+DNLM-P & 1.87 & 1.87 & 1.87 & 1.87 & 1.87 & 1.87 & 1.89 & 2.49 & 3.86 \tabularnewline
+DNLM-IIFFT-P & 1.36 & 1.37 & 1.37 & 1.38 & 1.39 & 1.40 & 1.46 & 2.04 & 3.95 \tabularnewline
+DNLM-MA-P & 1.74 & 2.07 & 2.17 & 2.17 & 2.46 & 2.31 & 2.46 & 2.98 & 4.06 \tabularnewline
+\end{tabular}
+\end{table}
+  
+  
+  
+  
+\begin{table}
+\centering
+\caption[Efecto de $\text{CPI}_{\text{CPU}}$ de los filtros al escalar el n\'umero de hilos]{Cambio en $\text{CPI}_{\text{CPU}}$ al aumentar la cantidad de hilos para las implementaciones del filtro DNLM, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:cpic}}
+\begin{tabular}{lrrrrrrrrr}
+& \multicolumn{9}{c}{$\text{CPI}_{\text{CPU}}$} \tabularnewline
+\hline
+ Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+\hline
+DNLM-P & 1.87 & 0.94 & 0.47 & 0.23 & 0.12 & 0.06 & 0.03 & 0.02 & 0.02 \tabularnewline
+DNLM-IIFFT-P & 1.36 & 0.68 & 0.34 & 0.17 & 0.09 & 0.04 & 0.02 & 0.02 & 0.02 \tabularnewline
+DNLM-MA-P & 1.74 & 1.03 & 0.54 & 0.27 & 0.14 & 0.07 & 0.04 & 0.02 & 0.02 \tabularnewline
 \end{tabular}
 \end{table}
 
-El filtro DNLM presenta una aceleración proporcional a la diferencia en el tama\~no de registro entre AVX y AVX2; pero no en el caso de AVX y AVX512, en el que la aceleración no aumenta. Esto hace indicar que el aumento en el empaquetamiento de instrucciones entre AVX2 y AVX512 no tiene efecto considerable en la versión no optimizada del filtro . 
 
-
-
-%Vectorization table for DNLM-IIFFT-------------------------------
 \begin{table}
-\protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM-IIFFT]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM-IIFFT usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm_iifft}}
 \centering
-\begin{tabular}{lrrr}
-SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
+\caption[Intensidad vectorial de los filtros con un hilo de ejecución]{Intensidad vectorial  $\text{VPU}_{\text{i}}$ para las versiones del filtro DNLM con 1 hilo de ejecución, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vpui}}
+\begin{tabular}{lr}
+ Filtro & $\text{VPU}_{\text{i}}$ \tabularnewline
 \hline
-AVX & $62.79\pm0.03$ & $0.0$ & $1.00$\tabularnewline
-AVX2 & $62.30\pm0.31$ & $0.01$ & $1.09$\tabularnewline
-AVX512 & $62.27\pm 0.06$ & $0.00$ & $1.09$ \tabularnewline
+DNLM-P & 1.00 \tabularnewline
+DNLM-IIFFT-P & 0.81 \tabularnewline
+DNLM-MA-P & 0.95 \tabularnewline
+\end{tabular}
+\end{table}
+  
+  
+  
+\begin{table}
+\centering
+\caption[Cambio en intensidad de  micro-operaciones en los filtros al escalar el n\'umero de hilos]{Cambio en  $\mu\text{Ops}_{\text{i}}$ para las versiones del filtro DNLM al escalar el n\'umero de hilos, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:ucode}}
+\begin{tabular}{lrrrrrrrrr}
+& \multicolumn{9}{c}{$\mu\text{Ops}_{\text{i}}$} \tabularnewline
+\hline
+ Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+\hline
+DNLM-P & 0.26 & 0.26 & 0.26 & 0.26 & 0.26 & 0.27 & 0.27 & 0.27 & 0.28 \tabularnewline
+DNLM-IIFFT-P & 0.05 & 0.05 & 0.05 & 0.05 & 0.06 & 0.07 & 0.09 & 0.11 & 0.21 \tabularnewline
+DNLM-MA-P & 0.03 & 0.06 & 0.10 & 0.16 & 0.23 & 0.28 & 0.32 & 0.32 & 0.33 \tabularnewline
 \end{tabular}
 \end{table}
 
 
-En el caso de la optimización DNLM-IIFFT, el comportamiento mostrado en la Tabla \ref{tabla:vec_dnlm_iifft}es similar a los resultados anteriores pero con una aceleración menor, sin obtener la ventaja teórica entre AVX, AVX2 y AVX512. Una posible causa es por los parámetros utilizados para el tama\~no de ventana y vecindario, los cuales limitan la cantidad de pixeles utilizados en el cálculo de los pesos, y por lo tanto, un menor grado de aprovechamiento del empaquetado que ofrecen las instrucciones SIMD para ejecutar instrucciones sobre un conjunto de datos.
-
-%Vectorization table for DNLM-MA-------------------------------
 \begin{table}
-\protect\caption[Efecto de vectorización con instrucciones SIMD para el filtro DNLM-MA]{Efecto del cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM-MA usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vec_dnlm_MA}}
 \centering
-\begin{tabular}{lrrr}
-SIMD ISA & Duración [s]& Coef. de var. & Aceleración [$\times$] \tabularnewline
+\caption[Cambio en la raz\'on de aciertos de lectura en cach\'e L1 para los filtros al escalar el n\'umero de hilos]{Cambio en  $\text{L1}_{\text{Hit}}$ para las versiones del filtro DNLM al escalar el n\'umero de hilos, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:l1_hit}}
+\begin{tabular}{lrrrrrrrrr}
+& \multicolumn{9}{c}{$\text{L1}_{\text{Hit}}$} \tabularnewline
 \hline
-AVX & $2.82\pm0.03$ & $0.0$ & $1$\tabularnewline
-AVX2 & $2.13\pm0.03$ & $0.00$ & $1.32$\tabularnewline
-AVX512 & $2.14\pm 0.03$ & $0.00$ & $1.32$ \tabularnewline
+ Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+\hline
+DNLM-P & 0.99 & 0.99 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 0.99 & 0.99 \tabularnewline
+DNLM-IIFFT-P & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 \tabularnewline
+DNLM-MA-P & 0.80 & 0.83 & 0.85 & 0.88 & 0.93 & 0.96 & 0.98 & 0.99 & 0.99 \tabularnewline
 \end{tabular}
 \end{table}
 
-La tabla \ref{tabla:vpui} muestra las métricas CPI y VPUi para los filtros DNLM, DNLM-IIFFT y DNLM-MA con un solo hilo de ejecución. Se observa que la intensidad de uso de la VPU es casi la máxima para todos los filtros, por lo tanto se deduce que la vectorización es casi total.
 
 \begin{table}
-\protect\caption[Métricas CPI y VPUi de los filtros con 1 hilo]{CPI y VPUi de  la región paralelizada cambio en el conjunto de instrucciones SIMD para implementaciones secuenciales del filtro DNLM usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vpui}}
 \centering
-\begin{tabular}{lrr}
-Filtro  & CPI & VPUi \tabularnewline
+\caption[Cambio en la raz\'on de aciertos de lectura en cach\'e L2 para los filtros al escalar el n\'umero de hilos]{Cambio en  $\text{L2}_{\text{Hit}}$ para las versiones del filtro DNLM al escalar el n\'umero de hilos, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:l2_hit}}
+\begin{tabular}{lrrrrrrrrr}
+& \multicolumn{9}{c}{$\text{L2}_{\text{Hit}}$} \tabularnewline
 \hline
-DNLM & $1.5$ & $0.95$\tabularnewline
-DNLM-IIFFT &$2.82$ & $0.81$  \tabularnewline
-DNLM-MA &$3.18$&  $1$  \tabularnewline
+ Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+\hline
+DNLM-P & 0.99 & 0.99 & 0.97 & 0.96 & 0.96 & 0.95 & 0.94 & 0.97 & 0.95 \tabularnewline
+DNLM-IIFFT-P & 1.00 & 1.00 & 0.99 & 0.99 & 0.99 & 0.99 & 0.99 & 0.98 & 0.93 \tabularnewline
+DNLM-MA-P & 0.91 & 0.86 & 0.85 & 0.85 & 0.85 & 0.85 & 0.85 & 0.88 & 0.89 \tabularnewline
 \end{tabular}
 \end{table}
 
-Los resultados mostrados en la Tabla \ref{tabla:vec_dnlm_MA} comparten un comportamiento similar a los filtros DNLM y DNLM-IIFFT. 
+
+El grado de vectorizaci\'on obtenido gracias al uso de la biblioteca IPP en las versiones secuenciales del filtro DNLM se muestra en la tabla \ref{tabla:vpui}. La intensidad computacional de las unidades vectoriales alcanza el 81\% para el filtro DNLM, 95\% para el filtro DNLM-IIFFT y 100\% para el caso del filtro DNLM-MA, presentado en este trabajo. El set de instrucciones utilizado es AVX-512, con registros de 512 bytes de tama\~no para el c\'alculo simult\'aneo de hasta 32 operaciones de precisi\'on simple. Con esto se demuestra la ventaja de emplear bibliotecas previamente optimizadas para la plataforma, como una forma simple y eficiente de obtener c\'odigo vectorizable, sin recurrir a intr\'insecas o \engl{pragmas} del compilador.
+
+
+La tabla \ref{tabla:vpui} tambi\'en muestra los CPI y $\text{CPI}_{\text{CPU}}$ para los filtros DNLM, DNLM-IIFFT y DNLM-MA con un solo hilo de ejecución. Son resultados esperables, debido a que la alta vectorizaci\'on provoca un aumento en los ciclos por hilo (CPI) que tarda una instrucci\'on, debido a que una s\'ola instrucci\'on vectorial realiza m\'ultiples operaciones en un conjunto de datos, implicando un n\'umero mayor de ciclos para completar la ejecuci\'on de la instrucci\'on. El comportamiento de $\text{CPI}_{\text{CPU}}$ de igual manera es esperado ya que al aumentar la cantidad de hilos de ejecuci\'on, la cantidad de trabajo por CPU disminuye. 
+
+
+Para evaluar las implementaciones paralelas se utiliza la cantidad de hilos que mejor resultado muestra. Esto es, 256 hilos para el filtro DNLM-P, 128 hilos para el filtro DNLM-IFFTT-P y 32 hilos para el filtro DNLM-MA-P, según se observa en la Figura \ref{fig:scalability}. 
 
 
 
@@ -166,6 +201,9 @@ El efecto de variar el número de hilos de ejecución para las implementaciones 
   \end{tikzpicture}
   \caption[Escalabilidad de las implementaciones paralelas del filtro DNLM]{Escalabilidad de la implementación paralela para cada versión del filtro DNLM, desde 1 a 256 hilos de ejecución. El tama\~no de la imagen de entrada es de $1024\times1024$, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles.\label{fig:scalability}}
   \end{figure}
+  
+  LATENCIA INHERENTE EN CUANTO A ACCESO A DATOS DEL DNLM-P, ES MEJOR CON 4 HILOS POR CORE.
+  
   
   Siguiendo la misma tendencia, la eficiencia de las implementaciones paralelas se muestran en la Figura \ref{fig:efficiency}. Se aprecia que la eficiencia de las implementaciones DNLM-P y DNLM-IIFFT-P presentan una disminución sostenida en la eficiencia al aumentar la cantidad de hilos de ejecución. En el caso de la implementación DNLM-MA-P, presenta un mayor ancho de banda de memoria, por lo tanto la sobrecarga en cuanto a transferencia de datos en memoria aumenta al aumentar la cantidad de hilos de ejecución, provocando una caída considerablemente más pronunciada en la curva de eficiencia.
   

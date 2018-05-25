@@ -1,7 +1,7 @@
 \chapter{Optimización y paralelización del filtro DNLM}
 \label{ch:solucion}
 
-En este capítulo se presenta la paralelización del filtro DNLM, con una comparación entre dos optimizaciones algorítmicas presentes en la literatura y sus respectivas versiones paralelas. La primera es una optimización propuesta para el filtro DNLM, llamada DNLM-IIFFT. Se enfoca en disminuir la función de costo computacional mediante el uso de imágenes integrales y la transformada rápida de Fourier \cite{CalderonRamirez2017}. La segunda optimización elegida es adaptada en este trabajo al filtro DNLM, debido a que fue presentada originalmente para el filtro NLM. Esta optimización, en adelante DNLM-MA, acelera el cálculo de la función de pesado del filtro gracias al uso de un filtro de media móvil, en adición con el cambio en los ciclos de iteración y el aprovechamiento de la simetría de la función de pesado del filtro NLM \cite{Condat2010}. Ambas optimizaciones se detallan en la sección\ref{ch:marco_opt}.
+En este capítulo se presenta la paralelización del filtro DNLM, con una comparación entre dos optimizaciones algorítmicas presentes en la literatura y sus respectivas versiones paralelas. La primera es una optimización propuesta para el filtro DNLM, llamada DNLM-IIFFT. Se enfoca en disminuir la función de costo computacional mediante el uso de imágenes integrales y la transformada rápida de Fourier \cite{CalderonRamirez2017}. La segunda optimización elegida es adaptada en este trabajo al filtro DNLM, debido a que fue presentada originalmente para el filtro NLM. Esta optimización, en adelante DNLM-MA, acelera el cálculo de la función de pesado del filtro gracias al uso de un filtro de media móvil, en adición con el cambio en los ciclos de iteración y el aprovechamiento de la simetría de la función de pesado del filtro NLM \cite{Condat2010}. Ambas optimizaciones se detallan en la sección \ref{ch:marco_opt}.
 
 El paralelismo se emplea en dos formas: a nivel de tareas y a nivel de datos. En el caso del paralelismo a nivel de datos, este trabajo se enfoca en la vectorización de la mayor cantidad de operaciones vectorizables presentes el algoritmo. Para esto se propone el uso de las primitivas de Intel para procesamiento de se\~nales e imágenes, llamadas \engl{Integrated Performance Primitives} (IPP). Las rutinas de esta biblioteca están optimizadas para utilizar datos alineados en memoria y generar instrucciones SIMD vectorizadas. Estas instrucciones vectorizadas son aprovechadas por las unidades vectoriales presentes en la arquitectura Xeon Phi Knights Landing.
 
@@ -9,9 +9,9 @@ El paralelismo se emplea en dos formas: a nivel de tareas y a nivel de datos. En
 
 \section{Versiones del filtro DNLM a implementar}
 
-Para lograr una correcta comparación entre las optimizaciones del filtro DNLM, se realiza la implementación de ambas optimizaciones DNLM-IIFT y DNLM-MA, sumadas a la versión original del filtro DNLM con un sóli hilo que debe servir como punto base de comparación. Todas las versiones son desarrolladas usando la biblioteca IPP.
+Para lograr una correcta comparación entre las optimizaciones del filtro DNLM, se realiza la implementación de ambas optimizaciones DNLM-IIFT y DNLM-MA, sumadas a la versión original del filtro DNLM con un sólo hilo que debe servir como punto base de comparación. Todas las versiones son desarrolladas usando la biblioteca IPP.
 
-El funcionamiento del filtro DNLM se puede generalizar como un kernel $\psi_{\textrm{NLM}}$ que modifica a cada pixel de la imagen de entrada $U$, como se puede ver en (\ref{eq:weighted}) y (\ref{eq:nlmfunc}). El kernel $\psi_{\textrm{NLM}}$ determina el valor del pixel filtrado, iterando sobre los pixeles de la ventana de búsqueda $\Omega$ de $S$ pixeles. Una vez obtenido el peso del pixel, se multiplica por la imagen mejorada $U_{\textrm{USM}}$ producto del método de \textit{Unsharp Mask}, como se aprecia en la figura \ref{fig:diagramabloqDNLM}.  Por último, se normaliza el resultado para obtener la imagen final. 
+El funcionamiento del filtro DNLM se puede generalizar como un kernel $\psi_{\textrm{NLM}}$ que modifica a cada pixel de la imagen de entrada \mat{U}, como se puede ver en (\ref{eq:weighted}) y (\ref{eq:nlmfunc}). El kernel $\psi_{\textrm{NLM}}$ determina el valor del pixel filtrado, iterando sobre los pixeles de la ventana de búsqueda \mat{\Omega} de $S$ pixeles. Una vez obtenido el peso del pixel, se multiplica por la imagen mejorada \mat{U_{\textrm{USM}}} producto del método de \engl{Unsharp Mask}, como se aprecia en la figura \ref{fig:diagramabloqDNLM}.  Por último, se normaliza el resultado para obtener la imagen final. 
 
 \begin{figure}
 \centering
@@ -46,7 +46,7 @@ Análogamente, el diagrama funcional del filtro DNLM-IIFFT se muestra en la figu
 \node (in1) [io, below of=start] {Entrada};
 \node (dec1) [process, below of=in1, xshift=2cm] {Unsharp Mask};
 \node (dec2) [process, below of=in1, xshift=-2cm] {Imagen Integral};
-\node (pro2b) [process, below of=dec2, xshift=1cm, yshift=-0.5cm] {Filtrado};
+\node (pro2b) [process, below of=dec2, xshift=2cm, yshift=-0.5cm] {Filtrado};
 \node (out1) [io, below of=pro2b] {Salida};
 \node (stop) [startstop, below of=out1] {Fin};
 
@@ -54,7 +54,7 @@ Análogamente, el diagrama funcional del filtro DNLM-IIFFT se muestra en la figu
 \draw [arrow] (in1) -| (dec1);
 \draw [arrow] (in1) -| (dec2);
 \draw [arrow] (dec1) |-  (pro2b);
-\draw [arrow] (dec2) -|  (pro2b);
+\draw [arrow] (dec2) |-  (pro2b);
 \draw [arrow] (pro2b) -- (out1);
 \draw [arrow] (out1) -- (stop);
 \end{tikzpicture}
@@ -62,9 +62,9 @@ Análogamente, el diagrama funcional del filtro DNLM-IIFFT se muestra en la figu
 \end{figure}
 
 
-\begin{figure}
+\begin{algorithm}
 \begin{algorithmic}[1]
-\State $W\gets \Call{CreateMatrix}{U.size}$
+\State $Y\gets \Call{CreateMatrix}{U.size}$
 \For{$i\gets 0, i < (U.rows - 1)$}
 	\For{$j\gets 0, j < (U.cols - 1)$}
 		\State $\Omega\gets \Call{GetPixelWindow}{i,j}$
@@ -76,68 +76,67 @@ Análogamente, el diagrama funcional del filtro DNLM-IIFFT se muestra en la figu
                 \State $E(n,m)\gets \Call{FrobeniusNorm}{\omega_m,\omega_p}$              
         	\EndFor 
         \EndFor 
-        \State $W(i,j)\gets \Call{Average}{E}$
+        \State $Y(i,j)\gets \Call{Average}{E}$
 	\EndFor
 \EndFor
-\State \textbf{return} $W$
+\State \textbf{return} $Y$
 \end{algorithmic}
-\caption{Pseudocódigo del algoritmo del filtro DNLM\label{fig:euclid}}
-\end{figure}
+\caption{Pseudocódigo de la funci\'on de pesado del filtro DNLM\label{fig:euclid}}
+\end{algorithm}
 
-La región del algoritmo DNLM que se pretende paralizar está dada entre la l\i'nea 7 y línea 12 de la figura \ref{fig:euclid}, las cuales comprenden los ciclos aninados que sirven para recorrer cada uno de los pixeles de la imagen. Los hilos corren paralelamente hasta que llegan a la región crítica mostrada en la línea 13 de la figura \ref{fig:euclid}, donde deben escribir de manera síncrona. Esto permite a cada hilo procesar una cantidad de trabajo similar, distribuyendo la carga equitativamente.
+La región del algoritmo DNLM que se pretende paralelizar está dada entre la l\'inea 7 y línea 12 del pseudoc\'odigo \ref{fig:euclid}, las cuales comprenden los ciclos anidados que sirven para recorrer cada uno de los pixeles de la imagen. Los hilos corren paralelamente hasta que llegan a la región crítica mostrada en la línea 13 del pseudoc\'odigo \ref{fig:euclid}, donde deben escribir de manera síncrona. Esto permite a cada hilo procesar una cantidad de trabajo similar, distribuyendo la carga equitativamente.
 
-De la misma menera, la figura \ref{fig:euclid2} muestra el pseudocódigo de la optimización DNLM-IIFT. En este caso la región que se pretende paralelizar comprende desde la línea 3 a la línea 15, en la que los hilos procesan de manera independiente los pixeles de la imagen hasta que ingresan a la región crítica dada por la línea 16, dond deben sincronizarse para escribir.
+De la misma manera, la regi\'on paralelizable del pseudoc\'odigo \ref{fig:euclid2} de la optimización DNLM-IIFFT comprende desde la línea 3 a la línea 15. En esa secci\'on del programa los hilos procesan de manera independiente los pixeles de la imagen hasta que ingresan a la región crítica dada por la línea 16, donde deben sincronizarse para escribir.
 
-\begin{figure}
 
+\begin{algorithm}
 \begin{algorithmic}[1]
-\State $W\gets \Call{CreateMatrix}{U.size}$
-\State $I\gets \Call{IntegralImage}{U.*U}$
+\State $Y\gets \Call{CreateMatrix}{U.size}$
+\State $I\gets \Call{IntegralImage}{U\odot \mat{U}}$
 \For{$i\gets 0, i < (U.rows - 1)$}
 	\For{$j\gets 0, j < (U.cols - 1)$}
 		\State $\Omega\gets \Call{GetPixelWindow}{i,j}$
         \State $\omega_{p}\gets \Call{GetPixelNeighborhood}{i,j}$
-        \State $W_{1}\gets \Call{CreateMatrix}{\Omega.size}$
-        \State $s_{1} \gets I(i+\omega,j+\omega)-I(i-\omega-1,j-\omega-1)+I(i+\omega,j-\omega-1)+I(i-\omega-1,j+\omega)$
+        \State $Y_{\text{tmp}}\gets \Call{CreateMatrix}{\Omega.size}$
+        \State $s_{1} \gets I(i+W,j+W)-I(i-W-1,j-W-1)+I(i+W,j-W-1)+I(i-W-1,j+W)$
         \State $E\gets \Omega * \omega_{p}$ \Comment{Perform convolution}
-        \For{$n\gets 0, n < (\Omega.rows - 1)$}
-        	\For{$m\gets 0, m < (\Omega.cols - 1)$}
-        		\State $s_{2} \gets I(n+\omega,m+\omega)-I(n-\omega-1,m-\omega-1)+I(n+\omega,m-\omega-1)+I(n-\omega-1,m+\omega)$
-        		\State $W_{1}(n,m)\gets -2*E(n,m) + s_{1} + s_{2}$
+        \For{$n\gets 0, n < (Y.rows - 1)$}
+        	\For{$m\gets 0, m < (Y.cols - 1)$}
+        		\State $s_{2} \gets I(n+W,m+W)-I(n-W-1,m-W-1)+I(n+W,m-W-1)+I(n-W-1,m+W)$
+        		\State $Y_{1}(n,m)\gets -2*E(n,m) + s_{1} + s_{2}$
         	\EndFor 
         \EndFor 
-        \State $W(i,j)\gets \Call{Average}{W_{1}}$
+        \State $Y(i,j)\gets \Call{Average}{Y_{\text{tmp}}}$
 	\EndFor
 \EndFor
-\State \textbf{return} $W$
+\State \textbf{return} $Y$
 \end{algorithmic}
-\caption{Pseudocódigo del algoritmo del filtro DNLM-IIFFT}\label{fig:euclid2}
-\end{figure}
+\caption{Pseudocódigo de la funci\'on de pesado del filtro DNLM-IIFFT\label{fig:euclid2}}
+\end{algorithm}
 
-Se observa como disminuyen la cantidad de ciclos de iteración del algoritmo del filtro DNLM-IIFFT respecto a la versión original para una imagen de entrada $U$ de $N$ pixeles, en su lugar se realiza una convolución entre la ventana de búsqueda $|\Omega|=S$ y el vecindario $|\omega|=P$. 
+Se observa c\'omo disminuyen la cantidad de ciclos de iteración del algoritmo del filtro DNLM-IIFFT respecto a la versión original para una imagen de entrada \mat{U} de $N$ pixeles, en su lugar se realiza una convolución entre la ventana de búsqueda \mat{\Omega} de tama\~no $S$ y el vecindario de tama\~no $W$. 
 
-La optimización DNLM-MA presenta una región paralelizable comprendida desde la línea 2 hasta la línea 12 de la figura \ref{fig:euclid3}, sin embargo, la variable $W$ es compartida por lo que las escrituras deben ser en una región crítica para los hilos. 
+La optimización DNLM-MA presenta una región paralelizable comprendida desde la línea 2 hasta la línea 12 del pseudoc\'odigo \ref{fig:euclid3}, sin embargo, la variable donde se almacenan los pesos $Y$ es compartida por lo que las escrituras deben ser en una región crítica para los hilos. 
 
 
-\begin{figure}[H]
-
+\begin{algorithm}
 \begin{algorithmic}[1]
-\State $W\gets \Call{CreateMatrix}{U.size}$
+\State $Y_{\text{Acumm}}\gets \Call{CreateMatrix}{U.size}$
 \For{$dn\gets 0, dn < (\Omega.size/2 - 1)$}
 	\For{$dm\gets 0, dm < (\Omega.size/2 - 1)$}\Comment{Symmetry}
 		\If	{$dn == 0 \And dm == 0$}
-			\State $W\gets W + \Call{Ones}{W.size}$
+			\State $Y_{\text{Acumm}}\gets Y_{\text{Acumm}} + \Call{Ones}{\Omega.size}$
 		\Else
 			\State $D\gets \Call{$D_{\Delta}$}{U,dn,dm}$  
 			\State $E\gets D * \Call{Ones}{\omega.size}$ \Comment{Perform convolution}
-			\State $W\gets W + \Call{Exp}{E/h}$ 
+			\State $Y_{\text{Acumm}}\gets Y_{\text{Acumm}} + \Call{Exp}{E/h}$ 
 		\EndIf
 	\EndFor
 \EndFor
-\State \textbf{return} $W$
+\State \textbf{return} $Y$
 \end{algorithmic}
-\caption{Pseudocódigo del algoritmo del filtro DNLM-MA}\label{fig:euclid3}
-\end{figure}
+\caption{Pseudocódigo de la funci\'on de pesado del filtro DNLM-MA\label{fig:euclid3}}
+\end{algorithm}
 
 
  

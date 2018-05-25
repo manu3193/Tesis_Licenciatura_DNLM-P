@@ -24,7 +24,7 @@ U = X + V \enspace ,
  
 \begin{equation}
 \label{eq:probfuncgauus}
-p(v(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {V(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}} \enspace ,
+p(v(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {v(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}} \enspace ,
 \end{equation}
 
 siendo $\sigma$ la desviación est\'andar  y $\mu$ el valor medio de la distribución de probabilidad, que para efectos del ruido gaussiano se asume $\mu = 0$.
@@ -46,16 +46,16 @@ La función de pesado del filtro NLM se define como:
 
 \begin{equation}
 \label{eq:nlmfunc}
-\psi_{\textrm{NLM}}\left(U,p,m\right) = \exp\left(-\frac{\left\Vert \vec{\boldsymbol{\eta}}\left(m\right)-\vec{\boldsymbol{\eta}}\left(p\right)\right\Vert^2 }{\sigma^{2}}\right) \enspace ,
+\psi_{\textrm{NLM}}\left(U,p,m\right) = \exp\left(-\frac{\left\Vert \vec{\boldsymbol{\eta}}\left(m\right)-\vec{\boldsymbol{\eta}}\left(p\right)\right\Vert^2 }{h}\right) \enspace ,
 \end{equation}
 
-donde $\sigma$ es el par\'ametro que controla el grado de suavizado del filtro y $\vec{\boldsymbol{\eta}}\left(q\right)$ el vector que contiene los pixeles de un vecindario con tama\~no $\omega$ al rededor de $q$, con $q \in \{p,m\}$.
+donde $h$ es el par\'ametro que controla el grado de suavizado del filtro con $h = \alpha\sigma^{2}$; y $\vec{\boldsymbol{\eta}}\left(q\right)$ el vector que contiene los pixeles de un vecindario de tama\~no $W$ al rededor de $q$, con $q \in \{p,m\}$.
 
 Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades, como en otros filtros. La función de pesado definida en (\ref{eq:nlmfunc}) hace uso de la distancia Euclidiana para determinar la similitud entre los vecindarios de los pixeles $p$ y $m$. 
 De esta manera se determina el peso en la contribución para el ponderamiento de los pixeles en una región limitada por una ventana $\Omega$. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos al comparar los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen\cite{calderon2015dewaff}. 
 
 
-En cuanto a la complejidad computacional, al filtrar una imagen de entrada en escala de grises de $N$ pixeles, con una ventana deslizante de tama\~no $|\Omega| = S$ pixeles y un vecindario de tama\~no $|\omega| = P$ pixeles, la complejidad computacional del filtro DNLM es de $\mathcal{O}(N\cdot~S\cdot~P)$. 
+En cuanto a la complejidad computacional, al filtrar una imagen de entrada en escala de grises de $N$ pixeles, con una ventana deslizante de tama\~no $|\Omega| = S$ pixeles y un vecindario de tama\~no $W$ pixeles, la complejidad computacional del filtro DNLM es de $\mathcal{O}(N\cdot~S\cdot~W)$. 
 
 
 
@@ -212,7 +212,7 @@ D\left(x,y\right)=\Vert \mat{Y} - \mat{X} \Vert_{F}^2 \enspace ,
 
 con \mat{Y} y \mat{X} las matrices de los vecindarios de los pixeles $y$ y $x$. respectivamente.
 
-Si se se define la norma $\Vert \cdot \Vert_{F}^2$ con el producto interno de Frobenius $\langle\,,\rangle_{F}$ se tiene que:
+Si se se define la norma $\Vert \cdot \Vert_{F}^2$ con el producto interno de Frobenius $\langle\,\cdot,\cdot\rangle_{F}$ se tiene que:
 
 \begin{equation}\label{eq:frobProd}
 \begin{split}
@@ -315,10 +315,10 @@ Esta optimización del filtro DNLM se centra en el cálculo de la norma de Frobe
 \begin{itemize}
 \item El uso de la imagen integral cuadrática para calcular los términos $\Vert \mat{Y} \Vert_{F}^2 $ y $\Vert \mat{X} \Vert_{F}^2 $.
 \item Calcular la convolución para obtener el término $-2\langle\mat{Y},\mat{X}\rangle_{F} $
-correspondiente a la correlación del vecindario \mat{Y} con la ventana de búsqueda \mat{\Omega}, para acceder posteriormente al $i$-ésimo elemento del resultado.
+correspondiente a la correlación del vecindario \mat{Y} con la ventana de búsqueda \mat{\Omega}, para acceder posteriormente al elemento de la matriz resultante en la posici\'on correspondiente.
 \end{itemize}
 
-Lo anterior permite disminuir la complejidad computacional del filtro a $O(S\log(S) \cdot N)$.
+Lo anterior permite disminuir la complejidad computacional del filtro a $\mathcal{O}(S\log(S) \cdot N)$.
  
 \subsubsection{Imágenes integrales}
 
@@ -410,23 +410,44 @@ lo cual, es consistente con el término $\mat{P}_{\left(3,3\right)}$ en (\ref{eq
 
 \subsubsection{Convolución y transformada rápida de Fourier}
 
-Como se mostró anteriormente, el término $-2\langle\mat{Y},\mat{X}\rangle_{F}$ producto del desarrollo de la norma de Frobenius en (\ref{eq:matFrodProd}), puede representarse como el $i$-ésimo elemento de la matriz resultante de la correlación del vecindario \mat{X} del pixel $x_{ij}$ con la ventana \mat{\Omega} como:
+Como se mostró anteriormente, el término $-2\langle\mat{Y},\mat{X}\rangle_{F}$ producto del desarrollo de la norma de Frobenius en (\ref{eq:matFrodProd}), puede representarse como un elemento de la matriz producto de la correlación del vecindario \mat{X} del pixel $x_{ij}$ de tama\~no $W$ con la ventana \mat{\Omega} de tama\~no $S$ como:
 
 \begin{equation}
 -2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} \otimes \mat{X}\right](i,j) \enspace .
 \end{equation}
 
-Para expresar la correlación en términos de la convolución, se debe rotar la matriz \mat{X} de modo que se cumple que:
+Para expresar la correlación en términos de la convolución, se debe rotar la matriz \mat{X} para obtener el $\mat{X}^\textrm{R}$ por medio de la multiplicaci\'on de \mat{X} con la matrix de permutaci\'on definida como:
 
 \begin{equation}
-\mat{\Omega} \otimes \mat{X} = \mat{\Omega}*\mat{X}\mat{I}^T \enspace ,
+\mat{P} = \left[\begin{array}{ccc}
+0 & 0 & 1\\
+0 & 1 & 0\\
+1 & 0 & 0
+\end{array}\right] \enspace ,
 \end{equation}
 
-donde $\mat{I}^T$ es la matriz identidad transpuesta del vecindario \mat{X}. Lo anterior implica que el término sea calculado como:
+para el caso en que \mat{X} sea una matriz de $3\times 3$. La matriz $\mat{X}^\textrm{R}$ se obtiene al multiplicar la matriz de permutaci\'on \mat{P} a ambos lados de \mat{X} de la siguiente forma:
+
 
 \begin{equation}
--2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} *\mat{X}\mat{I}^T\right](i,j) \enspace .
+\mat{X}^\text{R} = \mat{P}\mat{X}\mat{P} \enspace ,
 \end{equation}
+
+
+
+con esto se puede representar la correlaci\'on en t\'erminos de la convoluci\'on para el c\'alculo del t\'ermino $-2\langle\mat{Y},\mat{X}\rangle_{F}$ como:
+
+\begin{equation}
+-2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} *\mat{X}^\text{R}\right](i,j) \enspace .
+\end{equation}
+
+La convoluci\'on $\mat{\Omega} *\mat{X}^\text{R}$ se puede representar como multiplicaciones en el dominio de la frecuencia, como:
+
+\begin{equation}
+-2\langle\mat{Y},\mat{X}\rangle_{F} = -2 \left[ \ifourier{ \fourier{\mat{\Omega}} \odot \fourier{\mat{X}^\text{R}}} \right](i,j) \enspace .
+\end{equation}
+
+Con esto, la complejidad computacional de las transformaciones de dominio y multiplicaci\'on resulta menor que la complejidad de la convoluci\'on espacial cuando $(S~+~2S\log{S})~<~S^2$, para el caso anterior. Adem\'as, la ganancia de usar la transformada r\'apida de Fourier se obtiene gracias a su reducido costo computacional de $\mathcal{O}(S\log(S))$ respecto a $\mathcal{O}(S^2)$ de la transformada normal.
 
 
 
@@ -434,9 +455,9 @@ donde $\mat{I}^T$ es la matriz identidad transpuesta del vecindario \mat{X}. Lo 
 \subsection{DNLM-MA}
 \label{ch:marco_condat}
 
-Esta propuesta de optimización computacional del filro NLM se caracteriza por su simpleza, al proponer un intercambio entre los ciclos de interación del algoritmo \cite{Condat2010}. La aceleración se consigue al incorporar simetría y convoluciones al realizar el ponderamiento de la regón definida por la ventana de búsqueda \mat{\Omega}, para todos los pixeles la imagen de manera simultánea.
+Esta propuesta de optimización computacional del filro NLM se caracteriza por su simpleza, al proponer un intercambio entre los ciclos de interación del algoritmo \cite{Condat2010}. La aceleración se consigue al incorporar simetría y convoluciones al realizar el ponderamiento de la región definida por la ventana de búsqueda \mat{\Omega}, para todos los pixeles la imagen de manera simultánea.
 
-Siguiendo la definición de la función de pesado del filtro NLM en (\ref{eq:nlmfunc}), un pixel $y$ puede ser expresado en términos del desplazamiento desde un pixel $x$ como $y = x + \Delta$. Por ejemplo, para una ventana de búsqueda $\vert\Omega\vert = 5 \times 5$, $\Delta$ puede tomar los valores $\Delta=0$, $\Delta=1$, $\Delta=2$ y en general, puede tomar valores de hasta $\Delta=\vert\Omega\vert/2$. Por lo tanto, la función de pesado del filtro NLM es simétrica si:
+Siguiendo la definición de la función de pesado del filtro NLM en (\ref{eq:nlmfunc}), un pixel $y$ puede ser expresado en términos del desplazamiento $\Delta$ desde un pixel $x$ como $y = x + \Delta$. Por ejemplo, para una ventana de búsqueda de tama\~no $S = 5 \times 5$, $\Delta$ puede tomar los valores $\Delta=0$, $\Delta=1$, $\Delta=2$ y en general, puede tomar valores de hasta $\Delta=S/2$. Por lo tanto, la función de pesado del filtro NLM es simétrica si:
 
 \begin{equation}\
 \psi_{\text{NLM}}(\mat{U}, x, x + \Delta) = \psi_{\text{NLM}}(\mat{U}, y, y - \Delta)  \enspace . 
@@ -451,32 +472,33 @@ Los pesos son calculados al intercambiar los ciclos del algoritmo, ya que se ite
 \end{equation}
 
 donde la potencia al cuadrado es para cada pixel individual, siguiendo la notación de Hadamard. Seguidamente, se calcula la convolución de
-$\mat{D}_\Delta$ con un kernel de promediado de tama\~no $\omega$ de la siguiente forma:
+$\mat{D}_\Delta$ con un kernel de promediado de tama\~no $W$ de la siguiente forma:
 \begin{equation}
 \label{eq:convmoas}
 \mat{E}_{\Delta} = \mat{D}_{\Delta} * \mat{G} \enspace ,
 \end{equation}
 
-donde se define la convolución con un kernel $h$ (\ref{eq:convmoas}) que corresponde a un kernel de promediado.
-
-
-El resultado es la función de pesado del filtro DNLM-MA: 
+donde $G$ corresponde a un kernel de promediado de la forma $\mat{G} = \frac{1}{9}\left[\begin{array}{ccc}
+1 & 1 & 1\\
+1 & 1 & 1\\
+1 & 1 & 1
+\end{array}\right]$. Con esto, cada pixel de $\mat{E}_{\Delta}$ es igual al valor medio de los pixeles de su vecindario en la matriz $\mat{D}_{\Delta}$. A partir de $\mat{E}_{\Delta}$, se puede obtener la respuesta de la función de pesado del filtro DNLM-MA como: 
 
 \begin{equation}
-\psi_{DNLM-MA}=\exp^{\circ}\left(-\frac{ E_\Delta\left(x\right) }{h}\right)  \enspace .
+\psi_{DNLM-MA}\left(x\right)=\exp^{\circ}\left(-\frac{ E_\Delta\left(x\right) }{h}\right)  \enspace .
 \label{eq:wmoas}
 \end{equation}
 
 
-Con esto se consigue reducir la  función de costo computacional a $O(\sqrt{P} \cdot S \cdot N)$.  
+Este m\'etodo consigue reducir la  función de costo computacional a $O(\sqrt{W} \cdot S \cdot N)$.  
 
 
 
 \section{Arquitectura Intel Xeon Phi Knights Landing}
 \label{ch:marco_xeonphi}
 
-La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \textit{many-core} está dise\~nada para aplicaciones de computación de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para propósito general. A diferencia de la versión anterior, esta nueva iteración con nombre clave Knights Landig permite el arranque de un sistema operativo por sí misma y provee más de 3 TFLOP/s de precisión doble y cerca de 6 TFLOP/s de precisión doble \cite{Jeffers201663}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicación en 2D, cada una de ellas conformada por 2 CPU y 1MB de caché L2 compartido \cite{XeonPhiWhitePaper}. Cada uno de los CPU incorpora 2 Unidades de Procesamiento Vectorial (VPU) con registros de hasta 512 bytes de largo, capaces de operar de manera simultánea para 2 o más hilos \ref{XeonPhiWhitePaper}. 
-Entre las características que destacan del CPU es su modo de ejecución fuera de orden y el multihilo simultáneo de 4 hilos \cite{XeonPhiWhitePaper}. Una de sus particularidades es la incorporación de 16GB de Memoria de Alto Ancho de Banda (MCDRAM) de hasta $450 Gbyte/s$ en el mismo chip como lo muestra la Figura \ref{fig:cpu_phi}, permitiendo tiempos de latencia cortos en comparación con los obtenidos con tecnologías DDR4 \cite{XeonPhiWhitePaper}.
+La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \engl{many-core} está dise\~nada para aplicaciones de computación de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para propósito general. A diferencia de la versión anterior, esta nueva iteración con nombre clave \engl{Knights Landig}, permite el arranque de un sistema operativo por sí misma y provee más de 3 TFLOP/s de precisión simple y cerca de 6 TFLOP/s de precisión doble \cite{Jeffers201663}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicación en 2D, cada una de ellas conformada por 2 CPU y 1MB de caché L2 compartido \cite{XeonPhiWhitePaper}. Cada uno de los CPU incorpora 2 Unidades de Procesamiento Vectorial (VPU) con soporte para el conjunto de instrucciones SIMD AVX-512 con registros de hasta 512 bytes de largo, capaces de operar de manera simult\'anea hasta 2 operaciones vectoriales por ciclo \cite{XeonPhiWhitePaper}. 
+Entre las características que destacan del CPU es su modo de ejecución fuera de orden y el multihilo simultáneo de 4 hilos \cite{XeonPhiWhitePaper}. Una de sus particularidades es la incorporación de 16GB de Memoria de Alto Ancho de Banda (MCDRAM) de hasta $450 \text{Gbyte/s}$ en el mismo chip como lo muestra la Figura \ref{fig:cpu_phi}, permitiendo reducir la latencia de la memoria principal \cite{XeonPhiWhitePaper}.
 
 \begin{figure}
 \centering
@@ -486,13 +508,13 @@ Entre las características que destacan del CPU es su modo de ejecución fuera d
 \end{figure}
 
 
-La arquitectura KNL presenta distintos modos de configuración de memoria y \engl{clústering}. Para efectos de este trabajo, se utiliza el modo de configuración recomendado por el fabricante: Modo de \engl{clustering} por cuadrantes y configuración de memoria MCDRAM como \engl{caché}.
+La arquitectura KNL presenta distintos modos de configuración de memoria y clústering. Para efectos de este trabajo, se utiliza el modo de configuración recomendado por el fabricante: Modo de cl\'ustering por cuadrantes y configuración de memoria MCDRAM como caché.
 
 
 \section{Paralelización y vectorización}
 \label{ch:marco_parallel}
 
-Existen múltiples enfoques de paralelización y vectorización del filtro NLM en el estado del arte. Estos han demostrado una alta aceleración del algoritmo de filtrado, como lo muestra la Tabla \ref{method_table}. 
+Existen múltiples enfoques de paralelización y vectorización del filtro NLM en el estado del arte. Estos han demostrado una alta aceleración del algoritmo de filtrado, como se muestra en la Tabla \ref{method_table}. 
 
 
 \begin{table}
@@ -516,9 +538,9 @@ Huang et al. \cite{huang2017parallel} &  Intel Xeon Phi & OpenMP & $32\times$\\
 \label{method_table}
 \end{table}
 
-La primera implementación paralela encontrada en la literatura se realiz\' mediante múltiplles hilos de ejecución para procesar imágenes médicas en 3D, con la ayuda de un servidor y 8 procesadores Xeon \ \cite{coupe2006fast}. Seguidamente, se utiliza una arquitectura SIMD para paralelizar el filtro en un servidor con 8 procesadores AMD Opteron de doble núcleo \cite{Darbon2008}. Además, implementaciones en GPU han empleado la optimización propuesta por Gossens en DirectX \cite{marques2013implementation} y la optimización propuesta por Condat en CUDA \cite{mingliang2016medical,goossens2010gpu}, las cuales muestran mayores aceleraciones que las implementaciones en CPU. Otra implementación con una aceleración ligeramente mayor a la obtenida por Marques y Pardo \cite{marques2013implementation} es conseguida en un sistema distribuido con 1024 núcleos de procesamiento \cite{shi2015optimized}. Una implementación más compleja combina MPI con P-Threads y MPI con CUDA para alcanzar una aceleración aún mayor \cite{nguyen2016medical}. Finalmente, dos implementaciones del filtro para plataformas Xeon Phi \cite{zhu2016parallel,huang2017parallel} y OpenCL \cite{zhu2016parallel}.
+La primera implementación paralela encontrada en la literatura fue realizada mediante múltiples hilos de ejecución para procesar imágenes médicas en 3D, con la ayuda de un servidor y 8 procesadores Xeon \ \cite{coupe2006fast}. Seguidamente, se utiliza una arquitectura SIMD para paralelizar el filtro en un servidor con 8 procesadores AMD Opteron de doble núcleo \cite{Darbon2008}. Además, implementaciones en GPU han empleado la optimización propuesta por Gossens en DirectX \cite{marques2013implementation} y la optimización propuesta por Condat en CUDA \cite{mingliang2016medical,goossens2010gpu}, las cuales muestran mayores aceleraciones que las implementaciones en CPU. Otra implementación con una aceleración ligeramente mayor a la obtenida por Marques y Pardo \cite{marques2013implementation} es conseguida en un sistema distribuido con 1024 núcleos de procesamiento \cite{shi2015optimized}. Una implementación más compleja combina MPI con P-Threads y MPI con CUDA para alcanzar una aceleración aún mayor \cite{nguyen2016medical}. Finalmente, dos implementaciones del filtro para plataformas Xeon Phi \cite{zhu2016parallel,huang2017parallel} y OpenCL \cite{zhu2016parallel}.
 
-Si bien la aceleración obtenida con GPU es usualmente mayor a las reportadas con la plataforma Xeon Phi, ésta última tiene la ventaja de proveer un estilo de programación sencillo y flexible, ya que utiliza el set de instrucciones X86 \cite{huang2017parallel}. 
+Si bien la aceleración obtenida con GPU es usualmente mayor a las reportadas con la plataforma Xeon Phi, ésta última tiene la ventaja de proveer un estilo de programación sencillo y flexible, ya que utiliza el set de instrucciones x86 \cite{huang2017parallel}. 
 
 La arquitectura KNL está dise\~nada con un fuerte soporte de instrucciones vectoriales para acelerar operaciones sobre datos, sin embargo,  la vectorización se ve afectada si no se asegura un correcto alineamiento de los datos, o bien si el pre-retiro de instrucciones de caché no es efectivo \cite{Jeffers201617:vect}.
 La vectorización de las rutinas del algoritmo son fundamentales para acelerar el tiempo de procesamiento en la arquitectura KNL. Por ejemplo, utilizar instrucciones vectoriales como AVX-512 permite el cálculo simultaneo de 16 operaciones matemáticas de precisión simple, o bien 8 operaciones de precisión doble \cite{Jeffers201617:vect}.
@@ -526,12 +548,12 @@ La vectorización de las rutinas del algoritmo son fundamentales para acelerar e
 Una efectiva vectorización se puede lograr con tres enfoques:
 
 \begin{itemize}
-\item Bibliotecas: Muchas bibliotecas se encuentran previamente optimizadas para el uso de instrucciones vectorizadas. 
-\item Auto-vectorización: Consiste en otorgarle la responsabilidad al compilador para identificar regiones vectorizables.
-\item Directivas o \engl{pragmas} para assistir vectorización: Permite que el programador le indique al compilador las regiones paralelizables.
+\item Bibliotecas: Bibliotecas como Intel IPP y MKL se encuentran previamente optimizadas para el uso de instrucciones vectorizadas, por lo general \'esta es la opci\'on m\'as recomendada. 
+\item Auto-vectorización: Consiste en otorgarle la responsabilidad al compilador para identificar regiones vectorizables de manera autom\'atica en tiempo de compilaci\'on.
+\item Directivas o \engl{pragmas} para assistir vectorización: Permite que el programador le indique al compilador las regiones paralelizables y otros atributos, para que el compilador pueda generar c\'odigo vectorizado.
 \end{itemize}
  
-En este trabajo se apuesta por la primera opción: el uso de la biblioteca \engl{Intel Performance Primitives} (IPP). Esta biblioteca incorpora rutinas vectorizadas con datos alineados en memoria para funciones de procesamiento de se\~nales e imágenes. Además, la biblioteca IPP implementa un despachador que selecciona atomáticamente el conjunto de instruccions SIMD específico para las rutinas de la biblioteca, de acuerdo a las características del procesador \cite{IntelCorporation2017}.  Sumado a lo anterior, permite selccionar un conjunto de instrucciones SIMD específico \cite{IntelCorporation2017}, siendo útil para comprobar la diferencia en rendimiento entre diferentes conjuntos de instrucciones SIMD según se requiera.
+En este trabajo se apuesta por la primera opción: el uso de la biblioteca \engl{Intel Performance Primitives} (IPP). Esta biblioteca incorpora rutinas vectorizadas con datos alineados en memoria para funciones de procesamiento de se\~nales e imágenes. Además, la biblioteca IPP implementa un despachador que selecciona atomáticamente el conjunto de instruccions SIMD específico para las rutinas de la biblioteca, de acuerdo a las características del procesador \cite{IntelCorporation2017}.  Sumado a lo anterior, permite seleccionar un conjunto de instrucciones SIMD específico \cite{IntelCorporation2017}, lo que permite comprobar la diferencia en rendimiento entre diferentes conjuntos de instrucciones SIMD de ser necesario.
 
 El filtro DNLM tiene la ventaja de poder realizar el filtrado de cada pixel de manera independiente. Esto se puede intuir de la función de filtrado (\ref{eq:weighted}). El resultado tiene un alto nivel de paralelismo, con un grado de granularidad propicio para distribuir la carga de procesamiento en los núcleos del procesador, como se observa en la Figura \ref{fig:parallel_figure}. 
 
@@ -557,7 +579,7 @@ Las métricas utilizadas en este trabajo se listan a continuación:
 
 \paragraph*{Ciclos por instrucción (CPI):}
 
-Esta métrica consiste en el número promedio de ciclos requeridos por hilo para ejecutar una instrucción y se considera como un indicador de la latencia presente, que afecta el tiempo de ejecución de una aplicación.
+Esta métrica consiste en el número promedio de ciclos requeridos por hilo para ejecutar una instrucción y se considera como un indicador de la latencia presente que afecta el tiempo de ejecución de una aplicación.
 
 La métrica CPI promedio por hilo está dada por:
 \begin{equation}\label{eq:CPI_metric}
@@ -572,10 +594,81 @@ Además, se puede calcular los CPI promedio por CPU como:
 
 El valor de $\text{CPI}_{\text{CPU}} $ se reduce al aumentar la cantidad de hilos de ejecución, por lo tanto, al optimizar se debe conseguir el menor $\text{CPI}_{\text{CPU}} $. Además, se debe tomar en cuenta que al utilizar instrucciones vectoriales el CPI tiende a aumentar, debido a que la cantidad de trabajo realizado con una sóla instrucción aumenta \cite{Jeffers2016315}.
 
-\paragraph*{Uso de VPU}
+\paragraph*{Intensidad de uso de VPU ($\text{VPU}_{\text{i}}$):}
 
-Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de opraciones en punto flotante por segundo\cite{Jeffers2016315}. Esá definida como:
+Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de opraciones en punto flotante por segundo\cite{Jeffers2016315}. Está definida como:
 
 \begin{equation}
-\text{VPUi}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}
+\text{VPU}_{\text{i}}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}
 \end{equation}
+
+
+\paragraph*{Intensidad de operaciones de microarquitectura ($\mu\text{Ops}_{\text{i}}$):}
+
+Esta métrica mide la intensidad en operaciones de la microarquitectura que son retiradas de la etapa de decodificaci\'on. Permite estimar una medida de la densidad de operaciones en el pipeline del \engl{backend}, es decir, la densidad de operaciones en las etapas posteriores a la toma y decodificaci\'on de instrucciones. Está definida como:
+
+\begin{equation}
+\mu\text{Ops}_{\text{i}}= \frac{\text{\#}\mu\text{Ops retiradas MS}}{\text{\#}\mu\text{Ops retiradas totales}} \enspace ,
+\end{equation}
+
+donde $\text{\#}\mu\text{Ops retiradas MS}$ corresponde al n\'umero de operaciones retiradas que fueron emitidas por el micro secuenciador (MS).
+
+
+\paragraph*{Raz\'on de aciertos de lectura en cach\'e L1 ($\text{L1}_{\text{Hit}}$):}
+
+A partir de esta m\'etrica se puede determinar el aprovechamiento de la localidad de cach\'e de nivel L1 por la aplicaci\'on. Esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{L1}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L1}}{\text{\# operaciones de lectura}} \enspace .
+\end{equation}
+
+\paragraph*{Raz\'on de aciertos de lectura en cach\'e L2 ($\text{L2}_{\text{Hit}}$):}
+
+Esta m\'etrica determina el rendimiento en la localidad de cach\'e de nivel L2. Al igual que el caso anterior, esta m\'etrica es fundamental para obtener un buen rendimiento en el KNL ya que evita cerca de 250 ciclos que tarda la consulta a la cach\'e externa o memoria principal. \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{L2}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L2}}{\text{\# operaciones de lectura}} \enspace .
+\end{equation}
+
+
+\paragraph*{Raz\'on de c\'omputo en L1 por acceso a datos ($\text{CDA}_\text{L1}$):}
+
+Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocurren por cada acceso a cach\'e L1. Su valor da una idea de la densidad computacional del algoritmo y se recomienda igual o por encima a la intensidad computacional $\text{VPU}_{\text{i}}$. Adem\'as, esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{CDA}_\text{L1} = \frac{\text{\# SIMD empaquetadas}}{\text{\# accesos a datos}} \enspace .
+\end{equation}
+
+
+
+\paragraph*{Raz\'on de c\'omputo en L2 por acceso a datos ($\text{CDA}_\text{L2}$):}
+
+Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocurren por cada acceso a cach\'e L2. Su valor permite estimar la eficiencia de las operaciones vectoriales del algoritmo. Sumado a lo anterior, esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{CDA}_{\text{L2}} = \frac{\text{\# SIMD empaquetadas}}{\text{\# fallos en cach\'e L1}} \enspace .
+\end{equation}
+
+
+\paragraph*{Costo de aciertos de lectura en cach\'e L2 ($\text{L2p}_{\text{Hit}}$):}
+
+Esta m\'etrica estima el costo de los fallos en cach\'e nivel L1 que aciertan en cach\'e nivel L2. Representa el costo de la falla de lectura a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{L2p}_{\text{Hit}} = 17 *\frac{\text{\# aciertos de lectura en L2}}{\text{CPI}} \enspace .
+\end{equation}
+
+Este valor debe mantenerse por debajo del 15\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
+
+
+\paragraph*{Costo de fallos de lectura en cach\'e L2 ($\text{L2p}_{\text{Miss}}$):}
+
+Esta m\'etrica determina el costo de los fallos en cach\'e nivel L2. Representa el costo de lectura a memorias externas ya sea MCDRAM o DRAM a raz\'on de los ciclos totales que tarda la aplicaci\'on \cite{Jeffers2016315}. Se define como:
+
+\begin{equation}
+\text{L2p}_\text{Miss} = 230 *\frac{\text{\# fallos de lectura en L2}}{\text{CPI}} \enspace .
+\end{equation}
+
+La espectativa es mantener este valos por debajo del 5\% de los ciclos totales de la aplicaci\'on \cite{Jeffers2016315}.
+
+
