@@ -3,8 +3,7 @@
 
 Los experimentos realizados utilizan un tama\~no por defecto de la imagen de entrada con $N = 1024 \times 1024$, ventana de búsqueda con $S = 21 \times 21$ y vecindario con $W = 7 \times 7$, excepto donde se indica lo contrario. Adem\'as, todos los resultados reportados corresponden al promedio de 10 ejecuciones para cada programa evaluado.  
 
-
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Intensidad vectorial de operaciones con un hilo de ejecución]{Intensidad vectorial  $\text{VPU}_{\text{i}}$ para las versiones del filtro DNLM con 1 hilo de ejecución, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:vpui}}
 \begin{tabular}{lr}
@@ -16,12 +15,10 @@ DNLM-MA-P & 0.95 \tabularnewline
 \end{tabular}
 \end{table}
 
-
-
 El grado de vectorizaci\'on obtenido gracias al uso de la biblioteca IPP en las versiones secuenciales del filtro DNLM se muestra en la tabla \ref{tabla:vpui}. La intensidad computacional de las unidades vectoriales alcanza el 81\% para el filtro DNLM, 95\% para el filtro DNLM-IIFFT y 100\% para el caso del filtro DNLM-MA, optimizaci\'on presentada en este trabajo. El set de instrucciones utilizado es AVX-512, con registros de 512 bytes de tama\~no para el c\'alculo simult\'aneo de hasta 32 operaciones de precisi\'on simple. Con esto se demuestra la ventaja de emplear bibliotecas previamente optimizadas para la plataforma, como una forma simple y eficiente de obtener c\'odigo vectorizable, sin recurrir a intr\'insecas o \engl{pragmas} del compilador.
 
 
-\begin{table}
+\begin{table}[bht]
 \centering
 \caption[Cambio en CPI al escalar el n\'umero de hilos]{Valores de CPI por hilo para implementaciones del filtro DNLM al escalar el n\'umero de hilos, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:cpi}}
 \begin{tabular}{lrrrrrrrrr}
@@ -36,7 +33,7 @@ DNLM-MA-P & 1.74 & 2.07 & 2.17 & 2.17 & 2.46 & 2.31 & 2.46 & 2.98 & 4.06 \tabula
 \end{table}
 
 
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Cambio en $\text{CPI}_{\text{CPU}}$ al escalar el n\'umero de hilos]{Cambio en $\text{CPI}_{\text{CPU}}$ al escalar el n\'umero de hilos para las implementaciones del filtro DNLM, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:cpic}}
 \begin{tabular}{lrrrrrrrrr}
@@ -57,7 +54,7 @@ El comportamiento de $\text{CPI}_{\text{CPU}}$ mostrado en la tabla \ref{tabla:c
   
 
   
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Cambio en intensidad de  micro-operaciones al escalar el n\'umero de hilos]{Cambio en  $\mu\text{Ops}_{\text{i}}$ al escalar el n\'umero de hilos para las implementaciones del filtro DNLM, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:ucode}}
 \begin{tabular}{lrrrrrrrrr}
@@ -71,9 +68,9 @@ DNLM-MA-P & 0.03 & 0.06 & 0.10 & 0.16 & 0.23 & 0.28 & 0.32 & 0.32 & 0.33 \tabula
 \end{tabular}
 \end{table}
 
-Las micro-operaciones observadas en la tabla \ref{tabla:ucode} muestra una mayor intensidad en el \engl{backend} del procesador por hilo para el filtro DNLM-P, lo cual quiere decir que ejecuta una mayor cantidad de instrucciones en los pipelines del procesador, en comparaci\'on con los filtros DNLM-IFFT y DNLM-MA. El Filtro DNLM-MA-P  con 32 hilos de ejecuci\'on consigue alcanzar la misma intensidad de micro-operaciones que el filtro DNLM-P; a partir de esta cantidad de hilos, la intensidad de micro-operaciones reduce su aumento hasta estancarse. 
+Las micro-operaciones observadas en la tabla \ref{tabla:ucode} muestran una mayor intensidad en el \engl{backend} del procesador por hilo para el filtro DNLM-P, lo cual quiere decir que ejecuta una mayor cantidad de instrucciones en los pipelines del procesador, en comparaci\'on con los filtros DNLM-IFFT y DNLM-MA. El Filtro DNLM-MA-P  con 32 hilos de ejecuci\'on consigue alcanzar la misma intensidad de micro-operaciones que el filtro DNLM-P; a partir de esta cantidad de hilos, la intensidad de micro-operaciones reduce su aumento hasta estancarse. 
 
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Cambio en la raz\'on de aciertos de lectura en cach\'e L1 al escalar el n\'umero de hilos]{Cambio en  $\text{L1}_{\text{Hit}}$ al escalar el n\'umero de hilos para las implementaciones del filtro DNLM, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:l1_hit}}
 \begin{tabular}{lrrrrrrrrr}
@@ -88,7 +85,7 @@ DNLM-MA-P & 0.80 & 0.83 & 0.85 & 0.88 & 0.93 & 0.96 & 0.98 & 0.99 & 0.99 \tabula
 \end{table}
 
 
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Cambio en la raz\'on de aciertos de lectura en cach\'e L2 al escalar el n\'umero de hilos]{Cambio en  $\text{L2}_{\text{Hit}}$ al escalar el n\'umero de hilos para las implementaciones del filtro DNLM , utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:l2_hit}}
 \begin{tabular}{lrrrrrrrrr}
@@ -105,7 +102,7 @@ DNLM-MA-P & 0.91 & 0.86 & 0.85 & 0.85 & 0.85 & 0.85 & 0.85 & 0.88 & 0.89 \tabula
 
 Las tablas \ref{tabla:l1_hit} y \ref{tabla:l2_hit} muestran la buena localidad de cach\'e de los filtros DNLM-P y DNLM-IIFFT para diferente n\'umero de hilos. La tasa de aciertos en cach\'e nivel L1 y L2 se mantiene cerca del 99\%  para los filtros DNLM-P y DNLM-IIFFT-P. Caso contrario sucede con el filtro DNLM-MA-P que demuestra menor tasa de aciertos debido a sus mayores requerimientos de ancho de banda y la incapacidad de almacenar la gran cantidad de datos sobre los que opera en memoria cach\'e. 
 
-\begin{table}
+\begin{table}[htb]
 \centering
 \caption[Cambio en la raz\'on de c\'omputo en caché L1 por acceso a datos al escalar el n\'umero de hilos]{Cambio en  $\text{CDA}_\text{L1}$ al escalar el n\'umero de hilos para las implementaciones del filtro DNLM, utilizando una imagen de entrada de $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:cda_l1}}
 \begin{tabular}{lrrrrrrrrr}
@@ -119,9 +116,35 @@ DNLM-MA-P & 1.69 & 1.50 & 1.30 & 1.00 & 0.68 & 0.36 & 0.18 & 0.08 & 0.04 \tabula
 \end{tabular}
 \end{table}
 
+La tabla \ref{tabla:cda_l1} muestra la disminuci\'on general de aciertos en cach\'e L1 por lectura de datos al escalar el n\'umero de hilos. Esta m\'etrica es la principal raz\'on por la que las distintas implementaciones del filtro DNLM tienen una cantidad de hilos espec\'ifica que alcanza la mejor aceleraci\'on debido al paralelismo. La raz\'on de $\text{CDA}_\text{L2}$ reduce sostenidamente al aumentar la cantidad de hilos a 256 en el filtro DNLM-P. El caso del filtro DNLM-IIFFT-P es similar, sin embargo el valor cae significativamente al alcanzar m\'	as de 128 hilos. El filtro DNLM-MA-P se comporta distinto y su valor aumenta para 16 y 32 hilos y luego cae para cantidades mayores de hilos. Esta m\'etrica coincide con los resultados de aceleraci\'on y escalabilidad que de la figura \ref{fig:scalability}.
 
+\begin{figure}[htb]
+\centering
+  \begin{tikzpicture}
+      \begin{semilogyaxis}[
+          height=0.3\textheight,
+          width=0.5\textwidth,
+          xlabel= \# Hilos,
+          ylabel=Duración (s),
+          xmin=1,
+          xmax=260,
+          scaled x ticks = false
+  ]
+           \addplot[mark=*] table[x=Threads,y=Time] {data/scaling_original.txt};
+           \addlegendentry{DNLM}
+          \addplot[mark=x] table[x=Threads,y=Time] {data/scaling_iifft.txt};
+          \addlegendentry{DNLM-IIFFT}
+          \addplot[mark=triangle] table[x=Threads,y=Time] {data/scaling_condat.txt};
+          \addlegendentry{DNLM-MA}
+      \end{semilogyaxis}
+  \end{tikzpicture}
+  \caption[Escalabilidad de las implementaciones paralelas del filtro DNLM]{Escalabilidad de la implementación paralela para cada versión del filtro DNLM, desde 1 a 256 hilos de ejecución. El tama\~no de la imagen de entrada es de $1024\times1024$, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles.\label{fig:scalability}}
+  \end{figure}
+ 
 
-\begin{table}
+En el caso del cambio en la tasa de aciertos en cach\'e L2 por acceso a datos al aumentar la cantidad de hilos, la tabla \ref{tabla:cda_l2} muestra
+%
+\begin{table}[htb]
 \centering
 \setlength\tabcolsep{2.5pt}
 \setlength{\textfloatsep}{20mm}
@@ -136,24 +159,17 @@ DNLM-IIFFT-P & 95.65 & 96.97 & 97.01 & 96.95 & 96.54 & 95.86 & 94.23 & 73.16 & 4
 DNLM-MA-P & 8.45 & 8.64 & 8.46 & 8.57 & 9.28 & 9.16 & 8.76 & 7.14 & 4.79 \tabularnewline
 \end{tabular}
 \end{table}
-
-
-La tabla \ref{tabla:cda_l1} muestra la disminuci\'on general de aciertos en cach\'e L1 por lectura de datos al escalar el n\'umero de hilos. Esta m\'etrica es la principal raz\'on por la que las distintas implementaciones del filtro DNLM tienen una cantidad de hilos espec\'ifica que alcanza la mejor aceleraci\'on debido al paralelismo. La raz\'on de $\text{CDA}_\text{L2}$ reduce sostenidamente al aumentar la cantidad de hilos a 256 en el filtro DNLM-P. El caso del filtro DNLM-IIFFT-P es similar, sin embargo el valor cae significativamente al alcanzar m\'	as de 128 hilos. El filtro DNLM-MA-P se comporta distinto y su valor aumenta para 16 y 32 hilos y luego cae para cantidades mayores de hilos. Esta m\'etrica coincide con los resultados de aceleraci\'on y escalabilidad que de la figura \ref{fig:scalability}.
-
-En el caso del cambio en la tasa de aciertos en cach\'e L2 por acceso a datos al aumentar la cantidad de hilos, la tabla \ref{tabla:cda_l2} muestra una ca\'ida pronunciada a partir de los 128 hilos para el filtro DNLM-P, DNLM-IIFFT-P y DNLM-MA-P. Esto es esperado ya que la cach\'e nivel L2 es compartida entre los 2 n\'ucleos de procesamiento que conforman la celda. Al existir 64 celdas, los 128 hilos de ejecuci\'on se distribuyen para todas las celdas, de manera que genera una sobrecarga en las consultas a cach\'e L2 y por lo tanto una mayor cantidad de desaciertos.  
+%
+una ca\'ida pronunciada a partir de los 128 hilos para el filtro DNLM-P, DNLM-IIFFT-P y DNLM-MA-P. Esto es esperado ya que la cach\'e nivel L2 es compartida entre los 2 n\'ucleos de procesamiento que conforman la celda. Al existir 64 celdas, los 128 hilos de ejecuci\'on se distribuyen para todas las celdas, de manera que genera una sobrecarga en las consultas a cach\'e L2 y por lo tanto una mayor cantidad de desaciertos.  
 
 
 La evaluaci\'on de la las implementaciones paralelas se realiza con la cantidad de hilos que mejor resultado presenta el algoritmo. Esto es, 256 hilos para el filtro DNLM-P, 128 hilos para el filtro DNLM-IFFTT-P y 32 hilos para el filtro DNLM-MA-P, según se observa en la Figura \ref{fig:scalability}. 
 
 
-La comparación del tiempo de ejecución de las implementaciones del filtro DNLM se muestra en la Tabla \ref{tabla:speedup}, la cual revela que la aceleración del filtro DNLM-MA basado en el enfoque de media movil de Condat \cite{Condat2010} sobrepasa por un gran margen ($88.30\times$) la implementación DNLM-IIFFT \cite{CalderonRamirez2017} basada en la optimización de Wang para el filtro NLM \cite{wang2006fast} que emplea la FFT e imágenes integrales. El coeficiente de variación de todas las implementaciones es igual o menor que $0.06$. 
-De la misma manera, la implementación paralela DNLM-MA-P es la más rápida, logrando alcanzar una aceleración de $665.63\times$ sobre la implementación secuencial original DNLM. Sin embargo, las implementaciones paralelas DNLM-IIFFT-P y DNLM-P muestran aceleraciones mayores a $100\times$ en comparación a la versión secuencial original DNLM.
-La tabla \ref{tabla:speedup} también muestra que el filtro DNLM-MA-P obtiene una aceleración menor ($7.24\times$) en comparación con el DNLM-IIFFT-P ($76.68\times$) y el DNLM-P ($109.14\times$) respecto a sus versiones con un sólo hilo de ejecución.
-
-
-
+La comparación del tiempo de ejecución de las implementaciones del filtro DNLM se muestra en la Tabla \ref{tabla:speedup},
+%
 %Speedup table---------------------------------------
-\begin{table}
+\begin{table}[htb]
 \protect\caption[Aceleración promedio de optimizaciones del filtro DNLM]{Aceleración promedio para las optimizaciones del filtro DNLM usando una imagen de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:speedup}}
 \centering
 \begin{tabular}{lrrr}
@@ -167,6 +183,10 @@ DNLM-IIFFT-P & $1.00\pm0.00$ & $0.00$ & $163.92$ \tabularnewline
 DNLM-MA-P & $\boldsymbol{0.25\pm0.00}$ & $\boldsymbol{0.01}$ &  $\boldsymbol{665.63}$\tabularnewline
 \end{tabular}
 \end{table}
+%
+la cual revela que la aceleración del filtro DNLM-MA basado en el enfoque de media movil de Condat \cite{Condat2010} sobrepasa por un gran margen ($88.30\times$) la implementación DNLM-IIFFT \cite{CalderonRamirez2017} basada en la optimización de Wang para el filtro NLM \cite{wang2006fast} que emplea la FFT e imágenes integrales. El coeficiente de variación de todas las implementaciones es igual o menor que $0.06$. 
+De la misma manera, la implementación paralela DNLM-MA-P es la más rápida, logrando alcanzar una aceleración de $665.63\times$ sobre la implementación secuencial original DNLM. Sin embargo, las implementaciones paralelas DNLM-IIFFT-P y DNLM-P muestran aceleraciones mayores a $100\times$ en comparación a la versión secuencial original DNLM.
+La tabla \ref{tabla:speedup} también muestra que el filtro DNLM-MA-P obtiene una aceleración menor ($7.24\times$) en comparación con el DNLM-IIFFT-P ($76.68\times$) y el DNLM-P ($109.14\times$) respecto a sus versiones con un sólo hilo de ejecución.
 
 
 El efecto en el cambio del tama\~no de imagen en la aceleración total de la implementación DNLM-MA-P se muestra en la Tabla \ref{tabla:scala1}. Se aprecia cómo la aceleración de la implementación DNLM-MA-P incrementa significativamente cuando el tama\~no de la imagen aumenta, con aceleraciones desde $206.95\times$ a $728.66$ para tama\~nos de imagen desde $256 \times 256$ a $2048 \times 2048$ pixeles. La máxima aceleración converge tal y como lo demuestra el tiempo de filtrado de la muestra de $4096\times 4096$ pixeles.  
@@ -174,7 +194,7 @@ De la misma manera, se observa una tendencia similar al aumentar el tama\~no de 
 
 
 %Scalability table #1--------------------------------
-\begin{table}
+\begin{table}[htb]
 \protect\caption[Efecto al cambiar tama\~no de imagen de entrada]{Effecto al cambiar el tama\~no de la imagen de entrada para el filtro DNLM y DNLM-MA-P usando una imagen de entrada de  $1024 \times 1024$ pixeles, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles. \label{tabla:scala1}}
 \centering
 \begin{tabular}{lrrr}
@@ -190,7 +210,7 @@ $4096 \times 4096$ & $2629.59\pm31.26$ & $3.45\pm0.01$ & $761.63$ \tabularnewlin
 
 
 %Scalability table #2--------------------------------
-\begin{table}
+\begin{table}[htb]
 \protect\caption[Efecto al cambiar parámetros $S$ y $W$]{Effecto al cambiar el tama\~no de ventana de búsqueda ($S$) y vecindario ($W$) para el filtro DNLM y DNLM-MA-P usando una imagen de entrada de  $1024 \times 1024$ pixeles. \label{tabla:scala2}}
 \centering
 \begin{tabular}{lrrrr}
@@ -218,35 +238,10 @@ La latencia inherente en cuanto a acceso a datos del filtro DNLM-P, hace que su 
 
 
 %GRAPHS-----------------------------------------------
-
-
-\begin{figure}
-\centering
-  \begin{tikzpicture}
-      \begin{semilogyaxis}[
-          height=0.3\textheight,
-          width=0.5\textwidth,
-          xlabel= \# Hilos,
-          ylabel=Duración (s),
-          xmin=1,
-          xmax=260,
-          scaled x ticks = false
-  ]
-           \addplot[mark=*] table[x=Threads,y=Time] {data/scaling_original.txt};
-           \addlegendentry{DNLM}
-          \addplot[mark=x] table[x=Threads,y=Time] {data/scaling_iifft.txt};
-          \addlegendentry{DNLM-IIFFT}
-          \addplot[mark=triangle] table[x=Threads,y=Time] {data/scaling_condat.txt};
-          \addlegendentry{DNLM-MA}
-      \end{semilogyaxis}
-  \end{tikzpicture}
-  \caption[Escalabilidad de las implementaciones paralelas del filtro DNLM]{Escalabilidad de la implementación paralela para cada versión del filtro DNLM, desde 1 a 256 hilos de ejecución. El tama\~no de la imagen de entrada es de $1024\times1024$, con tama\~no de ventana de búsqueda de $21 \times 21$ y vencidario de $7 \times 7$ pixeles.\label{fig:scalability}}
-  \end{figure}
- 
   
   Siguiendo la misma tendencia, la eficiencia de las implementaciones paralelas se muestran en la Figura \ref{fig:efficiency}. Se aprecia que la eficiencia de las implementaciones DNLM-P y DNLM-IIFFT-P presentan una disminución sostenida en la eficiencia al aumentar la cantidad de hilos de ejecución. En el caso de la implementación DNLM-MA-P, presenta un mayor ancho de banda de memoria, por lo tanto la sobrecarga en cuanto a transferencia de datos en memoria aumenta al aumentar la cantidad de hilos de ejecución, provocando una caída considerablemente más pronunciada en la curva de eficiencia.
   
-  \begin{figure}
+  \begin{figure}[htb]
   \centering
   \begin{tikzpicture}
       \begin{axis}[

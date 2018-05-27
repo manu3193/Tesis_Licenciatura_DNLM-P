@@ -14,19 +14,19 @@ La propuesta de paralelización incluye la evaluación de dos optimizaciones com
 \label{ch:marco_agwn}
 
 El ruido presente en im\'agenes se debe a fenómenos naturales en el proceso de captura, transmisión y almacenamiento de las im\'agenes. 	Una forma de modelar este ruido es mediante el ruido blanco aditivo de distribución gaussiana. Este ruido es llamado gaussiano porque se modela a través de una distribución de probabilidad gaussiana. Se dice que es blanco debido a que su espectro de intensidad es plano. Se le llama aditivo porque la distorción causada por el ruido se modela a través de la suma del ruido a los pixeles de la imagen. El modelo de ruido gaussiano  est\'a dado por:
-
+%
 \begin{equation}
 \label{eq:modelruido}
 U = X + V \enspace ,
 \end{equation}
-
- donde $U$ es la imagen con ruido gaussiano, $X$ corresponde a la imagen sin ruido y $V$ corresponde a una variable alatoria que sigue una función de densidad de probabilidad gaussiana dada por: 
- 
+%
+donde $U$ es la imagen con ruido gaussiano, $X$ corresponde a la imagen sin ruido y $V$ corresponde a una variable alatoria que sigue una función de densidad de probabilidad gaussiana dada por: 
+%
 \begin{equation}
 \label{eq:probfuncgauus}
 p(v(x)) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {v(x) - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}} \enspace ,
 \end{equation}
-
+%
 siendo $\sigma$ la desviación est\'andar  y $\mu$ el valor medio de la distribución de probabilidad, que para efectos del ruido gaussiano se asume $\mu = 0$.
 
 
@@ -34,21 +34,21 @@ siendo $\sigma$ la desviación est\'andar  y $\mu$ el valor medio de la distribu
 \label{ch:marco_nlm}
 
 El filtro NLM forma parte de los filtros espaciales de promedio ponderado que pueden definirse de manera general como:
-
+%
 \begin{equation}
 \label{eq:weighted}
 Y(U,p)=\left(\sum_{m\in \Omega}\psi\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi\left(U, p, m\right)U(m)\right) \enspace ,
 \end{equation}
-
+%
 donde $p$ es el pixel que se pretende filtrar, $m$ corresponde a un pixel contenido en la ventana deslizante $\Omega$, $\psi$ es una función de pesado del filtro y $U$ la imagen de entrada \cite{calderon2015dewaff}.
 
 La función de pesado del filtro NLM se define como:
-
+%
 \begin{equation}
 \label{eq:nlmfunc}
 \psi_{\textrm{NLM}}\left(U,p,m\right) = \exp\left(-\frac{\left\Vert \vec{\boldsymbol{\eta}}\left(m\right)-\vec{\boldsymbol{\eta}}\left(p\right)\right\Vert^2 }{h}\right) \enspace ,
 \end{equation}
-
+%
 donde $h$ es el par\'ametro que controla el grado de suavizado del filtro con $h = \alpha\sigma^{2}$; y $\vec{\boldsymbol{\eta}}\left(q\right)$ el vector que contiene los pixeles de un vecindario de tama\~no $W$ al rededor de $q$, con $q \in \{p,m\}$.
 
 Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades, como en otros filtros. La función de pesado definida en (\ref{eq:nlmfunc}) hace uso de la distancia Euclidiana para determinar la similitud entre los vecindarios de los pixeles $p$ y $m$. 
@@ -67,21 +67,21 @@ En cuanto a la complejidad computacional, al filtrar una imagen de entrada en es
 Los métodos de Unsharp Masking se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracción de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles típicamente representados como detalles y ruido. 
 
 Adicionalmente, se puede emplear un enfoque inverso que consiste en sumar la imagen $B$ con la información de bordes y detalles en alta frecuencia a la imagen original. La adición se controla en una proporción dada por el coeficiente $\lambda$, con:
-
+%
 \begin{equation}
 \label{eq:unsharpmask}
 G=U+\lambda~B \enspace .
 \end{equation}
 
 Por ejemplo, $B$ corresponde a
-
+%
 \begin{equation}
 \label{eq:unsharfilter}
 B=l*U \enspace 
 \end{equation}
-
+%
 y $l$ puede estar dado por:
-
+%
 \begin{equation} l = \left[
 \begin{array}{ccc}
 1 & 1 & 1\\
@@ -89,14 +89,14 @@ y $l$ puede estar dado por:
 1 & 1 & 1
 \end{array}\right]
 \end{equation}
-
+%
 para el caso de la aproximación al laplaciano.
 
 La imagen $B$ se obtiene por medio de la convolución entre la imagen original y un kernel de aproximación al laplaciano, laplaciano de gaussiano o de diferencia de gaussianas.
 
 
 En este trabajo se utiliza un kernel de aproximación al laplaciano por medio del laplaciano de gaussiano \cite{sotak1989laplacian}:
-
+%
 \begin{equation}
 \label{eq:log}
 \operatorname{LoG}(x,y) = \frac{1}{\pi\sigma^4}\left(\frac{x^2+y^2}{2\sigma^2} - 1\right)e^{-\frac{x^2+y^2}{2\sigma^2}},
@@ -104,7 +104,7 @@ En este trabajo se utiliza un kernel de aproximación al laplaciano por medio de
 
 La figura \ref{fig:exampleUSM} muestra el resultado de aproximar al laplaciano de una de imagen de entrada y la salida del método USM con la imagen mejorada en contraste y bordes. 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 %
 \begin{minipage}{0.25\textwidth}
   \centering
@@ -139,45 +139,56 @@ La figura \ref{fig:exampleUSM} muestra el resultado de aproximar al laplaciano d
 El enfoque del filtro \engl{Deceived Non-Local Means} (DNLM) consiste en la combinación de un método de \engl{Unsharp Masking} (USM) con el filtro NLM, con el propósito de lograr por un lado una mejora en los bordes y en el contraste de la imagen, y por otro lado la eliminación del ruido gausiano  presente en la imagen. La combinación propuesta se basa en el desacople entre la imagen usada en el pesado (imagen original $U$) y la utilizada en el filtrado $U_{\textrm{USM}}$. Esto permite evitar el efecto anillo presente en las im\'agenes filtradas con el USM \cite{calderon2015dewaff}.
 
 La función del filtro DNLM est\'a dada por:
-
+%
 \begin{equation}
 \label{eq:dnlm}
 Y(U,p)=\left(\sum_{m\in \Omega}\psi_{NLM}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{\textrm{NLM}}\left(U, p, m\right)U_{\textrm{USM}}(m)\right) \enspace ,
 \end{equation}
-
+%
 donde $U$ es la imagen de entrada, $p$ es el pixel que se pretende filtrar, $m$ corresponde a un pixel contenido en la ventana deslizante $\Omega$, $\psi_{\textrm{NLM}}$ es una función de pesado del filtro NLM y $U_{\textrm{USM}}$ la imagen producto de la mejora con el método USM \cite{calderon2015dewaff}. El desacople mostrado en (\ref{eq:dnlm}) se da al realizar el c\'alculo de los pesos con la imagen de entrada $U$ y el filtrado con la imagen $U_{\textrm{USM}}$.
 
 La figura \ref{fig:exampleDNLM} muestra el aumento en contraste de la imagen y el mayor detalle en bordes resultado del procesamiento con el filtro DNLM.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
-\begin{minipage}[b]{0.3\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{512x512}}
-%  \vspace{1.5cm}
-  \centerline{(a) Ejemplo de imagen de actividad celular.}\medskip
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.3\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{512x512_DeNLM}}
-%  \vspace{1.5cm}
-  \centerline{(b) Imagen fitrada.}
-\end{minipage}
-\vfill
-\begin{minipage}[b]{0.3\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{11043}}
-%  \vspace{1.5cm}
-  \centerline{(c) Imagen de rayos-x.}\medskip
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.3\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{11043_DeNLM}}
-%  \vspace{1.5cm}
-  \centerline{(d) Imagen filtrada.}\medskip
-\end{minipage}
+\begin{tabular}{cc}
+  \includegraphics[width=0.3\linewidth]{512x512} &
+  \includegraphics[width=0.3\linewidth]{512x512_DeNLM} \\
+  (a) Ejemplo de imagen de actividad celular. &
+  (b) Imagen fitrada. \\
+  \includegraphics[width=0.3\linewidth]{11043} &
+  \includegraphics[width=0.3\linewidth]{11043_DeNLM} \\
+  (c) Imagen de rayos-x. &
+  (d) Imagen filtrada. 
+\end{tabular}
+%
+% \begin{minipage}[b]{0.3\textwidth}
+%   \centering
+%   \centerline{\includegraphics[width=\linewidth]{512x512}}
+% %  \vspace{1.5cm}
+%   \centerline{(a) Ejemplo de imagen de actividad celular.}\medskip
+% \end{minipage}
+% \hfill
+% \begin{minipage}[b]{0.3\textwidth}
+%   \centering
+%   \centerline{\includegraphics[width=\linewidth]{512x512_DeNLM}}
+% %  \vspace{1.5cm}
+%   \centerline{(b) Imagen fitrada.}
+% \end{minipage}
+% \vfill
+% \begin{minipage}[b]{0.3\textwidth}
+%   \centering
+%   \centerline{\includegraphics[width=\linewidth]{11043}}
+% %  \vspace{1.5cm}
+%   \centerline{(c) Imagen de rayos-x.}\medskip
+% \end{minipage}
+% \hfill
+% \begin{minipage}[b]{0.3\textwidth}
+%   \centering
+%   \centerline{\includegraphics[width=\linewidth]{11043_DeNLM}}
+% %  \vspace{1.5cm}
+%   \centerline{(d) Imagen filtrada.}\medskip
+% \end{minipage}
 %
 \caption[Ejemplo de im\'agenes filtradas con el filtro DNLM]{Ejemplo de im\'agenes filtradas con el filtro DNLM. \label{fig:exampleDNLM}}
 
@@ -197,23 +208,22 @@ Esta optimización computacional utiliza im\'agenes integrales y la transformada
 
 
 Al analizar la distancia euclidiana $D$ entre los vecindarios se tiene que:
-
+%
 \begin{equation}
 D\left(x,y\right)=\left\Vert \vec{\boldsymbol{\eta}}\left(y\right)-\vec{\boldsymbol{\eta}}\left(x\right)\right\Vert^2 \enspace . 
 \end{equation}
 
 La ecuación anterior puede representarse en notacion matricial con la norma de Frobenius $\Vert \cdot \Vert_{F}$ como:
-
-
+%
 \begin{equation}
 D\left(x,y\right)=\Vert \mat{Y} - \mat{X} \Vert_{F}^2 \enspace ,
 \label{eq:distMat}
 \end{equation}
-
+%
 con \mat{Y} y \mat{X} las matrices de los vecindarios de los pixeles $y$ y $x$. respectivamente.
 
 Si se se define la norma $\Vert \cdot \Vert_{F}^2$ con el producto interno de Frobenius $\langle\,\cdot,\cdot\rangle_{F}$ se tiene que:
-
+%
 \begin{equation}\label{eq:frobProd}
 \begin{split}
 \Vert \mat{Y} - \mat{X} \Vert_{F}^2 & = \langle\mat{Y} - \mat{X},\mat{Y} - \mat{X}\rangle_{F}  \quad \text{y por sesquilinealidad:}\\ 
@@ -221,11 +231,10 @@ Si se se define la norma $\Vert \cdot \Vert_{F}^2$ con el producto interno de Fr
 & = \Vert \mat{Y} \Vert_{F}^2 -2\langle\mat{Y},\mat{X}\rangle_{F} + \Vert \mat{X} \Vert_{F}^2 \enspace ,
 \end{split} 
 \end{equation}
-
-
+%
 tomando en cuenta que $\Vert \cdot \Vert_{F}^2$ es una norma que cumple todos los axiomas correspondientes. 
 
-\begin{table}
+\begin{table}[htb]
 \begin{center}
 \caption{Ejemplo de imagen de entrada \mat{U}.\label{table:imageExample}}
 
@@ -248,8 +257,7 @@ tomando en cuenta que $\Vert \cdot \Vert_{F}^2$ es una norma que cumple todos lo
 \end{table}
 
 El siguiente ejemplo ilustra el cálculo de la norma de Frobenius entre los vecindarios de pixeles contenidos en la imagen $\mat{U} \in\mathbb{R}^{5 \times 5}$ definida en la Tabla \ref{table:imageExample}. Para efectos de la ilustración, se toman los vecindarios $\mat{P}_{\left(3,3\right)},\mat{P}_{\left(2,2\right)} \in\mathbb{R}^{3\times3}$ de la imagen de ejemplo \mat{U}  y se realiza  el cálculo de la norma de Frobenius tal que:
-
-
+%
 \begin{equation}
 \label{eq:resultado1}
 \begin{split}
@@ -271,9 +279,8 @@ El siguiente ejemplo ilustra el cálculo de la norma de Frobenius entre los veci
 \end{split}
 \end{equation}
 
-
-
 Al desarrollar (\ref{eq:resultado1}) como se muestra en (\ref{eq:frobProd}), se obtiene que: 
+%
 \begin{equation}\label{eq:matFrodProd}
 \resizebox{.9 \textwidth}{!} 
 {
@@ -303,12 +310,8 @@ $\begin{split}
 \end{split}$
 }
 \end{equation}
-
-
+%
 consistente con los resultados obtenidos en (\ref{eq:resultado1}).
-
-
-
 
 Esta optimización del filtro DNLM se centra en el cálculo de la norma de Frobenius desarrollada en  (\ref{eq:frobProd}) de la siguiente manera:
 
@@ -324,12 +327,14 @@ Lo anterior permite disminuir la complejidad computacional del filtro a $\mathca
 
 
 La imagen integral $\mat{I}_{\Sigma}$ de una imagen de entrada \mat{U} presentada en \cite{viola2001robust}, está dada por: 
+%
 \begin{equation}
 \mat{I}_{\Sigma}\left(x,y\right)=\sum_{i\leq x}\sum_{j\leq y}u_{ij} \enspace ,
 \end{equation}
+%
 la cual corresponde a la sumatoria de todos los  pixeles ubicados a la izquierda y superiores al pixel $u_{ij}$ de la imagen de entrada \mat{U}.
 
-\begin{table}
+\begin{table}[htb]
 \begin{center}
 \caption{Ejemplo de imagen de entrada \mat{U^{\odot 2}}.\label{table:imageExample2}}
 
@@ -355,7 +360,7 @@ la cual corresponde a la sumatoria de todos los  pixeles ubicados a la izquierda
 Continuando con el ejemplo previamente mostrado, la imagen de entrada \mat{U} con sus elementos elevados al cuadrado se define como el producto de Hadamard $\mat{U}^{\odot 2} = \mat{U} \odot \mat{U}$, como se muestra en la tabla \ref{table:imageExample2}. 
 
 
-\begin{table}
+\begin{table}[bt]
 \caption{Imagen integral para $\mat{U}^{\odot2}$.\label{table:integralcuad}}
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
@@ -381,9 +386,9 @@ La imagen integral $\mat{I}_{\Sigma}$ se puede calcular iterativamente para un p
 \mat{I}_{\Sigma}\left(x,y\right)=\mat{U}\left(x,y\right)-\mat{I}_{\Sigma}\left(x-1,y-1\right)+\mat{I}_{\Sigma}\left(x,y-1\right)
 +\mat{I}_{\Sigma}\left(x-1,y\right) \enspace ,
 \end{equation}
-
+%
 lo cual, para el ejemplo anterior significa que:
-
+%
 \begin{equation}
 \mat{I}_{\Sigma}\left(3,3\right)=4-198+208+208=222 \enspace .
 \end{equation}
@@ -392,18 +397,18 @@ Las imágenes integrales son útiles para calcular la sumatoria sobre una regió
 
 Al utilizar la imagen integral $\mat{I}_{\Sigma}$ para calcular la sumatoria de una región de la imagen original \mat{U}, limitada por los pixeles $a=\left(x_{0},y_{0}\right)$,
 $b=\left(x_{1},y_{0}\right)$, $c=\left(x_{0},y_{1}\right)$ and $d=\left(x_{1},y_{1}\right)$, ilustrados en la Tabla \ref{table:integralcuad}, se calcula como: 
-
+%
 \begin{equation}
 \sum_{i>x_{0}}^{i\leq x_{1}}~\sum_{j>y_{0}}^{j\leq y_{1}}u_{ij}=\mat{I}_{\Sigma}\left(d\right)+\mat{I}_{\Sigma}\left(a\right)-\mat{I}_{\Sigma}\left(b\right)-\mat{I}_{\Sigma}\left(c\right) \enspace ,
 \end{equation}
-
+%
 y en el ejemplo presentado para una ventana de $3\times3$ pixeles alrededor del pixel $u_{3,3}^2$ de la imagen $\mat{U}^{\odot2}$ , los pixeles de las esquinas están dados por: $a=\left(1,1\right)$, $b=\left(4,1\right)$,
 $c=\left(1,4\right)$ y $d=\left(4,4\right)$, como se muestra en la Tabla \ref{table:imageExample2}. El cálculo de la sumatoria de los pixeles en la región especificada está dada por: 
-
+%
 \begin{equation}
 \sum_{i>1}^{i\leq 4}~\sum_{j>1}^{j\leq 4}u_{i,j}^2=271+25-179-75=42 \enspace ,
 \end{equation}
-
+%
 lo cual, es consistente con el término $\mat{P}_{\left(3,3\right)}$ en (\ref{eq:matFrodProd}). 
 
 
@@ -411,13 +416,13 @@ lo cual, es consistente con el término $\mat{P}_{\left(3,3\right)}$ en (\ref{eq
 \subsubsection{Convolución y transformada rápida de Fourier}
 
 Como se mostró anteriormente, el término $-2\langle\mat{Y},\mat{X}\rangle_{F}$ producto del desarrollo de la norma de Frobenius en (\ref{eq:matFrodProd}), puede representarse como un elemento de la matriz producto de la correlación del vecindario \mat{X} del pixel $x_{ij}$ de tama\~no $W$ con la ventana \mat{\Omega} de tama\~no $S$ como:
-
+%
 \begin{equation}
 -2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} \otimes \mat{X}\right](i,j) \enspace .
 \end{equation}
 
 Para expresar la correlación en términos de la convolución, se debe rotar la matriz \mat{X} para obtener el $\mat{X}^\textrm{R}$ por medio de la multiplicaci\'on de \mat{X} con la matrix de permutaci\'on definida como:
-
+%
 \begin{equation}
 \mat{P} = \left[\begin{array}{ccc}
 0 & 0 & 1\\
@@ -425,28 +430,25 @@ Para expresar la correlación en términos de la convolución, se debe rotar la 
 1 & 0 & 0
 \end{array}\right] \enspace ,
 \end{equation}
-
+%
 para el caso en que \mat{X} sea una matriz de $3\times 3$. La matriz $\mat{X}^\textrm{R}$ se obtiene al multiplicar la matriz de permutaci\'on \mat{P} a ambos lados de \mat{X} de la siguiente forma:
-
-
+%
 \begin{equation}
 \mat{X}^\text{R} = \mat{P}\mat{X}\mat{P} \enspace ,
 \end{equation}
-
-
-
+%
 con esto se puede representar la correlaci\'on en t\'erminos de la convoluci\'on para el c\'alculo del t\'ermino $-2\langle\mat{Y},\mat{X}\rangle_{F}$ como:
-
+%
 \begin{equation}
 -2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} *\mat{X}^\text{R}\right](i,j) \enspace .
 \end{equation}
 
 La convoluci\'on $\mat{\Omega} *\mat{X}^\text{R}$ se puede representar como multiplicaciones en el dominio de la frecuencia, como:
-
+%
 \begin{equation}
 -2\langle\mat{Y},\mat{X}\rangle_{F} = -2 \left[ \ifourier{ \fourier{\mat{\Omega}} \odot \fourier{\mat{X}^\text{R}}} \right](i,j) \enspace .
 \end{equation}
-
+%
 Con esto, la complejidad computacional de las transformaciones de dominio y multiplicaci\'on resulta menor que la complejidad de la convoluci\'on espacial cuando $(S~+~2S\log{S})~<~S^2$, para el caso anterior. Adem\'as, la ganancia de usar la transformada r\'apida de Fourier se obtiene gracias a su reducido costo computacional de $\mathcal{O}(S\log(S))$ respecto a $\mathcal{O}(S^2)$ de la transformada normal.
 
 
@@ -458,41 +460,42 @@ Con esto, la complejidad computacional de las transformaciones de dominio y mult
 Esta propuesta de optimización computacional del filro NLM se caracteriza por su simpleza, al proponer un intercambio entre los ciclos de interación del algoritmo \cite{Condat2010}. La aceleración se consigue al incorporar simetría y convoluciones al realizar el ponderamiento de la región definida por la ventana de búsqueda \mat{\Omega}, para todos los pixeles la imagen de manera simultánea.
 
 Siguiendo la definición de la función de pesado del filtro NLM en (\ref{eq:nlmfunc}), un pixel $y$ puede ser expresado en términos del desplazamiento $\Delta$ desde un pixel $x$ como $y = x + \Delta$. Por ejemplo, para una ventana de búsqueda de tama\~no $S = 5 \times 5$, $\Delta$ puede tomar los valores $\Delta=0$, $\Delta=1$, $\Delta=2$ y en general, puede tomar valores de hasta $\Delta=S/2$. Por lo tanto, la función de pesado del filtro NLM es simétrica si:
-
+%
 \begin{equation}\
 \psi_{\text{NLM}}(\mat{U}, x, x + \Delta) = \psi_{\text{NLM}}(\mat{U}, y, y - \Delta)  \enspace . 
 \label{eq:symmetry}
 \end{equation}
-
+%
 Los pesos son calculados al intercambiar los ciclos del algoritmo, ya que se itera sobre cada desplazamiento $\Delta$, en lugar de iterar sobre cada uno de los pixeles de la imagen de entrada. Para cada una de las iteraciones, la diferencia cuadrática es calculada para toda la imagen como:
-
+%
 \begin{equation}
 \mat{D}_\Delta\left(x\right) = \left(\mat{U}\left(x\right) - \mat{U}\left( x + \Delta \right)\right)^{\circ2}  \enspace ,
 \label{eq:diffquad}
 \end{equation}
-
+%
 donde la potencia al cuadrado es para cada pixel individual, siguiendo la notación de Hadamard. Seguidamente, se calcula la convolución de
 $\mat{D}_\Delta$ con un kernel de promediado de tama\~no $W$ de la siguiente forma:
 \begin{equation}
 \label{eq:convmoas}
 \mat{E}_{\Delta} = \mat{D}_{\Delta} * \mat{G} \enspace ,
 \end{equation}
-
-donde $G$ corresponde a un kernel de promediado de la forma $\mat{G} = \frac{1}{9}\left[\begin{array}{ccc}
+%
+donde $G$ corresponde a un kernel de promediado de la forma 
+\begin{equation*}
+\mat{G} = \frac{1}{9}\left[\begin{array}{ccc}
 1 & 1 & 1\\
 1 & 1 & 1\\
 1 & 1 & 1
-\end{array}\right]$. Con esto, cada pixel de $\mat{E}_{\Delta}$ es igual al valor medio de los pixeles de su vecindario en la matriz $\mat{D}_{\Delta}$. A partir de $\mat{E}_{\Delta}$, se puede obtener la respuesta de la función de pesado del filtro DNLM-MA como: 
-
+\end{array}\right].
+\end{equation*}
+Con esto, cada pixel de $\mat{E}_{\Delta}$ es igual al valor medio de los pixeles de su vecindario en la matriz $\mat{D}_{\Delta}$. A partir de $\mat{E}_{\Delta}$, se puede obtener la respuesta de la función de pesado del filtro DNLM-MA como: 
+%
 \begin{equation}
 \psi_{DNLM-MA}\left(x\right)=\exp^{\circ}\left(-\frac{ E_\Delta\left(x\right) }{h}\right)  \enspace .
 \label{eq:wmoas}
 \end{equation}
-
-
+%
 Este m\'etodo consigue reducir la  función de costo computacional a $O(\sqrt{W} \cdot S \cdot N)$.  
-
-
 
 \section{Arquitectura Intel Xeon Phi Knights Landing}
 \label{ch:marco_xeonphi}
@@ -500,7 +503,7 @@ Este m\'etodo consigue reducir la  función de costo computacional a $O(\sqrt{W}
 La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \engl{many-core} está dise\~nada para aplicaciones de computación de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para propósito general. A diferencia de la versión anterior, esta nueva iteración con nombre clave \engl{Knights Landig}, permite el arranque de un sistema operativo por sí misma y provee más de 3 TFLOP/s de precisión simple y cerca de 6 TFLOP/s de precisión doble \cite{Jeffers201663}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicación en 2D, cada una de ellas conformada por 2 CPU y 1MB de caché L2 compartido \cite{XeonPhiWhitePaper}. Cada uno de los CPU incorpora 2 Unidades de Procesamiento Vectorial (VPU) con soporte para el conjunto de instrucciones SIMD AVX-512 con registros de hasta 512 bytes de largo, capaces de operar de manera simult\'anea hasta 2 operaciones vectoriales por ciclo \cite{XeonPhiWhitePaper}. 
 Entre las características que destacan del CPU es su modo de ejecución fuera de orden y el multihilo simultáneo de 4 hilos \cite{XeonPhiWhitePaper}. Una de sus particularidades es la incorporación de 16GB de Memoria de Alto Ancho de Banda (MCDRAM) de hasta $450 \text{Gbyte/s}$ en el mismo chip como lo muestra la Figura \ref{fig:cpu_phi}, permitiendo reducir la latencia de la memoria principal \cite{XeonPhiWhitePaper}.
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.5\textwidth]{fig/cpu}
 \caption{Diagrama de alto nivel del procesador Xeon Phi KNL.}
@@ -517,7 +520,7 @@ La arquitectura KNL presenta distintos modos de configuración de memoria y clú
 Existen múltiples enfoques de paralelización y vectorización del filtro NLM en el estado del arte. Estos han demostrado una alta aceleración del algoritmo de filtrado, como se muestra en la Tabla \ref{method_table}. 
 
 
-\begin{table}
+\begin{table}[htb]
 \caption[Estado del arte en paralelizaciones del filtro NLM]{Métodos previos de implementaciones paralelas para el filtro NLM. Se muestra únicamente la aceleración máxima respecto a la versión secuencial no optimizada del filtro.}
 \begin{tabularx}{1\linewidth}{X X X X} 
 \hline
@@ -559,7 +562,7 @@ El filtro DNLM tiene la ventaja de poder realizar el filtrado de cada pixel de m
 
 
 
-\begin{figure}[H]
+\begin{figure}[htb]
    \centering
    \caption[Diagrama de distribución de tareas paralelas]{Diagrama de distribución de tareas para la paralelización del filtro DNLM}
    \includegraphics[width=0.8\textwidth]{parallel_figure}
@@ -587,7 +590,7 @@ La métrica CPI promedio por hilo está dada por:
 \end{equation}
 
 Además, se puede calcular los CPI promedio por CPU como:
-
+%
 \begin{equation}\label{eq:CPIc_metric}
 \text{CPI}_{\text{CPU}} = \frac{\text{CPI}_{\text{hilo}}}{\text{cantidad CPU}}
 \end{equation}
@@ -597,27 +600,26 @@ El valor de $\text{CPI}_{\text{CPU}} $ se reduce al aumentar la cantidad de hilo
 \paragraph*{Intensidad de uso de VPU ($\text{VPU}_{\text{i}}$):}
 
 Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de opraciones en punto flotante por segundo\cite{Jeffers2016315}. Está definida como:
-
+%
 \begin{equation}
 \text{VPU}_{\text{i}}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}
 \end{equation}
 
-
 \paragraph*{Intensidad de operaciones de microarquitectura ($\mu\text{Ops}_{\text{i}}$):}
 
 Esta métrica mide la intensidad en operaciones de la microarquitectura que son retiradas de la etapa de decodificaci\'on. Permite estimar una medida de la densidad de operaciones en el pipeline del \engl{backend}, es decir, la densidad de operaciones en las etapas posteriores a la toma y decodificaci\'on de instrucciones. Está definida como:
-
+%
 \begin{equation}
 \mu\text{Ops}_{\text{i}}= \frac{\text{\#}\mu\text{Ops retiradas MS}}{\text{\#}\mu\text{Ops retiradas totales}} \enspace ,
 \end{equation}
-
+%
 donde $\text{\#}\mu\text{Ops retiradas MS}$ corresponde al n\'umero de operaciones retiradas que fueron emitidas por el micro secuenciador (MS).
 
 
 \paragraph*{Raz\'on de aciertos de lectura en cach\'e L1 ($\text{L1}_{\text{Hit}}$):}
 
 A partir de esta m\'etrica se puede determinar el aprovechamiento de la localidad de cach\'e de nivel L1 por la aplicaci\'on. Esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
-
+%
 \begin{equation}
 \text{L1}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L1}}{\text{\# operaciones de lectura}} \enspace .
 \end{equation}
@@ -625,7 +627,7 @@ A partir de esta m\'etrica se puede determinar el aprovechamiento de la localida
 \paragraph*{Raz\'on de aciertos de lectura en cach\'e L2 ($\text{L2}_{\text{Hit}}$):}
 
 Esta m\'etrica determina el rendimiento en la localidad de cach\'e de nivel L2. Al igual que el caso anterior, esta m\'etrica es fundamental para obtener un buen rendimiento en el KNL ya que evita cerca de 250 ciclos que tarda la consulta a la cach\'e externa o memoria principal. \cite{Jeffers2016315}. Se define como:
-
+%
 \begin{equation}
 \text{L2}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L2}}{\text{\# operaciones de lectura}} \enspace .
 \end{equation}
@@ -634,7 +636,7 @@ Esta m\'etrica determina el rendimiento en la localidad de cach\'e de nivel L2. 
 \paragraph*{Raz\'on de c\'omputo en L1 por acceso a datos ($\text{CDA}_\text{L1}$):}
 
 Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocurren por cada acceso a cach\'e L1. Su valor da una idea de la densidad computacional del algoritmo y se recomienda igual o por encima a la intensidad computacional $\text{VPU}_{\text{i}}$. Adem\'as, esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
-
+%
 \begin{equation}
 \text{CDA}_\text{L1} = \frac{\text{\# SIMD empaquetadas}}{\text{\# accesos a datos}} \enspace .
 \end{equation}
@@ -644,7 +646,7 @@ Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocur
 \paragraph*{Raz\'on de c\'omputo en L2 por acceso a datos ($\text{CDA}_\text{L2}$):}
 
 Esta m\'etrica permite calcular el promedio de operaciones vectorizadas que ocurren por cada acceso a cach\'e L2. Su valor permite estimar la eficiencia de las operaciones vectoriales del algoritmo. Sumado a lo anterior, esta m\'etrica es cr\'itica para obtener un buen rendimiento en el KNL \cite{Jeffers2016315}. Se define como:
-
+%
 \begin{equation}
 \text{CDA}_{\text{L2}} = \frac{\text{\# SIMD empaquetadas}}{\text{\# fallos en cach\'e L1}} \enspace .
 \end{equation}
