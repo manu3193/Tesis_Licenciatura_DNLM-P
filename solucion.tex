@@ -128,7 +128,7 @@ La optimización DNLM-MA presenta una región paralelizable comprendida desde la
 			\State $Y_{\text{Acumm}}\gets Y_{\text{Acumm}} + \Call{Ones}{\Omega.size}$
 		\Else
 			\State $D\gets \Call{$D_{\Delta}$}{U,dn,dm}$  
-			\State $E\gets D * \Call{Ones}{\omega.size}$ \Comment{Perform convolution}
+			\State $E\gets D * \Call{Ones}{W}$ \Comment{Perform convolution with a $W$ all-ones matrix }
 			\State $Y_{\text{Acumm}}\gets Y_{\text{Acumm}} + \Call{Exp}{E/h}$ 
 		\EndIf
 	\EndFor

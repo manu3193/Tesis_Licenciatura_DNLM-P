@@ -105,30 +105,16 @@ En este trabajo se utiliza un kernel de aproximación al laplaciano por medio de
 La figura \ref{fig:exampleUSM} muestra el resultado de aproximar al laplaciano de una de imagen de entrada y la salida del método USM con la imagen mejorada en contraste y bordes. 
 
 \begin{figure}[htb]
-%
-\begin{minipage}{0.25\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{test}}
-%  \vspace{1.5cm}
-  \centerline{(a) Imagen de entrada $U$.}\medskip
-\end{minipage}
-\hfill
-\begin{minipage}{0.25\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{test_lapl}}
-%  \vspace{1.5cm}
-  \centerline{(b) Laplaciano de $U$.}
-\end{minipage}
-\hfill
-\begin{minipage}{0.25\textwidth}
-  \centering
-  \centerline{\includegraphics[width=\linewidth]{test_sharp}}
-%  \vspace{1.5cm}
-  \centerline{(c) Imagen de salida $U_{\textrm{USM}}$.}\medskip
-\end{minipage}
-%
-\caption[Ejemplo de mejora en imagen con \engl{Unsharp Mask}]{Salida del filtro USM con $\lambda = 0.9$ y $\sigma = 0.3$. \label{fig:exampleUSM}}
-%
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\linewidth]{test} &
+  \includegraphics[width=0.3\linewidth]{test_lapl} &
+  \includegraphics[width=0.3\linewidth]{test_sharp}\\
+  (a) Imagen de entrada $U$. &
+  (b) Imagen $B$. &
+  (b) Imagen de salida $U_{\textrm{USM}}$.\\
+\end{tabular}
+\caption{Ejemplo del filtro USM con $\sigma = 0.7$ y $\alpha = 0.8$. \label{fig:exampleUSM}}
 \end{figure}
 
 
@@ -142,7 +128,7 @@ La función del filtro DNLM est\'a dada por:
 %
 \begin{equation}
 \label{eq:dnlm}
-Y(U,p)=\left(\sum_{m\in \Omega}\psi_{NLM}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{\textrm{NLM}}\left(U, p, m\right)U_{\textrm{USM}}(m)\right) \enspace ,
+Y(U,p)=\left(\sum_{m\in \Omega}\psi_{\textrm{NLM}}\left(U, p, m\right)\right)^{-1} \\ \left(\sum_{m\in \Omega}\psi_{\textrm{NLM}}\left(U, p, m\right)U_{\textrm{USM}}(m)\right) \enspace ,
 \end{equation}
 %
 donde $U$ es la imagen de entrada, $p$ es el pixel que se pretende filtrar, $m$ corresponde a un pixel contenido en la ventana deslizante $\Omega$, $\psi_{\textrm{NLM}}$ es una función de pesado del filtro NLM y $U_{\textrm{USM}}$ la imagen producto de la mejora con el método USM \cite{calderon2015dewaff}. El desacople mostrado en (\ref{eq:dnlm}) se da al realizar el c\'alculo de los pesos con la imagen de entrada $U$ y el filtrado con la imagen $U_{\textrm{USM}}$.
@@ -256,7 +242,7 @@ tomando en cuenta que $\Vert \cdot \Vert_{F}^2$ es una norma que cumple todos lo
 \par\end{center} 
 \end{table}
 
-El siguiente ejemplo ilustra el cálculo de la norma de Frobenius entre los vecindarios de pixeles contenidos en la imagen $\mat{U} \in\mathbb{R}^{5 \times 5}$ definida en la Tabla \ref{table:imageExample}. Para efectos de la ilustración, se toman los vecindarios $\mat{P}_{\left(3,3\right)},\mat{P}_{\left(2,2\right)} \in\mathbb{R}^{3\times3}$ de la imagen de ejemplo \mat{U}  y se realiza  el cálculo de la norma de Frobenius tal que:
+El siguiente ejemplo ilustra el cálculo de la norma de Frobenius entre los vecindarios de pixeles contenidos en la imagen $\mat{U}$ de tama\~no $S=25$ definida en la Tabla \ref{table:imageExample}. Para efectos de la ilustración, se toman los vecindarios $\mat{P}_{\left(3,3\right)},\mat{P}_{\left(2,2\right)}$ de tama\~no $W=9$ pixeles de la imagen de ejemplo \mat{U}  y se realiza  el cálculo de la norma de Frobenius tal que:
 %
 \begin{equation}
 \label{eq:resultado1}
@@ -399,14 +385,14 @@ Al utilizar la imagen integral $\mat{I}_{\Sigma}$ para calcular la sumatoria de 
 $b=\left(x_{1},y_{0}\right)$, $c=\left(x_{0},y_{1}\right)$ and $d=\left(x_{1},y_{1}\right)$, ilustrados en la Tabla \ref{table:integralcuad}, se calcula como: 
 %
 \begin{equation}
-\sum_{i>x_{0}}^{i\leq x_{1}}~\sum_{j>y_{0}}^{j\leq y_{1}}u_{ij}=\mat{I}_{\Sigma}\left(d\right)+\mat{I}_{\Sigma}\left(a\right)-\mat{I}_{\Sigma}\left(b\right)-\mat{I}_{\Sigma}\left(c\right) \enspace ,
+\sum_{i=x_{0}}^{x_{1}}~\sum_{j=y_{0}}^{y_{1}}u_{ij}=\mat{I}_{\Sigma}\left(d\right)+\mat{I}_{\Sigma}\left(a\right)-\mat{I}_{\Sigma}\left(b\right)-\mat{I}_{\Sigma}\left(c\right) \enspace ,
 \end{equation}
 %
 y en el ejemplo presentado para una ventana de $3\times3$ pixeles alrededor del pixel $u_{3,3}^2$ de la imagen $\mat{U}^{\odot2}$ , los pixeles de las esquinas están dados por: $a=\left(1,1\right)$, $b=\left(4,1\right)$,
 $c=\left(1,4\right)$ y $d=\left(4,4\right)$, como se muestra en la Tabla \ref{table:imageExample2}. El cálculo de la sumatoria de los pixeles en la región especificada está dada por: 
 %
 \begin{equation}
-\sum_{i>1}^{i\leq 4}~\sum_{j>1}^{j\leq 4}u_{i,j}^2=271+25-179-75=42 \enspace ,
+\sum_{i=1}^{4}~\sum_{j=1}^{4}u_{i,j}^2=271+25-179-75=42 \enspace ,
 \end{equation}
 %
 lo cual, es consistente con el término $\mat{P}_{\left(3,3\right)}$ en (\ref{eq:matFrodProd}). 
@@ -418,9 +404,11 @@ lo cual, es consistente con el término $\mat{P}_{\left(3,3\right)}$ en (\ref{eq
 Como se mostró anteriormente, el término $-2\langle\mat{Y},\mat{X}\rangle_{F}$ producto del desarrollo de la norma de Frobenius en (\ref{eq:matFrodProd}), puede representarse como un elemento de la matriz producto de la correlación del vecindario \mat{X} del pixel $x_{ij}$ de tama\~no $W$ con la ventana \mat{\Omega} de tama\~no $S$ como:
 %
 \begin{equation}
--2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} \otimes \mat{X}\right](i,j) \enspace .
+-2\langle\mat{Y},\mat{X}\rangle_{F} = -2\left[\mat{\Omega} \otimes \mat{X}\right](i,j) \enspace ,
 \end{equation}
-
+%
+donde $\otimes$ denota el operador de correlaci\'on , y (i,j) es la posici\'on de cada uno de los pixeles de la ventana \mat{\Omega}. 
+%
 Para expresar la correlación en términos de la convolución, se debe rotar la matriz \mat{X} para obtener el $\mat{X}^\textrm{R}$ por medio de la multiplicaci\'on de \mat{X} con la matrix de permutaci\'on definida como:
 %
 \begin{equation}
@@ -500,7 +488,7 @@ Este m\'etodo consigue reducir la  función de costo computacional a $O(\sqrt{W}
 \section{Arquitectura Intel Xeon Phi Knights Landing}
 \label{ch:marco_xeonphi}
 
-La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \engl{many-core} está dise\~nada para aplicaciones de computación de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para propósito general. A diferencia de la versión anterior, esta nueva iteración con nombre clave \engl{Knights Landig}, permite el arranque de un sistema operativo por sí misma y provee más de 3 TFLOP/s de precisión simple y cerca de 6 TFLOP/s de precisión doble \cite{Jeffers201663}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicación en 2D, cada una de ellas conformada por 2 CPU y 1MB de caché L2 compartido \cite{XeonPhiWhitePaper}. Cada uno de los CPU incorpora 2 Unidades de Procesamiento Vectorial (VPU) con soporte para el conjunto de instrucciones SIMD AVX-512 con registros de hasta 512 bytes de largo, capaces de operar de manera simult\'anea hasta 2 operaciones vectoriales por ciclo \cite{XeonPhiWhitePaper}. 
+La arquitectura de procesador Intel Xeon Phi Knights Landing conocida como \engl{many-core} está dise\~nada para aplicaciones de computación de alto rendimiento y es considerada la alternativa de Intel al desarrollo de algoritmos en GPU para propósito general. A diferencia de la versión anterior, esta nueva iteración con nombre clave \engl{Knights Landig}, permite el arranque de un sistema operativo por sí misma y provee más de 3 TFLOP/s de precisión simple y cerca de 6 TFLOP/s de precisión doble \cite{Jeffers201663}. Posee de 32 a 36 celdas interconectadas por una interfaz de comunicación en 2D, cada una de ellas conformada por 2 CPU y 1MB de caché L2 compartido \cite{XeonPhiWhitePaper}. Cada uno de los CPU incorpora 2 Unidades de Procesamiento Vectorial (VPU) con soporte para el conjunto de instrucciones SIMD AVX-512 con registros de hasta 512 bits de largo, capaces de operar de manera simult\'anea hasta 2 operaciones vectoriales por ciclo \cite{XeonPhiWhitePaper}. 
 Entre las características que destacan del CPU es su modo de ejecución fuera de orden y el multihilo simultáneo de 4 hilos \cite{XeonPhiWhitePaper}. Una de sus particularidades es la incorporación de 16GB de Memoria de Alto Ancho de Banda (MCDRAM) de hasta $450 \text{Gbyte/s}$ en el mismo chip como lo muestra la Figura \ref{fig:cpu_phi}, permitiendo reducir la latencia de la memoria principal \cite{XeonPhiWhitePaper}.
 
 \begin{figure}[htb]
@@ -543,7 +531,7 @@ Huang et al. \cite{huang2017parallel} &  Intel Xeon Phi & OpenMP & $32\times$\\
 
 La primera implementación paralela encontrada en la literatura fue realizada mediante múltiples hilos de ejecución para procesar imágenes médicas en 3D, con la ayuda de un servidor y 8 procesadores Xeon \ \cite{coupe2006fast}. Seguidamente, se utiliza una arquitectura SIMD para paralelizar el filtro en un servidor con 8 procesadores AMD Opteron de doble núcleo \cite{Darbon2008}. Además, implementaciones en GPU han empleado la optimización propuesta por Gossens en DirectX \cite{marques2013implementation} y la optimización propuesta por Condat en CUDA \cite{mingliang2016medical,goossens2010gpu}, las cuales muestran mayores aceleraciones que las implementaciones en CPU. Otra implementación con una aceleración ligeramente mayor a la obtenida por Marques y Pardo \cite{marques2013implementation} es conseguida en un sistema distribuido con 1024 núcleos de procesamiento \cite{shi2015optimized}. Una implementación más compleja combina MPI con P-Threads y MPI con CUDA para alcanzar una aceleración aún mayor \cite{nguyen2016medical}. Finalmente, dos implementaciones del filtro para plataformas Xeon Phi \cite{zhu2016parallel,huang2017parallel} y OpenCL \cite{zhu2016parallel}.
 
-Si bien la aceleración obtenida con GPU es usualmente mayor a las reportadas con la plataforma Xeon Phi, ésta última tiene la ventaja de proveer un estilo de programación sencillo y flexible, ya que utiliza el set de instrucciones x86 \cite{huang2017parallel}. 
+Si bien la aceleración obtenida con GPU es usualmente mayor a las reportadas con la plataforma Xeon Phi, esta última tiene la ventaja de proveer un estilo de programación sencillo y flexible, ya que utiliza el set de instrucciones x86 \cite{huang2017parallel}. 
 
 La arquitectura KNL está dise\~nada con un fuerte soporte de instrucciones vectoriales para acelerar operaciones sobre datos, sin embargo,  la vectorización se ve afectada si no se asegura un correcto alineamiento de los datos, o bien si el pre-retiro de instrucciones de caché no es efectivo \cite{Jeffers201617:vect}.
 La vectorización de las rutinas del algoritmo son fundamentales para acelerar el tiempo de procesamiento en la arquitectura KNL. Por ejemplo, utilizar instrucciones vectoriales como AVX-512 permite el cálculo simultaneo de 16 operaciones matemáticas de precisión simple, o bien 8 operaciones de precisión doble \cite{Jeffers201617:vect}.
@@ -553,7 +541,7 @@ Una efectiva vectorización se puede lograr con tres enfoques:
 \begin{itemize}
 \item Bibliotecas: Bibliotecas como Intel IPP y MKL se encuentran previamente optimizadas para el uso de instrucciones vectorizadas, por lo general \'esta es la opci\'on m\'as recomendada. 
 \item Auto-vectorización: Consiste en otorgarle la responsabilidad al compilador para identificar regiones vectorizables de manera autom\'atica en tiempo de compilaci\'on.
-\item Directivas o \engl{pragmas} para assistir vectorización: Permite que el programador le indique al compilador las regiones paralelizables y otros atributos, para que el compilador pueda generar c\'odigo vectorizado.
+\item Directivas o \engl{pragmas} para asistir vectorización: Permite que el programador le indique al compilador las regiones paralelizables y otros atributos, para que el compilador pueda generar c\'odigo vectorizado.
 \end{itemize}
  
 En este trabajo se apuesta por la primera opción: el uso de la biblioteca \engl{Intel Performance Primitives} (IPP). Esta biblioteca incorpora rutinas vectorizadas con datos alineados en memoria para funciones de procesamiento de se\~nales e imágenes. Además, la biblioteca IPP implementa un despachador que selecciona atomáticamente el conjunto de instruccions SIMD específico para las rutinas de la biblioteca, de acuerdo a las características del procesador \cite{IntelCorporation2017}.  Sumado a lo anterior, permite seleccionar un conjunto de instrucciones SIMD específico \cite{IntelCorporation2017}, lo que permite comprobar la diferencia en rendimiento entre diferentes conjuntos de instrucciones SIMD de ser necesario.
@@ -599,7 +587,7 @@ El valor de $\text{CPI}_{\text{CPU}} $ se reduce al aumentar la cantidad de hilo
 
 \paragraph*{Intensidad de uso de VPU ($\text{VPU}_{\text{i}}$):}
 
-Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de opraciones en punto flotante por segundo\cite{Jeffers2016315}. Está definida como:
+Esta métrica permite obtener la intensidad en instrucciones vectorizables a razón de las instrucciones escalares, dando una medida de la eficiencia en términos de operaciones en punto flotante por segundo\cite{Jeffers2016315}. Está definida como:
 %
 \begin{equation}
 \text{VPU}_{\text{i}}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}
