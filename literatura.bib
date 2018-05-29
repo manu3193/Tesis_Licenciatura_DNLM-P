@@ -96,31 +96,64 @@ month={Nov}}
 }
 
 %%%%%OPTIMIZATIONS
-@article{CalderonRamirez2017,
+@inproceedings{CalderonRamirez2017,
+abstract = {In this work we propose an efficient implementation of the deceived non local means filter, using integral images and the fast Fourier transform, named DNLM-IFFT. The deceived non local Means filter is part of the Deceived Weighted Averaging Filter Framework (DeWAFF), which defines an approach for image abstraction with a combination of Unsharp Masking for contrast and edges enhancement and weighted averaging filtering for noise reduction and texture simplification. The proposed methot uses integral images and the fast Fourier transform for the calculation of the Euclidian distance between the neighborhoods of each pixel in the sliding window to reduce the computational cost. The proposed approach achieved a speedup factor up to 10.},
 annote = {Resumen: paralelizacion del filtro DNLM usando imagenes integrales y transformada de fourier por Manuel y Osvaldo},
-author = {{Calder{\'{o}}n Ram{\'{i}}rez}, Sa{\'{u}}l and Corrales, Manuel Zumbado},
-file = {::},
+author = {{Calder{\'{o}}n Ram{\'{i}}rez}, Sa{\'{u}}l and {Zumbado Corrales}, Manuel},
+booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+doi = {10.1007/978-3-319-75193-1_16},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Calder{\'{o}}n Ram{\'{i}}rez, Corrales - 2017 - DNLM-IIFFT An Implementation of the Deceived Non Local Means Filter Using Integral Images and the.pdf:pdf},
+isbn = {9783319751924},
+issn = {16113349},
 keywords = {optimizacion},
+mendeley-groups = {NLM Optimizations},
 mendeley-tags = {optimizacion},
-title = {{DNLM-IIFFT: An Implementation of the Deceived Non Local Means Filter Using Integral Images and the Fast Fourier Transform for a Reduced Computational Cost}},
-year = {2017}
+pages = {127--134},
+title = {{DNLM-IIFFT: An implementation of the deceived non local means filter using integral images and the fast fourier transform for a reduced computational cost}},
+volume = {10657 LNCS},
+year = {2018}
 }
+
 @article{Condat2010,
+abstract = {We show that the popular Non-LocalMeans method for image denoising can be implemented exactly, easily and with lower computation time using convolutions. Also, our algorithm allows the use of infinite-size non-binary patches, which improves the denoising quality.},
+annote = {Resumen: optimizaci{\'{o}}n del tiempo de ejecuci{\'{o}}n del filtro NLM usando en "Implementation of non local menas filter in GPUs"
+
+
+Presenta una excelente lista de articulos que modifican el funcionamiento del filtro NLM para hacerlo mas eficiente. Adem{\'{a}}s de otra lista de los articulos que buscan solo optimizar la velocidad del filtro.
+
+Propone invertir el orden de los ciclos y usar un filtro de media movil para reducir la complejiad temporal a O(N*S), donde:
+
+
+
+N: cantidad de pixeles de la imagen
+S: cantidad de pixeles de la ventana de busqueda},
 author = {Condat, Laurent},
-file = {::},
-keywords = {Denoising,Index Terms—Non-Local Means,Patches,VIP,leido,optimizacion},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Condat - 2010 - A Simple Trick to Speed Up the Non-Local Means.pdf:pdf},
+journal = {Image (Rochester, N.Y.)},
+keywords = {Denoising,Non-Local Means,Patches,VIP,leido,optimizacion},
+mendeley-groups = {NLM Optimizations},
 mendeley-tags = {VIP,leido,optimizacion},
-title = {{A Simple Trick to Speed Up the Non-Local Means}},
+number = {7},
+pages = {1--3},
+title = {{A Simple Trick to Speed Up and Improve the Non-Local Means}},
+url = {http://www.greyc.ensicaen.fr/{~}lcondat/{\%}5Cnhttp://www.greyc.ensicaen.fr/{~}lcondat/publis/condat{\_}resreport{\_}NLmeansv3.pdf},
+volume = {2},
 year = {2010}
 }
-@article{Darbon2008,
+
+@inproceedings{Darbon2008,
+abstract = {We present an efficient algorithm for nonlocal image filtering with applications in electron cryomicroscopy. Our denoising algorithm is a rewriting of the recently proposed nonlocal mean filter. It builds on the separable property of neighborhood filtering to offer a fast parallel and vectorized implementation in contemporary shared memory computer architectures while reducing the theoretical computational complexity of the original filter. In practice, our approach is much faster than a serial, non–vectorized implementation and it scales linearly with image size. We demonstrate its efficiency in data sets from Caulobacter crescentus tomograms and a cryoimage containing viruses and provide visual evidences attesting the remarkable quality of the nonlocal means scheme in the context of cryoimaging. With such development we provide biologists with an attractive filtering tool to facilitate their scientific discoveries.},
 author = {Darbon, J{\'{e}}r{\^{o}}me and Cunha, Alexandre and Chan, Tony F and Osher, Stanley and Jensen, Grant J},
-file = {::},
+booktitle = {Biomedical Imaging: From Nano to Macro, 2008. ISBI 2008. 5th IEEE International Symposium on},
+file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Darbon et al. - 2008 - FAST NONLOCAL FILTERING APPLIED TO ELECTRON CRYOMICROSCOPY.pdf:pdf},
 keywords = {Index Terms— Nonlocal mean filtering,REVISARopt,SIMD,VIP,electron cryomicroscopy,image denoising,image vectorization,optimizacion,paralelo,parallel image processing},
+mendeley-groups = {NLM Parallelizations},
 mendeley-tags = {REVISARopt,VIP,optimizacion,paralelo},
+pages = {1331----1334},
 title = {{FAST NONLOCAL FILTERING APPLIED TO ELECTRON CRYOMICROSCOPY}},
 year = {2008}
 }
+
 @article{Goossens2008,
 abstract = {Recently, the NLMeans filter has been proposed by Buades et al. for the suppression of white Gaussian noise. This filter exploits the repetitive character of structures in an image, unlike conventional denoising algorithms, which typically operate in a local neighbourhood. Even though the method is quite intuitive and potentially very powerful, the PSNR and visual results are somewhat infe-rior to other recent state-of-the-art non-local algorithms, like KSVD and BM-3D. In this paper, we show that the NLMeans algorithm is basically the first iteration of the Jacobi optimization algorithm for robustly estimating the noise-free image. Based on this insight, we present ad-ditional improvements to the NLMeans algorithm and also an extension to noise reduction of coloured (corre-lated) noise. For white noise, PSNR results show that the proposed method is very competitive with the BM-3D method, while the visual quality of our method is better due to the lower presence of artifacts. For correlated noise on the other hand, we obtain a significant improvement in denoising performance compared to recent wavelet-based techniques.},
 annote = {Resumen: propone mejoras al filtro NLM basadas en aplicar iterativamente el filtro, usar otras funciones de distancia, actualizar la desviacion estandar del ruido y dise{\~{n}}ar el filtro para contrarrestar el efecto del ruido correlacionado.
@@ -342,9 +375,10 @@ title = {{Fast non-local filtering by random sampling: It works, especially for 
 year = {2013}
 }
 
-@article{Chatterjee2008,
+@inproceedings{Chatterjee2008,
 abstract = {The Non-Local Means (NLM) method of denoising has received considerable attention in the image processing community due to its performance, despite its simplicity. In this paper, we show that NLM is a zero-th order kernel regression method, with a very specific choice of kernel. As such, it can be generalized. The original method of NLM, we show, implicitly assumes local constancy of the underlying image data. Once put in the context of kernel regression, we extend the existing Non-Local Means algorithm to higher orders of regression which allows us to approximate the image data locally by a polynomial or other localized basis of a given order. These extra degrees of freedom allow us to perform better denoising in texture regions. Overall the higher order method displays consistently better denoising capabilities compared to the zero-th order method. The power of the higher order method is amply illustrated with the help of various denoising experiments.},
 author = {Chatterjee, Priyam and Milanfar, Peyman},
+booktitle = {Computational Imaging VI},
 doi = {10.1117/12.778615},
 file = {:home/manzumbado/Desktop/spie08paper.pdf:pdf},
 isbn = {9780819469861},
@@ -355,6 +389,7 @@ title = {{A Generalization of Non-Local Means via Kernel Regression}},
 url = {http://proceedings.spiedigitallibrary.org/proceeding.aspx?doi=10.1117/12.778615},
 year = {2008}
 }
+
 @article{JI20091238,
 author = {Ji, Zexuan and Chen, Qiang and Sun, Quan-Sen and Xia, De-Shen},
 doi = {https://doi.org/10.1016/j.ipl.2009.09.007},
@@ -394,14 +429,17 @@ Reduce la complejiad temporal a O(N*S), donde:
 
 N: cantidad de pixeles de la imagen
 S: cantidad de pixeles de la ventana de busqueda},
-author = {Wang, Jin and Guo, Yanwen and Ying, Yiting and Liu, Yanli and Peng, Qunsheng},
+author = {{Wang, Jin and Guo, Yanwen and Ying, Yiting and Liu, Yanli and Peng}, Qunsheng},
 file = {:home/manzumbado/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang et al. - 2006 - FAST NON-LOCAL ALGORITHM FOR IMAGE DENOISING.pdf:pdf},
+journal = {Image Processing, 2006 IEEE International Conference on},
 keywords = {Dis-crete Fourier transforms,Image enhancement,Index Terms,VIP,Wavelet transforms,YA,optimizacion},
 mendeley-groups = {NLM Optimizations},
 mendeley-tags = {VIP,YA,optimizacion},
-title = {{FAST NON-LOCAL ALGORITHM FOR IMAGE DENOISING}},
+pages = {1429--1432},
+title = {{Fast non-local algorithm for image denoising}},
 year = {2006}
 }
+
 
 
 @inproceedings{pardoNLM:2018,
@@ -488,9 +526,9 @@ year = {2018}
 
 @INPROCEEDINGS{CNN_DNLM, 
 author={S.~Calderón and F. Fallas and M. Zumbado and P. Tyrrell and H. Stark and Z. Emersic and B. Meden}, 
-booktitle={2018 IEEE International Conference on Image Processing (ICIP 2018), in press}, 
+booktitle={2018 IEEE International Conference on Image Processing (ICIP 2018)}, 
 title={Assessing the impact of image preprocessing using the Deceived Non Local Means Filter in a Convolutional Neural Net based approach for age estimation using digital  X-ray images from hand bones}, 
-year={}, 
+year={in press}, 
 volume={}, 
 number={}, 
 pages={}, 
