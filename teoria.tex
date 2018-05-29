@@ -52,7 +52,7 @@ La función de pesado del filtro NLM se define como:
 donde $h$ es el par\'ametro que controla el grado de suavizado del filtro con $h = \alpha\sigma^{2}$; y $\vec{\boldsymbol{\eta}}\left(q\right)$ el vector que contiene los pixeles de un vecindario de tama\~no $W$ al rededor de $q$, con $q \in \{p,m\}$.
 
 Este filtro introduce el concepto de similitud entre vencindarios de pixeles y no entre sus intensidades, como en otros filtros. La función de pesado definida en (\ref{eq:nlmfunc}) hace uso de la distancia Euclidiana para determinar la similitud entre los vecindarios de los pixeles $p$ y $m$. 
-De esta manera se determina el peso en la contribución para el ponderamiento de los pixeles en una región limitada por una ventana $\Omega$. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos al comparar los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen\cite{calderon2015dewaff}. 
+De esta manera se determina el peso en la contribución para el ponderamiento de los pixeles en una región limitada por una ventana $\Omega$. Este enfoque reduce los cambios bruscos en la intensidad de pixeles aleda\~nos al comparar los vecindarios en un \'area local, a la vez que permite conservar detalles como bordes y patrones en la imagen \cite{calderon2015dewaff}. 
 
 
 En cuanto a la complejidad computacional, al filtrar una imagen de entrada en escala de grises de $N$ pixeles, con una ventana deslizante de tama\~no $|\Omega| = S$ pixeles y un vecindario de tama\~no $W$ pixeles, la complejidad computacional del filtro DNLM es de $\mathcal{O}(N\cdot~S\cdot~W)$. 
@@ -64,7 +64,7 @@ En cuanto a la complejidad computacional, al filtrar una imagen de entrada en es
 \subsection{Unsharp Masking}
 \label{ch:marco_usm}
 
-Los métodos de Unsharp Masking se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracción de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles típicamente representados como detalles y ruido. 
+Los métodos de Unsharp Masking (\engl{USM}) se utilizan para el realce de los bordes y la mejora de contraste en las im\'agenes. Se realiza mediante una substracción de la imagen suavizada a la imagen original. Esto origina una imagen $B$ con las frecuencias altas de la imagen, es decir, los bordes y otros cambios de intensidad bruscos en los pixeles típicamente representados como detalles y ruido \cite{worksunsharp}. 
 
 Adicionalmente, se puede emplear un enfoque inverso que consiste en sumar la imagen $B$ con la información de bordes y detalles en alta frecuencia a la imagen original. La adición se controla en una proporción dada por el coeficiente $\lambda$, con:
 %
@@ -108,21 +108,21 @@ La figura \ref{fig:exampleUSM} muestra el resultado de aproximar al laplaciano d
 %
 \begin{minipage}{0.25\textwidth}
   \centering
-  \centerline{\includegraphics[width=\linewidth]{lena}}
+  \centerline{\includegraphics[width=\linewidth]{test}}
 %  \vspace{1.5cm}
   \centerline{(a) Imagen de entrada $U$.}\medskip
 \end{minipage}
 \hfill
 \begin{minipage}{0.25\textwidth}
   \centering
-  \centerline{\includegraphics[width=\linewidth]{lena_lapl}}
+  \centerline{\includegraphics[width=\linewidth]{test_lapl}}
 %  \vspace{1.5cm}
   \centerline{(b) Laplaciano de $U$.}
 \end{minipage}
 \hfill
 \begin{minipage}{0.25\textwidth}
   \centering
-  \centerline{\includegraphics[width=\linewidth]{lena_sharp}}
+  \centerline{\includegraphics[width=\linewidth]{test_sharp}}
 %  \vspace{1.5cm}
   \centerline{(c) Imagen de salida $U_{\textrm{USM}}$.}\medskip
 \end{minipage}
