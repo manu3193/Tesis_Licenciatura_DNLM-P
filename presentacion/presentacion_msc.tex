@@ -157,13 +157,15 @@ filtro DNLM para la plataforma Xeon Phi}
     \column{.45\textwidth}
     \begin{enumerate}
     \item <1-| alert@1> Imagen de entrada
-    \item <2-| alert@2> Imagen filtrada
-    \item <3-| alert@3> Segmentaci\'on
+    \item <2-| alert@2> Ecualizaci\'on de histogramas
+    \item <3-| alert@3> Filtro DNLM
+    \item <4-| alert@4> Segmentaci\'on
     \end{enumerate}
     \column{.5\textwidth}
-    \only<1>{\includegraphics[width=0.9\textwidth]{cisplatino_original}}
-    \only<2>{\includegraphics[width=0.9\textwidth]{cisplatino_preprocessed}}
-    \only<3>{\includegraphics[width=0.9\textwidth]{cisplatino_segmentation}}
+    \only<1>{\includegraphics[width=0.9\textwidth]{BBBC006_original}}     
+    \only<2>{\includegraphics[width=0.9\textwidth]{BBBC006_clahe}}  
+    \only<3>{\includegraphics[width=0.9\textwidth]{BBBC006_preprocessed}}
+    \only<4>{\includegraphics[width=0.9\textwidth]{BBBC006_segmented}}
   \end{columns}
 \end{frame}
 
