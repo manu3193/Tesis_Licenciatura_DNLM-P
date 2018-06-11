@@ -7,6 +7,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
 \usepackage{multicol}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, plotmarks}
+
+\usepackage{pgfplots}
 
 % For handout
 %\usepackage{pgfpages}
@@ -134,6 +138,12 @@ filtro DNLM para la plataforma Xeon Phi}
 \newcommand{\setZ}{\ensuremath{\mathbb{Z}}}
 
 
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -149,17 +159,16 @@ filtro DNLM para la plataforma Xeon Phi}
 \end{frame}
 
 % Título para el contexto
-\section{Preprocesamiento de imágenes}
+\section{Preprocesamiento de videos de actividad celular}
 
 \begin{frame}{Contexto}
-\begin{center}
-\only<1>{\includegraphics[width=0.9\linewidth]{diagram}}     
-\only<2>{\includegraphics[width=0.9\linewidth]{diagram_high}}  
-\end{center}
-
-
   
+  \begin{itemize}
+      \item Proyecto FEES ‘‘Análisis funcional genómico de células cancerosas por RNA de interferencia para la identificación de redes de regulación asociadas a proliferación y muerte en respuesta a quimioterapia genotóxica’’
+      \item Participan laboratorios de investigación del TEC, UCR y CeNAT
+  \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Contexto}
 
@@ -167,7 +176,7 @@ filtro DNLM para la plataforma Xeon Phi}
     \column{.45\textwidth}
     \begin{enumerate}
     \item <1-| alert@1> Imagen de entrada
-    \item <2-| alert@2> Ecualizaci\'on de histogramas
+    \item <2-| alert@2> Ecualizaci\'on de histogramas CLAHE
     \item <3-| alert@3> Filtro DNLM
     \item <4-| alert@4> Segmentaci\'on
     \end{enumerate}
@@ -179,111 +188,262 @@ filtro DNLM para la plataforma Xeon Phi}
   \end{columns}
 \end{frame}
 
+\begin{frame}{Flujo de procesamiento para videos de actividad celular}
+\begin{center}
+\only<1>{\includegraphics[width=0.9\linewidth]{diagram}}     
+\only<2>{\includegraphics[width=0.9\linewidth]{diagram_high}}  
+\end{center}
+\end{frame}
+
 \begin{frame}{Problema}
   
   \begin{itemize}
-  \item Dependiendo del tema, combine con folio anterior
-  \item Explique problema concreto a resolver
+  \item Complejidad computacional del filtro DNLM
+  \item Se requieren preprocesar lotes de hasta 170000 im\'agenes
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Objetivos}
-  
   \begin{itemize}
-  \item Palabras clave de objetivo general
-  \item Objetivos específicos resumidos 
+  \item Proponer una optimización computacional y paralelización del filtro DNLM  para la plataforma \textit{Xeon Phi Knights Landing}
+  \vspace{3mm}
+  \item Paralelismo en dos niveles: a nivel de tareas y a nivel del datos
+  \vspace{3mm}
+  \item Evaluar el rendimiento de las dos optimizaciones computacionales paralelas 
   \end{itemize}
 \end{frame}
 
 
+
 \section{Solución}
 
-\subsection{Segmentación de nematodos}
 
 
-\begin{frame}{Segmentación en dos niveles}{{\tiny{Olman Gómez, 2009}}}
-  % Coloque el diagrama de bloques detallado de su solución
-  %\includegraphics[width=\textwidth]{gomezsegm_fixed}
+\begin{frame}
+	Implementaci\'on paralela de tres algoritmos:
+	\begin{itemize}
+	\item DNLM: Filtro \textit{Deceived Non Local Means} original
+	\item DNLM-IIFFT: Filtro \textit{Deceived Non Local Means} con Im\'agenes Integrales y FFT
+	\item DNLM-MA: Filtro \textit{Deceived Non Local Means} con Media movil y simetr\'ia
+	\end{itemize}
+	
+	Complejidad computacional para una imagen de entrada de $N$ pixeles, ventana de b\'usqueda de $S$ pixeles y tama\~no de vecindario de $W$ pixeles:
+	\begin{itemize}
+	\item DNLM: $\mathcal{O}(N\cdot S\cdot W)$ 
+	\item DNLM-IIFFT: $\mathcal{O}(N \cdot S\log S)$
+	\item DNLM-MA: $\mathcal{O}(N\cdot S\cdot \sqrt{W})$
+	\end{itemize}
+
 \end{frame}
 
-\begin{frame}{Bloques}
-  % Aproveche el medio visual para dejar clara LA IDEA (no hay tiempo
-  % para detalle teórico).
-  \begin{columns}
-    \column{.45\textwidth}
-    \begin{enumerate}
-    \item <1-| alert@1> Entrada
-    \item <2-| alert@2> Filtro Mediana
-    \item <3-| alert@3> Contraste
-    \item <4-| alert@4> Gradiente
-    \item <5-| alert@5> Estimación Umbral
-    \item <6-| alert@6> Cuencas
-    \item <7-| alert@6> Combinación
-    \end{enumerate}
-    \column{.5\textwidth}
-    \only<1>{\includegraphics[width=0.9\textwidth]{nematodos}}
-    \only<2>{\includegraphics[width=0.9\textwidth]{cwagm1}}
-    \only<3>{\includegraphics[width=0.9\textwidth]{cwagm2}}
-    \only<4>{\includegraphics[width=0.9\textwidth]{cwagm3}}
-    \only<5>{\includegraphics[width=0.9\textwidth]{cwagm2b}}
-    \only<6>{\includegraphics[width=0.9\textwidth]{cwagm4}}
-    \only<7>{\includegraphics[width=0.9\textwidth]{cwagm5}}
-  \end{columns}
+
+
+\section{Experimento}
+
+\begin{frame}{Métricas utilizadas}
+	\begin{itemize}
+		\item $\text{CPI}_{\text{hilo}} = \frac{\text{\# de ticks de reloj}}{\# \text{de instrucciones}}$
+		\vspace*{4mm}
+		\item $\text{CPI}_{\text{CPU}} = \frac{\text{CPI}_{\text{hilo}}}{\text{cantidad CPU}}$
+		\vspace*{4mm}
+		\item $\text{VPU}_{\text{i}}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}$
+	\end{itemize}	
+\end{frame}
+	
+	
+	
+\begin{frame}{Métricas utilizadas}
+	\begin{itemize}
+	\item $\mu\text{Ops}_{\text{i}}= \frac{\text{\#}\mu\text{Ops retiradas MS}}{\text{\#}\mu\text{Ops retiradas totales}}$
+	\vspace*{4mm}
+	\item $\text{L1}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L1}}{\text{\# operaciones de lectura}}$
+	\vspace*{4mm}
+	\item $\text{L2}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L2}}{\text{\# operaciones de lectura}}$
+	\end{itemize}
+\end{frame}
+	
+	
+
+\begin{frame}{Experimento}
+
+Configuración:
+	\begin{itemize}
+		\item Promedio de 10 ejecuciones por prueba
+		\item Imagen de entrada de $N = 1024\times 1024$ pixeles, con $S = 21\times21$ y $W = 7\times7$
+		\item Se escala la cantidad de hilos de 1 a 256
+	\end{itemize}
+	
+	
+
 \end{frame}
 
 \section{Resultados}
 
-\begin{frame}{Algoritmo de segundo nivel}
-  
-  \begin{enumerate}
-  \item Características de Textura (IFLT, LBP)
-  \item Clasificadores neuronales (MLP, RBF), estadísticos (kNN)
-  \item Mezcla de clasificadores (AdaBoosting)
-  \end{enumerate}
 
-  % PPV: valor predictivo positivo
-  %
-  % La matriz de confusión cruda corresponderá a la acumulación en cada ite-
-  % ración de la clasificación de las regiones de la imagen de validación,
-  % usando el clasificador entrenado con el resto de las imágenes.
-  %
-  % La matriz de sensibilidad da la probabilidad de que un objeto de
-  % determinada clase sea correctamente asignado.
-  % Se obtiene dividiendo los elementos de C cruda entre
-  % el número de objetos en la correspondiente clase verdadera.
-  %
-  % La matriz de valor predictivo positivo (PPV) da la probabilidad que un
-  % objeto asignado a una clase en realidad pertenezca a esa clase.
-  % Se obtiene dividiendo los elementos de cada fila entre el número total
-  % de objetos asignados a esa clase.
+\begin{frame}{Escalabilidad de optimizaciones del filtro DNLM}
+
+	\begin{center}
+		\begin{tikzpicture}
+      \begin{semilogyaxis}[
+          height=0.9\textheight,
+          width=0.9\textwidth,
+          xlabel= N\'umero de hilos,
+          ylabel=Duraci\'on (s),
+          xmin=1,
+          xmax=260,
+          scaled x ticks = false
+  ]
+           \addplot[mark=*] table[x=Threads,y=Time] {data/scaling_original.txt};
+           \addlegendentry{DNLM}
+          \addplot[mark=x] table[x=Threads,y=Time] {data/scaling_iifft.txt};
+          \addlegendentry{DNLM-IIFFT-P}
+          \addplot[mark=triangle] table[x=Threads,y=Time] {data/scaling_condat.txt};
+          \addlegendentry{DNLM-MA-P}
+      \end{semilogyaxis}
+  \end{tikzpicture}
+	\end{center}
+\end{frame}
+
+
+\begin{frame}{Eficiencia de las implementaciones paralelas del filtro DNLM}
+
+	\begin{center}
+		\begin{tikzpicture}
+      \begin{axis}[
+          height=0.8\textheight,
+          width=0.8\textwidth,
+          xlabel= N\'umero de hilos,
+          ylabel=Eficiencia,
+          xmin=1,
+          xmax=260,
+          %scaled x ticks = false
+  ]
+           \addplot[mark=*] table[x=Threads,y=Efficiency] {data/eficiency_original.txt};
+           \addlegendentry{DNLM-P}
+          \addplot[mark=x] table[x=Threads,y=Efficiency] {data/eficiency_iifft.txt};
+          \addlegendentry{DNLM-IIFFT-P}
+          \addplot[mark=triangle] table[x=Threads,y=Efficiency] {data/efficiency_condat.txt};
+          \addlegendentry{DNLM-MA-P}
+      \end{axis}     
+  \end{tikzpicture}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Aceleraci\'on alcanzada con las optimizaciones del filtro DNLM}
+  
+
 
   \begin{center}
-    {\footnotesize Matrices de confusión para la combinación con}
-
-    {\footnotesize AdaBoost de MLP para la unión de descriptores con 
-      vecindario de 8 y 16}
-    \begin{tabular}{|c|cc|cc|cc|}
-      \hline
-      & \multicolumn{2}{c|}{Cruda} & \multicolumn{2}{c|}{Sensibilidad} & 
-      \multicolumn{2}{c|}{VPP} \\
-      \hline
-      Asignada$\backslash$Real& Fondo & Nem.& Fondo & Nem.& Fondo & Nem. \\
-      \hline
-      Fondo & 456 & 51 & 0,877 & 0,236 & 0,899 & 0,101 \\
-      Nematodo & 64 & 165 & 0,123 & 0,764 & 0,279 & 0,721 \\
-      \hline
-      & \multicolumn{6}{c|}{Precisión = 0,844}\\
-      \hline
-    \end{tabular}
+    {\footnotesize Aceleración promedio de optimizaciones del filtro DNLM}
+    \begin{tabular}{lrrr}
+	Filtro & Duración [s]& Coef. de var. & Aceleración [$\times$]\tabularnewline
+	\hline
+	DNLM & $163,71\pm1,32$ & $0,01$ & $1$\tabularnewline
+	DNLM-IIFFT & $76,68\pm0,06$ & $0,00$ & $2,14$\tabularnewline
+	DNLM-MA & $1,81\pm 0,01$ & $0,00$ & $90,44$ \tabularnewline
+	DNLM-P & $1,5\pm0,10$ & $0,06$ & $108,99$\tabularnewline
+	DNLM-IIFFT-P & $1,00\pm0,00$ & $0,00$ & $163,92$ \tabularnewline 
+	DNLM-MA-P & $\boldsymbol{0,25\pm0,00}$ & $\boldsymbol{0,01}$ &  $\boldsymbol{665,63}$\tabularnewline
+	\end{tabular}
   \end{center}
 \end{frame}
+
+
+\begin{frame}{Intensidad de uso de VPU}
+  
+  \begin{center}
+    {\footnotesize Intensidad vectorial de operaciones con un hilo de ejecución}
+    \begin{tabular}{lr}
+	 Filtro & $\text{VPU}_{\text{i}}$ \tabularnewline
+	\hline
+	DNLM-P & 1,00 \tabularnewline
+	DNLM-IIFFT-P & 0,81 \tabularnewline
+	DNLM-MA-P & 0,95 \tabularnewline
+	\end{tabular}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Ciclos por instrucción por núcleo}
+  
+  \begin{center}
+   \setlength\tabcolsep{2.5pt}
+   \setlength{\textfloatsep}{25mm}
+    {\footnotesize Cambio en $\text{CPI}_{\text{CPU}}$ al escalar el n\'umero de hilos}
+    \begin{tabular}{lrrrrrrrrr}
+	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+	\hline
+	DNLM-P & 1,87 & 0,94 & 0,47 & 0,23 & 0,12 & 0,06 & 0,03 & 0,02 & 0,02 \tabularnewline
+	DNLM-IIFFT-P & 1,36 & 0,68 & 0,34 & 0,17 & 0,09 & 0,04 & 0,02 & 0,02 & 0,02 \tabularnewline
+	DNLM-MA-P & 1,74 & 1,03 & 0,54 & 0,27 & 0,14 & 0,07 & 0,04 & 0,02 & 0,02 \tabularnewline
+	\end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Intensidad de operaciones de microarquitectura}
+  
+  \begin{center}
+  \setlength\tabcolsep{2.5pt}
+   \setlength{\textfloatsep}{25mm}
+    {\footnotesize Cambio en intensidad de  micro-operaciones al escalar el n\'umero de hilos}
+    \begin{tabular}{lrrrrrrrrr}
+	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+	\hline
+	DNLM-P & 0,26 & 0,26 & 0,26 & 0,26 & 0,26 & 0,27 & 0,27 & 0,27 & 0,28 \tabularnewline
+	DNLM-IIFFT-P & 0,05 & 0,05 & 0,05 & 0,05 & 0,06 & 0,07 & 0,09 & 0,11 & 0,21 \tabularnewline
+	DNLM-MA-P & 0,03 & 0,06 & 0,10 & 0,16 & 0,23 & 0,28 & 0,32 & 0,32 & 0,33 \tabularnewline
+	\end{tabular}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Raz\'on de aciertos de lectura en cach\'e L1}
+  
+  \begin{center}
+  \setlength\tabcolsep{2.5pt}
+   \setlength{\textfloatsep}{25mm}
+    {\footnotesize Cambio en la raz\'on de aciertos de lectura en cach\'e L1 al escalar el n\'umero de hilos}
+    \begin{tabular}{lrrrrrrrrr}
+	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+	\hline
+	DNLM-P & 0,99 & 0,99 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 & 0,99 & 0,99 \tabularnewline
+	DNLM-IIFFT-P & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 \tabularnewline
+	DNLM-MA-P & 0,80 & 0,83 & 0,85 & 0,88 & 0,93 & 0,96 & 0,98 & 0,99 & 0,99 \tabularnewline
+	\end{tabular}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Raz\'on de aciertos de lectura en cach\'e L2}
+  
+  \begin{center}
+  \setlength\tabcolsep{2.5pt}
+   \setlength{\textfloatsep}{25mm}
+    {\footnotesize Cambio en la raz\'on de aciertos de lectura en cach\'e L2 al escalar el n\'umero de hilos}
+    \begin{tabular}{lrrrrrrrrr}
+	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
+	\hline
+	DNLM-P & 0,99 & 0,99 & 0,97 & 0,96 & 0,96 & 0,95 & 0,94 & 0,97 & 0,95 \tabularnewline
+	DNLM-IIFFT-P & 1,00 & 1,00 & 0,99 & 0,99 & 0,99 & 0,99 & 0,99 & 0,98 & 0,93 \tabularnewline
+	DNLM-MA-P & 0,91 & 0,86 & 0,85 & 0,85 & 0,85 & 0,85 & 0,85 & 0,88 & 0,89 \tabularnewline
+	\end{tabular}
+  \end{center}
+\end{frame}
+
+
 
 
 \begin{frame}{Conclusiones}
   
   \begin{itemize}
-  \item Resuma las conclusiones y recomendaciones
-  \item No use texto completo sino únicamente palabras clave
+  \item Se desarrollaron dos optimizaciones computacionales del filtro DNLM y sus paralelizaciones
+  \item Se alcanz\'o un grado de vectorizaci\'on de 81\% para IIFFT, 95\% para MA y 100\% para el filtro original
+  \item La escalabilidad de los algoritmos implementados se ve afectada por el ancho de banda de memoria y aciertos en cach\'e L2
+  \item La mayor aceleraci\'on alcanzada ($1663\times$) supera la mejor aceleraci\'on reportada en el estado del arte ($740\times$)
+  \item Procesamiento de un conjunto de 170000 im\'agenes en unas 11 horas
+  \item Efectiva vectorizaci\'on es la clave en el escalamiento
+  \item Eficiencia en tiempo de procesamiento permitir\'ia su uso en CNNs
+  \item Art\'iculos relacionados publicados en CIARP 2017 y pr\'oximamente ICIP 2018
   \end{itemize}
   
 \end{frame}
@@ -291,7 +451,9 @@ filtro DNLM para la plataforma Xeon Phi}
 \begin{frame}{Trabajo futuro}
   
   \begin{itemize}
-  \item Resuma ideas para trabajos futuros
+  \item Explorar paralelizaci\'on multi nodo 
+  \item A\~nadir \textit{Unsharp Masking} adaptativo
+  \item Calibraci\'on automática de par\'ametros
   \end{itemize}
   
 \end{frame}
@@ -304,3 +466,5 @@ filtro DNLM para la plataforma Xeon Phi}
 \end{frame}
 
 \end{document}
+
+
