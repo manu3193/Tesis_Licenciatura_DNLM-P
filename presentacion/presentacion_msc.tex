@@ -28,11 +28,11 @@
 
 % What is this all about:
 \title[Paralelización del filtro DNLM]{Implementación paralela de optimizaciones computacionales \\del
-filtro DNLM para la plataforma Xeon Phi}
+filtro DNLM para la plataforma Xeon Phi KNL}
 \subtitle{Trabajo Final de Graduaci\'on}
 \institute[TEC]{Área Académica de Ingeniería en Computadores \\ Tecnológico de Costa Rica}
-\date[Junio 2018]{11 Junio, 2018}
-\author[M.\ Zumbado]{Ing.\ Manuel Zumbado Corrales}
+\date[Junio 2018]{15 Junio, 2018}
+\author[M.\ Zumbado]{Manuel Zumbado Corrales}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Notación
@@ -159,7 +159,7 @@ filtro DNLM para la plataforma Xeon Phi}
 \end{frame}
 
 % Título para el contexto
-\section{Preprocesamiento de videos de actividad celular}
+\section{Contexto}
 
 \begin{frame}{Contexto}
   
@@ -188,6 +188,7 @@ filtro DNLM para la plataforma Xeon Phi}
   \end{columns}
 \end{frame}
 
+
 \begin{frame}{Flujo de procesamiento para videos de actividad celular}
 \begin{center}
 \only<1>{\includegraphics[width=0.9\linewidth]{diagram}}     
@@ -204,27 +205,43 @@ filtro DNLM para la plataforma Xeon Phi}
 \end{frame}
 
 \begin{frame}{Objetivos}
+\textbf{Objetivo General:} \\ Proponer al menos una optimización computacional y paralelización del filtro DNLM  para la plataforma \textit{Xeon Phi Knights Landing}
+\vspace{3mm} \\
+\textbf{Objetivos Espec\'ificos:} \\
   \begin{itemize}
-  \item Proponer una optimización computacional y paralelización del filtro DNLM  para la plataforma \textit{Xeon Phi Knights Landing}
-  \vspace{3mm}
-  \item Paralelismo en dos niveles: a nivel de tareas y a nivel del datos
-  \vspace{3mm}
-  \item Evaluar el rendimiento de las dos optimizaciones computacionales paralelas 
+  \item Utilizar paralelismo en dos niveles: a nivel de hilos y a nivel del datos
+  \item Evaluar el rendimiento de las optimizaciones computacionales paralelas 
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Xeon Phi KNL}
+  
+  \begin{center}
+	\includegraphics[width=0.5\textwidth]{cpu} 
+	\end{center}
 \end{frame}
 
 
 
 \section{Solución}
 
+\begin{frame}{Filtro DNLM}
+	\begin{tabular}{rr}
+\includegraphics[width=0.5\textwidth]{diagram_full}
+&
+\raisebox{1.2\height}{\includegraphics[width=0.5\textwidth]{formulapdf}}
+\end{tabular}
+\end{frame}
+
 
 
 \begin{frame}
 	Implementaci\'on paralela de tres algoritmos:
 	\begin{itemize}
-	\item DNLM: Filtro \textit{Deceived Non Local Means} original
-	\item DNLM-IIFFT: Filtro \textit{Deceived Non Local Means} con Im\'agenes Integrales y FFT
-	\item DNLM-MA: Filtro \textit{Deceived Non Local Means} con Media movil y simetr\'ia
+	\item DNLM: Filtro DNLM original
+	\item DNLM-IIFFT: Filtro DNLM con Im\'agenes Integrales y FFT
+	\item DNLM-MA: Filtro DNLM con Media movil y simetr\'ia
 	\end{itemize}
 	
 	Complejidad computacional para una imagen de entrada de $N$ pixeles, ventana de b\'usqueda de $S$ pixeles y tama\~no de vecindario de $W$ pixeles:
@@ -242,9 +259,9 @@ filtro DNLM para la plataforma Xeon Phi}
 
 \begin{frame}{Métricas utilizadas}
 	\begin{itemize}
-		\item $\text{CPI}_{\text{hilo}} = \frac{\text{\# de ticks de reloj}}{\# \text{de instrucciones}}$
+		\item $\text{Speedup} = \frac{T_{s}}{T_{p}} $
 		\vspace*{4mm}
-		\item $\text{CPI}_{\text{CPU}} = \frac{\text{CPI}_{\text{hilo}}}{\text{cantidad CPU}}$
+		\item $\text{Eficiencia} = \frac{T_{s}}{p T_{p}}$
 		\vspace*{4mm}
 		\item $\text{VPU}_{\text{i}}= \frac{\text{\# SIMD empaquetadas}}{\text{\# SIMD empaquetadas}+\text{\# SIMD escalares}}$
 	\end{itemize}	
@@ -254,8 +271,6 @@ filtro DNLM para la plataforma Xeon Phi}
 	
 \begin{frame}{Métricas utilizadas}
 	\begin{itemize}
-	\item $\mu\text{Ops}_{\text{i}}= \frac{\text{\#}\mu\text{Ops retiradas MS}}{\text{\#}\mu\text{Ops retiradas totales}}$
-	\vspace*{4mm}
 	\item $\text{L1}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L1}}{\text{\# operaciones de lectura}}$
 	\vspace*{4mm}
 	\item $\text{L2}_{\text{Hit}} = \frac{\text{\# operaciones de lectura}-\text{\# fallos de lectura en L2}}{\text{\# operaciones de lectura}}$
@@ -363,40 +378,6 @@ Configuración:
   \end{center}
 \end{frame}
 
-
-\begin{frame}{Ciclos por instrucción por núcleo}
-  
-  \begin{center}
-   \setlength\tabcolsep{2.5pt}
-   \setlength{\textfloatsep}{25mm}
-    {\footnotesize Cambio en $\text{CPI}_{\text{CPU}}$ al escalar el n\'umero de hilos}
-    \begin{tabular}{lrrrrrrrrr}
-	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
-	\hline
-	DNLM-P & 1,87 & 0,94 & 0,47 & 0,23 & 0,12 & 0,06 & 0,03 & 0,02 & 0,02 \tabularnewline
-	DNLM-IIFFT-P & 1,36 & 0,68 & 0,34 & 0,17 & 0,09 & 0,04 & 0,02 & 0,02 & 0,02 \tabularnewline
-	DNLM-MA-P & 1,74 & 1,03 & 0,54 & 0,27 & 0,14 & 0,07 & 0,04 & 0,02 & 0,02 \tabularnewline
-	\end{tabular}
-  \end{center}
-\end{frame}
-
-\begin{frame}{Intensidad de operaciones de microarquitectura}
-  
-  \begin{center}
-  \setlength\tabcolsep{2.5pt}
-   \setlength{\textfloatsep}{25mm}
-    {\footnotesize Cambio en intensidad de  micro-operaciones al escalar el n\'umero de hilos}
-    \begin{tabular}{lrrrrrrrrr}
-	 Filtro & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \tabularnewline
-	\hline
-	DNLM-P & 0,26 & 0,26 & 0,26 & 0,26 & 0,26 & 0,27 & 0,27 & 0,27 & 0,28 \tabularnewline
-	DNLM-IIFFT-P & 0,05 & 0,05 & 0,05 & 0,05 & 0,06 & 0,07 & 0,09 & 0,11 & 0,21 \tabularnewline
-	DNLM-MA-P & 0,03 & 0,06 & 0,10 & 0,16 & 0,23 & 0,28 & 0,32 & 0,32 & 0,33 \tabularnewline
-	\end{tabular}
-  \end{center}
-\end{frame}
-
-
 \begin{frame}{Raz\'on de aciertos de lectura en cach\'e L1}
   
   \begin{center}
@@ -439,11 +420,17 @@ Configuración:
   \item Se desarrollaron dos optimizaciones computacionales del filtro DNLM y sus paralelizaciones
   \item Se alcanz\'o un grado de vectorizaci\'on de 81\% para IIFFT, 95\% para MA y 100\% para el filtro original
   \item La escalabilidad de los algoritmos implementados se ve afectada por el ancho de banda de memoria y aciertos en cach\'e L2
-  \item La mayor aceleraci\'on alcanzada ($1663\times$) supera la mejor aceleraci\'on reportada en el estado del arte ($740\times$)
+  \item La mayor aceleraci\'on alcanzada ($666\times$) se acerca a la mejor aceleraci\'on reportada en el estado del arte ($740\times$)
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Conclusiones}
+  
+  \begin{itemize}
   \item Procesamiento de un conjunto de 170000 im\'agenes en unas 11 horas
   \item Efectiva vectorizaci\'on es la clave en el escalamiento
-  \item Eficiencia en tiempo de procesamiento permitir\'ia su uso en CNNs
-  \item Art\'iculos relacionados publicados en CIARP 2017 y pr\'oximamente ICIP 2018
+  \item Eficiencia en tiempo de procesamiento permitir\'ia su uso en CNN	
   \end{itemize}
   
 \end{frame}
@@ -459,10 +446,13 @@ Configuración:
 \end{frame}
 
 
-\section{Resumen}
 
-\begin{frame}{Resumen}
-  \tableofcontents
+
+\begin{frame}{Papers}
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{paper}
+	\end{center}
+  
 \end{frame}
 
 \end{document}
